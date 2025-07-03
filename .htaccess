@@ -1,0 +1,13 @@
+ErrorDocument 404 /404.html
+
+# Assicura che i file .htaccess vengano letti
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>
+
+# Opzionale: reindirizza tutte le richieste errate alla pagina 404
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /404.html [L]
+</IfModule>

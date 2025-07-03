@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descrizione Personale</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: #000;
+            background-color: #f4f4f4;
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #C19A6B;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #000000;
+            padding: 10px 0;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1; /* Spinge il footer verso il basso se il contenuto è insufficiente */
+        }
+        .profile h1 {
+            color: #C19A6B;
+        }
+        .profile p {
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .profile ul {
+            list-style: none;
+            padding: 0;
+        }
+        .profile ul li {
+            background: #e8eaf6;
+            margin: 5px 0;
+            padding: 10px;
+            border-left: 5px solid #C19A6B;
+        }
+        footer {
+            text-align: center;
+            background-color: #000000;
+            color: #fff;
+            padding: 10px 0;
+        }
+        .image-slider {
+    position: relative;
+    width: 100%;
+    max-width: 600px;  /* Imposta una larghezza massima, puoi modificarla */
+    margin: auto;
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    transition: transform 1s ease-in-out;
+}
+
+.slides img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+@keyframes slide {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-100%); }
+    100% { transform: translateX(0); }
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Profilo Personale</h1>
+    </header>
+    <nav>        <a href="/" class="btn">Home</a>
+        <a href="#about">Chi Sono</a>
+        <a href="#passions">Passioni</a>
+    </nav>
+    <div class="container profile">
+        <h1 id="about">Chi Sono</h1>
+        <p>
+            Mi chiamo Gianluca Zaccarelli, vivo in provincia di Parma, ho 26 anni e sono un ENTJ. 
+            <br> 
+            Determinato e intraprendente, amo affrontare sfide e guidare progetti verso il successo.
+            <br>
+            La mia mente analitica si combina con una grande passione per la creatività e l'estetica, elementi che mi caratterizzano sia nella vita personale che professionale.
+        </p>
+        <h1 id="passions">Passioni</h1>
+        <p>
+            Da sempre attratto dall’arte e dall’espressione visiva e dalla disciplina, dedico il mio tempo libero a:
+        </p>
+        <ul>
+            <li><strong>Sport:</strong> Praticare attività fisica regolarmente per mantenermi in forma, migliorare il benessere mentale e sfidare i miei limiti.</li>
+            <li><strong>Fotografia:</strong> Catturare momenti unici attraverso l’obiettivo, esplorando luci e composizioni.</li>
+            <li><strong>Psicologia:</strong> Approfondire la comprensione della mente umana e le sue dinamiche per migliorare me stesso e i rapporti con gli altri.</li>
+            <li><strong>Arte:</strong> Visitare musei, sperimentare nuove tecniche e lasciarmi ispirare da diverse correnti artistiche.</li>
+            <li><strong>Custom Dressing e Outfit Creations:</strong> Creare abbinamenti personalizzati e outfit su misura che riflettano stile e personalità.</li>        </ul>
+        <h1 id="contact">Contatti</h1>
+        <p>
+            Sono sempre aperto a collaborazioni e nuove idee! Puoi contattarmi via email a <a href="mailto:gianluca.zaccarelli.work@gmail.com">gianluca.zaccarelli.work@gmail.com</a>.
+        </p>
+        <h1 id="contact">Galleria</h1>
+        <div class="image-slider">
+            <div class="slides">
+                <img src="https://www.zaccarelligianluca.it/assets/img/MainImage.jpg" alt="Immagine 1">
+                <img src="https://www.zaccarelligianluca.it/assets/img/MiniProfile.jpg" alt="Immagine 2">
+                <img src="https://www.zaccarelligianluca.it/assets/img/MainImage.jpg" alt="Immagine 3">
+                <img src="https://www.zaccarelligianluca.it/assets/img/MiniProfile.jpg" alt="Immagine 4">
+            </div>
+        </div>
+    </div>
+    <footer>
+        &copy; 2025 Gianluca Zaccarelli. Tutti i diritti riservati.
+    </footer>
+</body>
+<script>
+    let currentIndex = 0;
+    const slides = document.querySelector(".slides");
+    const images = slides.querySelectorAll("img");
+    
+    function moveSlide() {
+        currentIndex = (currentIndex + 1) % images.length;  // Passa alla prossima immagine
+        const offset = -currentIndex * 100;  // Sposta l'immagine successiva
+        slides.style.transform = `translateX(${offset}%)`;
+    }
+    
+    setInterval(moveSlide, 4000);  // Cambia immagine ogni 4 secondi
+    </script>
+</html>
