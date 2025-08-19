@@ -1,1 +1,132 @@
-<!DOCTYPE html><html lang="it"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Descrizione Personale</title>    <style>        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');        body {            font-family: 'Poppins', sans-serif;            background: linear-gradient(135deg, #C19A6B, #1f1c2c);            color: white;            margin: 0;            display: flex;            flex-direction: column;            align-items: center;            text-align: center;            overflow-x: hidden;        }        header {            width: 100%;            padding: 20px;            background: #C19A6B;            color: black;            font-size: 24px;            font-weight: bold;        }        nav {            display: flex;            justify-content: center;            gap: 20px;            background: black;            padding: 10px 0;        }        nav a, .btn {            color: white;            text-decoration: none;            font-size: 18px;            padding: 10px 20px;            background: #C19A6B;            border-radius: 5px;            transition: 0.3s;        }        nav a:hover, .btn:hover {            background: black;        }        .container {            max-width: 800px;            margin: 30px auto;            padding: 20px;            background: rgba(255, 255, 255, 0.1);            border-radius: 15px;            backdrop-filter: blur(10px);            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);        }        h1 {            color: #C19A6B;            font-size: 36px;        }        p {            font-size: 18px;            line-height: 1.6;        }        .gallery {            position: relative;            max-width: 600px;            margin: 20px auto;            overflow: hidden;        }        .slides {            display: flex;            transition: transform 1s ease-in-out;        }        .slides img {            width: 100%;            border-radius: 5px;        }        footer {            width: 100%;            text-align: center;            background: black;            color: white;            padding: 15px 0;        }    </style></head><body>    <header>Profilo Personale</header>    <nav>        <a href="#about">Chi Sono</a>        <a href="#passions">Passioni</a>        <a href="#contact">Contatti</a>    </nav>    <div class="container">        <h1 id="about">Chi Sono</h1>        <p>Mi chiamo Gianluca Zaccarelli, vivo in provincia di Parma, ho 26 anni e sono un ENTJ.</p>        <p>Determinato e intraprendente, amo affrontare sfide e guidare progetti verso il successo.</p>        <h1 id="passions">Passioni</h1>        <ul>            <li><strong>Sport:</strong> Mantenere uno stile di vita attivo.</li>            <li><strong>Fotografia:</strong> Catturare momenti unici.</li>            <li><strong>Psicologia:</strong> Studiare la mente umana.</li>            <li><strong>Arte:</strong> Visitare musei e sperimentare nuove tecniche.</li>            <li><strong>Custom Dressing:</strong> Creare outfit personalizzati.</li>        </ul>        <h1 id="gallery">Galleria</h1>        <div class="gallery">            <div class="slides">                <img src="https://www.zaccarelligianluca.it/assets/img/MainImage.jpg" alt="Immagine 1">                <img src="https://www.zaccarelligianluca.it/assets/img/MiniProfile.jpg" alt="Immagine 2">                <img src="https://www.zaccarelligianluca.it/assets/img/MainImage.jpg" alt="Immagine 3">                <img src="https://www.zaccarelligianluca.it/assets/img/MiniProfile.jpg" alt="Immagine 4">            </div>        </div>        <h1 id="contact">Contatti</h1>        <p>Email: <a href="mailto:gianluca.zaccarelli.work@gmail.com" style="color:#C19A6B;">gianluca.zaccarelli.work@gmail.com</a></p>        <a href="/" class="btn">Torna alla Home</a>    </div>    <footer>&copy; 2025 Gianluca Zaccarelli. Tutti i diritti riservati.</footer>    <script>        let currentIndex = 0;        const slides = document.querySelector(".slides");        const images = slides.querySelectorAll("img");        function moveSlide() {            currentIndex = (currentIndex + 1) % images.length;            const offset = -currentIndex * 100;            slides.style.transform = `translateX(${offset}%)`;        }        setInterval(moveSlide, 4000);    </script></body></html>
+<!DOCTYPE html>https://gianlucazaccarelli.github.iohttps://gianlucazaccarelli.github.iohttps://gianlucazaccarelli.github.iohttps://gianlucazaccarelli.github.io
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descrizione Personale</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #C19A6B, #1f1c2c);
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        header {
+            width: 100%;
+            padding: 20px;
+            background: #C19A6B;
+            color: black;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background: black;
+            padding: 10px 0;
+        }
+        nav a, .btn {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 20px;
+            background: #C19A6B;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        nav a:hover, .btn:hover {
+            background: black;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            color: #C19A6B;
+            font-size: 36px;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .gallery {
+            position: relative;
+            max-width: 600px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+        .slides {
+            display: flex;
+            transition: transform 1s ease-in-out;
+        }
+        .slides img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        footer {
+            width: 100%;
+            text-align: center;
+            background: black;
+            color: white;
+            padding: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>Profilo Personale</header>
+    <nav>
+        <a href="#about">Chi Sono</a>
+        <a href="#passions">Passioni</a>
+        <a href="#contact">Contatti</a>
+    </nav>
+    <div class="container">
+        <h1 id="about">Chi Sono</h1>
+        <p>Mi chiamo Gianluca Zaccarelli, vivo in provincia di Parma, ho 26 anni e sono un ENTJ.</p>
+        <p>Determinato e intraprendente, amo affrontare sfide e guidare progetti verso il successo.</p>
+        <h1 id="passions">Passioni</h1>
+        <ul>
+            <li><strong>Sport:</strong> Mantenere uno stile di vita attivo.</li>
+            <li><strong>Fotografia:</strong> Catturare momenti unici.</li>
+            <li><strong>Psicologia:</strong> Studiare la mente umana.</li>
+            <li><strong>Arte:</strong> Visitare musei e sperimentare nuove tecniche.</li>
+            <li><strong>Custom Dressing:</strong> Creare outfit personalizzati.</li>
+        </ul>
+        <h1 id="gallery">Galleria</h1>
+        <div class="gallery">
+            <div class="slides">
+                <img src="https://www.zaccarelligianluca.it/assets/img/MainImage.jpg" alt="Immagine 1">
+                <img src="https://www.zaccarelligianluca.it/assets/img/MiniProfile.jpg" alt="Immagine 2">
+                <img src="https://www.zaccarelligianluca.it/assets/img/MainImage.jpg" alt="Immagine 3">
+                <img src="https://www.zaccarelligianluca.it/assets/img/MiniProfile.jpg" alt="Immagine 4">
+            </div>
+        </div>
+        <h1 id="contact">Contatti</h1>
+        <p>Email: <a href="mailto:gianluca.zaccarelli.work@gmail.com" style="color:#C19A6B;">gianluca.zaccarelli.work@gmail.com</a></p>
+        <a href="/" class="btn">Torna alla Home</a>
+    </div>
+    <footer>&copy; 2025 Gianluca Zaccarelli. Tutti i diritti riservati.</footer>
+    <script>
+        let currentIndex = 0;
+        const slides = document.querySelector(".slides");
+        const images = slides.querySelectorAll("img");
+        function moveSlide() {
+            currentIndex = (currentIndex + 1) % images.length;
+            const offset = -currentIndex * 100;
+            slides.style.transform = `translateX(${offset}%)`;
+        }
+        setInterval(moveSlide, 4000);
+    </script>
+</body>
+</html>
