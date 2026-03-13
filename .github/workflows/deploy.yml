@@ -41,6 +41,12 @@ jobs:
           SITE: ${{ steps.pages.outputs.origin }}
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
+      - name: Generate CV PDF
+        run: node scripts/generate-pdf.mjs
+
+      - name: Copy CV to dist
+        run: cp public/cv.pdf dist/cv.pdf
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
