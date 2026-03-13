@@ -1,43 +1,53 @@
-# Astro Starter Kit: Minimal
+# Gianluca Zaccarelli — Portfolio CV
 
-```sh
-npm create astro@latest -- --template minimal
+Sito web personale / curriculum vitae di **Gianluca Zaccarelli**, Senior Full-Stack Developer.
+
+Live: [gianlucazaccarelli.github.io](https://gianlucazaccarelli.github.io)
+
+## Stack
+
+- [Astro](https://astro.build) — framework statico, zero JS di default
+- [Tailwind CSS v4](https://tailwindcss.com) — utility-first CSS
+- [TypeScript](https://www.typescriptlang.org) — tipizzazione strict
+- [Puppeteer](https://pptr.dev) — generazione automatica del PDF del CV
+- [GitHub Actions](https://docs.github.com/en/actions) — deploy su GitHub Pages
+
+## Struttura
+
+```
+src/
+├── components/     # Header, About, Experience, Education, Skills, Projects, Contact, Footer
+├── data/           # Contenuti tipizzati (experience, education, skills, projects, profile)
+├── layouts/        # BaseLayout.astro con SEO
+├── pages/
+│   ├── index.astro     # Single-page CV
+│   └── cv-print.astro  # Pagina ottimizzata per la generazione PDF
+└── styles/
+    └── global.css
+
+scripts/
+└── generate-pdf.mjs    # Genera public/cv.pdf via Puppeteer
+
+public/
+├── assets/profile.jpg
+├── logos/              # Loghi aziende ed enti
+└── cv.pdf              # Generato automaticamente nel CI
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Comandi
 
-## 🚀 Project Structure
+| Comando                | Azione                                          |
+| :--------------------- | :---------------------------------------------- |
+| `npm install`          | Installa le dipendenze                          |
+| `npm run dev`          | Dev server locale su `localhost:4321`           |
+| `npm run build`        | Build di produzione in `dist/`                  |
+| `npm run generate:cv`  | Genera `public/cv.pdf` (richiede build prec.)   |
+| `npm run preview`      | Preview della build locale                      |
 
-Inside of your Astro project, you'll see the following folders and files:
+## Deploy
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+Il deploy avviene automaticamente su **GitHub Pages** a ogni push su `main` tramite GitHub Actions (`.github/workflows/deploy.yml`). Il workflow:
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. Builda il sito con Astro
+2. Genera `cv.pdf` tramite Puppeteer dalla pagina `/cv-print`
+3. Pubblica `dist/` su GitHub Pages
