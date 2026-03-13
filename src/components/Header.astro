@@ -9,7 +9,7 @@ import SocialIcon from './SocialIcon.astro';
   style="background: rgba(255,255,255,0.80); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);"
 >
   <!-- Bottom gradient accent line -->
-  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-500/40 to-transparent"></div>
+  <div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-500/60 to-transparent"></div>
 
   <nav class="max-w-4xl mx-auto px-6 py-3 flex items-center justify-between">
 
@@ -87,42 +87,255 @@ import SocialIcon from './SocialIcon.astro';
   </nav>
 </header>
 
-<section id="hero" class="bg-white dark:bg-surface">
-  <div class="max-w-4xl mx-auto px-6 py-20 flex flex-col sm:flex-row items-center gap-10">
-    <div class="shrink-0">
-      <img
-        src="/assets/profile.jpg"
-        alt={profile.name}
-        width="128"
-        height="128"
-        loading="eager"
-        decoding="async"
-        class="w-32 h-32 rounded-full object-cover ring-2 ring-brand-200 dark:ring-brand-700/50"
-      />
+<!-- ── HERO ──────────────────────────────────────────── -->
+<section id="hero" class="hero-section">
+
+  <!-- Immagine centrale con parallax -->
+  <div class="hero-img-wrap" id="hero-bg">
+    <img
+      src="/assets/MainImage.jpg"
+      alt={profile.name}
+      loading="eager"
+      decoding="async"
+      class="hero-img"
+    />
+  </div>
+
+  <!-- Colonna sinistra -->
+  <div class="hero-col hero-col-left">
+    <div class="hero-location-badge">
+      <h4 class="hero-subtitle">
+        <span>Located</span>
+        in Italy
+      </h4>
+      <p class="hero-availability">{profile.location.split(',')[1]?.trim() ?? ''}</p>
     </div>
-    <div class="text-center sm:text-left">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white">{profile.name}</h1>
-      <p class="mt-2 text-xl text-brand-600 dark:text-brand-400 font-medium">{profile.title}</p>
-      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{profile.location} &middot; {profile.availability}</p>
-      <div class="mt-5 flex flex-wrap justify-center sm:justify-start gap-3">
-        {socialLinks.map(link => (
-          <a
-            href={link.href}
-            target={link.icon !== 'mail' ? '_blank' : undefined}
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-white/15 rounded-lg px-4 py-2 hover:border-brand-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
-          >
-            <SocialIcon icon={link.icon} class="w-4 h-4" />
-            {link.label}
-          </a>
-        ))}
-      </div>
+    <div class="hero-scroll-hint">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
     </div>
   </div>
+
+  <!-- Colonna destra -->
+  <div class="hero-col hero-col-right">
+    <div class="hero-right-top">
+      <span class="hero-mbti">{profile.mbti}</span>
+    </div>
+    <div class="hero-right-center">
+      <h4 class="hero-subtitle">
+        <span>{profile.title.split(' ').slice(0, 1).join(' ')}</span>
+        {profile.title.split(' ').slice(1).join(' ')}
+      </h4>
+      <p class="hero-availability">{profile.availability}</p>
+    </div>
+  </div>
+
+  <!-- Marquee rolling name (bottom) -->
+  <div class="hero-marquee-wrap" aria-hidden="true">
+    <div class="hero-marquee-inner" id="hero-marquee-inner">
+      <span class="hero-marquee-text">{profile.name}<em>—</em></span>
+    </div>
+  </div>
+
 </section>
 
+<style>
+  /* ── Hero Section ── */
+  .hero-section {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    min-height: 600px;
+    overflow: hidden;
+    background: #1C1D20;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── Immagine centrale ── */
+  .hero-img-wrap {
+    position: absolute;
+    top: -10%;
+    left: 0;
+    width: 100%;
+    height: 110%;
+    will-change: transform;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .hero-img {
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    pointer-events: none;
+    user-select: none;
+    /* Gradiente laterale per far emergere le colonne */
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 18%,
+      black 82%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 18%,
+      black 82%,
+      transparent 100%
+    );
+  }
+
+  /* ── Colonne laterali ── */
+  .hero-col {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+    padding: clamp(1.5rem, 3vw, 3rem);
+  }
+  .hero-col-left  { left: 0;  align-items: flex-start; }
+  .hero-col-right { right: 0; align-items: flex-end; }
+
+  /* Left: location badge */
+  .hero-location-badge {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Left: scroll hint */
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: clamp(1.5rem, 3vw, 3rem);
+    left: clamp(1.5rem, 3vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .hero-scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    animation: scrollLine 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%   { transform: scaleY(0); transform-origin: top; }
+    50%  { transform: scaleY(1); transform-origin: top; }
+    51%  { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* Right: top MBTI */
+  .hero-right-top {
+    position: absolute;
+    top: clamp(1.5rem, 3vw, 3rem);
+    right: clamp(1.5rem, 3vw, 3rem);
+  }
+  .hero-mbti {
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+  }
+
+  /* Right: subtitle centered */
+  .hero-right-center {
+    text-align: right;
+  }
+  .hero-subtitle {
+    color: #fff;
+    font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+    font-weight: 400;
+    line-height: 1.3;
+    margin: 0 0 0.4rem 0;
+    letter-spacing: -0.01em;
+  }
+  .hero-subtitle span {
+    display: block;
+    font-weight: 700;
+  }
+  .hero-availability {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── Marquee ── */
+  .hero-marquee-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    z-index: 3;
+    padding: 0.3rem 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(to top, rgba(28,29,32,0.9), rgba(28,29,32,0.5));
+  }
+  .hero-marquee-inner {
+    display: inline-flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+  .hero-marquee-text {
+    font-size: max(3rem, 5vw);
+    font-weight: 450;
+    letter-spacing: -0.03em;
+    color: #fff;
+    padding-right: 0.4em;
+    line-height: 1;
+    display: inline-block;
+    user-select: none;
+  }
+  .hero-marquee-text em {
+    font-style: normal;
+    color: #455CE9;
+    padding: 0 0.15em;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 720px) {
+    .hero-col-left  { padding: 1.25rem; }
+    .hero-col-right { padding: 1.25rem; }
+    .hero-subtitle  { font-size: 1rem; }
+    .hero-img {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 10%,
+        black 90%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 10%,
+        black 90%,
+        transparent 100%
+      );
+    }
+  }
+</style>
+
 <script>
-  const btn = document.getElementById('theme-toggle');
+  /* ── Navbar theme / shadow ── */
+  const btn    = document.getElementById('theme-toggle');
   const header = document.getElementById('top') as HTMLElement | null;
 
   function applyHeaderTheme(isDark: boolean) {
@@ -131,29 +344,78 @@ import SocialIcon from './SocialIcon.astro';
       ? 'rgba(28,29,32,0.85)'
       : 'rgba(255,255,255,0.80)';
   }
-
   function updateTooltip(isDark: boolean) {
     btn?.setAttribute('data-tooltip', isDark ? 'Tema chiaro' : 'Tema scuro');
   }
-
-  // Scroll shadow
   window.addEventListener('scroll', () => {
     if (!header) return;
-    if (window.scrollY > 8) {
-      header.classList.add('shadow-md');
-    } else {
-      header.classList.remove('shadow-md');
-    }
+    header.classList.toggle('shadow-md', window.scrollY > 8);
   }, { passive: true });
 
   const isDark = document.documentElement.classList.contains('dark');
   applyHeaderTheme(isDark);
   updateTooltip(isDark);
-
   btn?.addEventListener('click', () => {
     const isDark = document.documentElement.classList.toggle('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
     applyHeaderTheme(isDark);
     updateTooltip(isDark);
   });
+
+  /* ── Hero parallax ── */
+  const heroBg = document.getElementById('hero-bg') as HTMLElement | null;
+  window.addEventListener('scroll', () => {
+    if (!heroBg) return;
+    const y = window.scrollY;
+    heroBg.style.transform = `translateY(${y * 0.35}px)`;
+  }, { passive: true });
+
+  /* ── Marquee rolling (GSAP) ── */
+  (function initMarquee() {
+    const gsap = (window as any).gsap;
+    if (!gsap) return;
+
+    const inner   = document.getElementById('hero-marquee-inner');
+    const textEl  = inner?.querySelector('.hero-marquee-text') as HTMLElement | null;
+    if (!inner || !textEl) return;
+
+    // Clona il testo fino a riempire 3× la viewport
+    const fill = () => {
+      // Rimuovi cloni precedenti
+      inner.querySelectorAll('.hero-marquee-clone').forEach(el => el.remove());
+      const totalW  = textEl.offsetWidth;
+      const needed  = Math.ceil((window.innerWidth * 3) / totalW) + 1;
+      for (let i = 0; i < needed; i++) {
+        const clone = textEl.cloneNode(true) as HTMLElement;
+        clone.classList.add('hero-marquee-clone');
+        inner.appendChild(clone);
+      }
+    };
+    fill();
+    window.addEventListener('resize', fill, { passive: true });
+
+    let direction = 1; // 1 = forward, -1 = backward
+
+    const tl = gsap.timeline({ repeat: -1, onReverseComplete() {
+      (this as any).totalTime((this as any).rawTime() + (this as any).duration() * 10);
+    }});
+
+    tl.to(inner, {
+      xPercent: -100 / (inner.children.length),
+      duration: 22,
+      ease: 'none',
+    });
+
+    // Cambia direzione in base allo scroll
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+      const curr = window.scrollY;
+      const newDir = curr > lastScrollY ? 1 : -1;
+      if (newDir !== direction) {
+        direction = newDir;
+        gsap.to(tl, { timeScale: direction, duration: 0.5, overwrite: true });
+      }
+      lastScrollY = curr;
+    }, { passive: true });
+  })();
 </script>

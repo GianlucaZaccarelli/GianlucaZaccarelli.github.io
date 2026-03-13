@@ -5,40 +5,73 @@ import SocialIcon from './SocialIcon.astro';
 const year = new Date().getFullYear();
 ---
 
-<footer class="bg-gray-50 dark:bg-surface-alt border-t border-gray-100 dark:border-white/10 py-8">
-  <div class="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400 dark:text-gray-500">
-    <p>© {year} {profile.name}. Tutti i diritti riservati.</p>
+<footer class="relative bg-gray-50 dark:bg-surface-alt border-t border-gray-100 dark:border-white/10">
+  <!-- Top gradient accent line -->
+  <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-500/60 to-transparent"></div>
 
-    <div class="flex items-center gap-4">
-      {socialLinks.map(link => (
-        <a
-          href={link.href}
-          target={link.icon !== 'mail' ? '_blank' : undefined}
-          rel="noopener noreferrer"
-          aria-label={link.label}
-          data-tooltip={link.label}
-          class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
-        >
-          <SocialIcon icon={link.icon} class="w-4 h-4" />
-        </a>
-      ))}
+  <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center gap-8 sm:gap-0">
+
+    <!-- Col 1: Brand -->
+    <div class="flex flex-col gap-2 flex-1 items-center sm:items-start">
+      <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-brand-600 to-violet-500 bg-clip-text text-transparent">
+        {profile.nickname}
+      </span>
+      <p class="text-sm text-gray-400 dark:text-gray-500 leading-relaxed">
+        {profile.title}
+      </p>
+      <p class="text-sm text-gray-400 dark:text-gray-500 flex items-center gap-1.5 mt-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span id="rome-time"></span>
+      </p>
     </div>
 
-    <button
-      id="back-to-top"
-      data-tooltip="Torna all'inizio"
-      class="cursor-pointer hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
-    >
-      ↑ Torna su
-    </button>
-  </div>
+    <!-- Separator -->
+    <div class="hidden sm:block w-px self-stretch bg-gray-200 dark:bg-white/8 mx-8"></div>
 
-  <div class="max-w-4xl mx-auto px-6 mt-5 flex items-center justify-center gap-2 text-sm text-gray-400 dark:text-gray-500">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"/>
-      <polyline points="12 6 12 12 16 14"/>
-    </svg>
-    <span id="rome-time"></span>
+    <!-- Col 2: Social -->
+    <div class="flex flex-col gap-3 items-center">
+      <span class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+        Contatti
+      </span>
+      <div class="flex items-center gap-3">
+        {socialLinks.map(link => (
+          <a
+            href={link.href}
+            target={link.icon !== 'mail' ? '_blank' : undefined}
+            rel="noopener noreferrer"
+            aria-label={link.label}
+            data-tooltip={link.label}
+            class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 dark:text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-white/5 transition-colors"
+          >
+            <SocialIcon icon={link.icon} class="w-4 h-4" />
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Separator -->
+    <div class="hidden sm:block w-px self-stretch bg-gray-200 dark:bg-white/8 mx-8"></div>
+
+    <!-- Col 3: Credits + back to top -->
+    <div class="flex flex-1 items-center justify-end gap-8">
+      <p class="text-sm text-gray-400 dark:text-gray-500 text-right leading-relaxed">
+        © {year} {profile.name}.<br/>Tutti i diritti riservati.
+      </p>
+      <button
+        id="back-to-top"
+        data-tooltip="Torna all'inizio"
+        aria-label="Torna in cima"
+        class="cursor-pointer group shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-brand-600 hover:bg-brand-700 text-white shadow-sm shadow-brand-600/30 active:scale-95 transition-all"
+      >
+        <svg class="w-4 h-4 transition-transform group-hover:-translate-y-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"/>
+        </svg>
+      </button>
+    </div>
+
   </div>
 </footer>
 
@@ -57,7 +90,7 @@ const year = new Date().getFullYear();
       minute: '2-digit',
       second: '2-digit',
     });
-    el.textContent = `Roma, Italia — ${time} (CET/CEST)`;
+    el.textContent = `Roma — ${time}`;
   }
 
   updateTime();

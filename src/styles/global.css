@@ -1,10 +1,19 @@
 @import "tailwindcss";
 
+/* ── Neue Montreal (font custom OLD_SITE) ── */
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/assets/fonts/NeueMontreal-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Class-based dark mode: applies when .dark is on <html> or any ancestor */
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'NeueMontreal', 'Inter', ui-sans-serif, system-ui, sans-serif;
 
   --color-brand-50:  oklch(96% 0.02 264);
   --color-brand-100: oklch(91% 0.05 264);
