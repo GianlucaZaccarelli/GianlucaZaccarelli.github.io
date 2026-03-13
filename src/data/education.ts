@@ -7,7 +7,7 @@ export const education: Education[] = [
     logo: '/logos/unipr.jpg',
     degree: 'Laurea Breve',
     field: 'Scienze e tecniche psicologiche per le sfide contemporanee',
-    year: 'Set 2025 – In corso',
+    year: 'Sett. 2025 – In corso',
     description: 'Corso ad orientamento innovativo con integrazione delle prospettive psicobiologica, cognitiva, evolutiva, socio-relazionale e clinico-dinamica. Focus su sostenibilità, resilienza, tecnologie e competenze per psicologi in équipe multiprofessionali.',
   },
   {

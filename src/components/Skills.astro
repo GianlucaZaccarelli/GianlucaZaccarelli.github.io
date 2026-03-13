@@ -1,23 +1,31 @@
 ---
+import { skills } from '../data/skills';
+
 const BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
 
-const row1 = [
-  { name: 'C#',         icon: `${BASE}/csharp/csharp-original.svg` },
-  { name: '.NET',       icon: `${BASE}/dotnetcore/dotnetcore-original.svg` },
-  { name: 'Node.js',    icon: `${BASE}/nodejs/nodejs-original.svg` },
-  { name: 'SQL Server', icon: `${BASE}/microsoftsqlserver/microsoftsqlserver-plain.svg` },
-  { name: 'Docker',     icon: `${BASE}/docker/docker-original.svg` },
-  { name: 'Kubernetes', icon: `${BASE}/kubernetes/kubernetes-plain.svg` },
-  { name: 'Git',        icon: `${BASE}/git/git-original.svg` },
-];
+const iconMap: Record<string, string> = {
+  'C#':                   `${BASE}/csharp/csharp-original.svg`,
+  '.NET':                 `${BASE}/dotnetcore/dotnetcore-original.svg`,
+  'Node.js':              `${BASE}/nodejs/nodejs-original.svg`,
+  'Microsoft SQL Server': `${BASE}/microsoftsqlserver/microsoftsqlserver-plain.svg`,
+  'Docker':               `${BASE}/docker/docker-original.svg`,
+  'Kubernetes':           `${BASE}/kubernetes/kubernetes-plain.svg`,
+  'Git':                  `${BASE}/git/git-original.svg`,
+  'JavaScript':           `${BASE}/javascript/javascript-original.svg`,
+  'TypeScript':           `${BASE}/typescript/typescript-original.svg`,
+  'HTML5':                `${BASE}/html5/html5-original.svg`,
+  'CSS3':                 `${BASE}/css3/css3-original.svg`,
+  'Astro':                `${BASE}/astro/astro-original.svg`,
+};
 
-const row2 = [
-  { name: 'JavaScript', icon: `${BASE}/javascript/javascript-original.svg` },
-  { name: 'TypeScript', icon: `${BASE}/typescript/typescript-original.svg` },
-  { name: 'HTML5',      icon: `${BASE}/html5/html5-original.svg` },
-  { name: 'CSS3',       icon: `${BASE}/css3/css3-original.svg` },
-  { name: 'Astro',      icon: `${BASE}/astro/astro-original.svg` },
-];
+const toChips = (categories: string[]) =>
+  skills
+    .filter(s => categories.includes(s.category))
+    .flatMap(s => s.items)
+    .map(name => ({ name, icon: iconMap[name] ?? null }));
+
+const row1 = toChips(['Backend', 'DevOps & Infrastruttura']);
+const row2 = toChips(['Frontend', 'Metodologie & Soft Skills']);
 ---
 
 <section id="skills" class="py-16 bg-white dark:bg-surface overflow-hidden">
@@ -60,7 +68,6 @@ const row2 = [
     position: relative;
     width: 100%;
     overflow: hidden;
-    /* fade sui bordi */
     mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
     -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
   }
@@ -83,6 +90,13 @@ const row2 = [
   .marquee-wrapper:hover .marquee-left,
   .marquee-wrapper:hover .marquee-right {
     animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-left,
+    .marquee-right {
+      animation: none;
+    }
   }
 
   @keyframes scrollLeft {

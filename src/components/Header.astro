@@ -24,7 +24,7 @@ import SocialIcon from './SocialIcon.astro';
     </a>
 
     <!-- Nav links -->
-    <ul class="hidden md:flex items-center gap-1 text-sm font-medium text-gray-500 dark:text-gray-400">
+    <ul class="hidden md:flex items-center text-sm font-medium text-gray-500 dark:text-gray-400">
       {[
         { href: '#about',      label: 'About'      },
         { href: '#experience', label: 'Esperienza' },
@@ -32,15 +32,18 @@ import SocialIcon from './SocialIcon.astro';
         { href: '#skills',     label: 'Skills'     },
         { href: '#projects',   label: 'Progetti'   },
         { href: '#contact',    label: 'Contatti'   },
-      ].map(({ href, label }) => (
-        <li>
-          <a
-            href={href}
-            class="relative px-3 py-1.5 rounded-md transition-colors hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-white/5"
-          >
-            {label}
-          </a>
-        </li>
+      ].map(({ href, label }, i) => (
+        <>
+          {i > 0 && <span class="text-gray-200 dark:text-white/10 select-none px-0.5">|</span>}
+          <li>
+            <a
+              href={href}
+              class="relative px-3 py-1.5 rounded-md transition-colors hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-white/5"
+            >
+              {label}
+            </a>
+          </li>
+        </>
       ))}
     </ul>
 
@@ -105,8 +108,8 @@ import SocialIcon from './SocialIcon.astro';
   <div class="hero-col hero-col-left">
     <div class="hero-location-badge">
       <h4 class="hero-subtitle">
-        <span>Located</span>
-        in Italy
+        <span>Situato</span>
+        in Italia
       </h4>
       <p class="hero-availability">{profile.location.split(',')[1]?.trim() ?? ''}</p>
     </div>

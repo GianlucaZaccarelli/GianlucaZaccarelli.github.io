@@ -44,7 +44,7 @@ const iconMap: Record<string, string> = {
               );
             })}
           </div>
-          <div class="flex gap-3 mt-auto pt-2">
+          <div class="flex gap-3 mt-auto pt-2 items-center">
             {project.github && (
               <a
                 href={project.github}
@@ -64,6 +64,9 @@ const iconMap: Record<string, string> = {
               >
                 Demo →
               </a>
+            )}
+            {!project.github && !project.demo && (
+              <span class="text-xs text-gray-400 dark:text-gray-600 italic">Progetto interno — non pubblico</span>
             )}
           </div>
         </article>
