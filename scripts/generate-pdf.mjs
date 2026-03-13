@@ -7,7 +7,7 @@
 
 import puppeteer from 'puppeteer';
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -40,6 +40,7 @@ const server = createServer(async (req, res) => {
   if (urlPath.endsWith('/')) urlPath += 'index.html';
 
   let filePath = join(DIST, urlPath);
+  if (existsSync(filePath) && (await stat(filePath)).isDirectory()) filePath = join(filePath, 'index.html');
   if (!existsSync(filePath)) filePath = join(DIST, urlPath + '.html');
   if (!existsSync(filePath)) { res.writeHead(404); res.end('Not found'); return; }
 
