@@ -1,0 +1,65 @@
+---
+import { profile, socialLinks } from '../data/profile';
+import SocialIcon from './SocialIcon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-gray-50 dark:bg-surface-alt border-t border-gray-100 dark:border-white/10 py-8">
+  <div class="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400 dark:text-gray-500">
+    <p>© {year} {profile.name}. Tutti i diritti riservati.</p>
+
+    <div class="flex items-center gap-4">
+      {socialLinks.map(link => (
+        <a
+          href={link.href}
+          target={link.icon !== 'mail' ? '_blank' : undefined}
+          rel="noopener noreferrer"
+          aria-label={link.label}
+          data-tooltip={link.label}
+          class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+        >
+          <SocialIcon icon={link.icon} class="w-4 h-4" />
+        </a>
+      ))}
+    </div>
+
+    <button
+      id="back-to-top"
+      data-tooltip="Torna all'inizio"
+      class="cursor-pointer hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+    >
+      ↑ Torna su
+    </button>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-6 mt-5 flex items-center justify-center gap-2 text-sm text-gray-400 dark:text-gray-500">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 16 14"/>
+    </svg>
+    <span id="rome-time"></span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('back-to-top')?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function updateTime() {
+    const el = document.getElementById('rome-time');
+    if (!el) return;
+    const now = new Date();
+    const time = now.toLocaleTimeString('it-IT', {
+      timeZone: 'Europe/Rome',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+    el.textContent = `Roma, Italia — ${time} (CET/CEST)`;
+  }
+
+  updateTime();
+  setInterval(updateTime, 1000);
+</script>

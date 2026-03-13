@@ -1,0 +1,33 @@
+---
+import { profile, socialLinks } from '../data/profile';
+import SocialIcon from './SocialIcon.astro';
+---
+
+<section id="contact" class="py-16 bg-white dark:bg-surface">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <h2 class="section-title">Contatti</h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
+      Sono disponibile per nuove opportunità, collaborazioni o semplicemente per una chiacchierata tecnica.
+    </p>
+    <a
+      href={`mailto:${profile.email}`}
+      class="inline-flex items-center gap-3 bg-brand-600 text-white font-medium px-8 py-3 rounded-xl hover:bg-brand-700 transition-colors text-lg"
+    >
+      <SocialIcon icon="mail" class="w-5 h-5" />
+      {profile.email}
+    </a>
+    <div class="mt-10 flex justify-center gap-6">
+      {socialLinks.filter(l => l.icon !== 'mail').map(link => (
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-gray-400 dark:text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors font-medium"
+        >
+          <SocialIcon icon={link.icon} class="w-5 h-5" />
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

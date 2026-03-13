@@ -1,0 +1,40 @@
+---
+import { education } from '../data/education';
+---
+
+<section id="education" class="py-16 bg-gray-50 dark:bg-surface-alt">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="section-title">Formazione</h2>
+    <div class="space-y-6">
+      {education.map(edu => (
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 p-6 bg-white dark:bg-surface-card rounded-xl border border-gray-100 dark:border-white/10">
+          <div class="flex items-start gap-4">
+            {edu.logo && (
+              <div class="shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white flex items-center justify-center overflow-hidden p-2 shadow-sm">
+                <img
+                  src={edu.logo}
+                  alt={`Logo ${edu.institution}`}
+                  class="w-full h-full object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            )}
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-white">{edu.degree} in {edu.field}</h3>
+              {edu.url ? (
+                <a href={edu.url} target="_blank" rel="noopener noreferrer" class="text-brand-600 dark:text-brand-400 text-sm mt-0.5 hover:underline underline-offset-2 inline-block">{edu.institution} ↗</a>
+              ) : (
+                <p class="text-brand-600 dark:text-brand-400 text-sm mt-0.5">{edu.institution}</p>
+              )}
+              {edu.description && (
+                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">{edu.description}</p>
+              )}
+            </div>
+          </div>
+          <span class="text-sm font-medium text-gray-400 dark:text-gray-500 shrink-0 sm:text-right">{edu.year}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

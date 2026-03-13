@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npm install:*)",
+      "Bash(npx astro:*)",
+      "Bash(npm run:*)",
+      "WebFetch(domain:gianlucazaccarelli.github.io)",
+      "WebFetch(domain:it.linkedin.com)",
+      "WebSearch",
+      "Bash(sed -i \"s|company: ''Code It Digital Solutions S.r.l.'',|company: ''Code It Digital Solutions S.r.l.'',\\\\n    url: ''https://www.linkedin.com/company/code-it-digital-solutions-s-r-l/'',|\" \"c:/git/ZakkaSite/src/data/experience.ts\")",
+      "Bash(sed -i \"s|url: ''https://www.raffaelecaruso.com'',|url: ''https://carusomenswear.com/'',|\" \"c:/git/ZakkaSite/src/data/experience.ts\")",
+      "WebFetch(domain:carusomenswear.com)"
+    ]
+  }
+}

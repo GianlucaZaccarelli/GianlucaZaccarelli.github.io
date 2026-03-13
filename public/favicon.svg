@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100" height="100" rx="22" fill="url(#bg)"/>
+
+  <!-- Accent: sottile linea diagonale di sfondo -->
+  <line x1="0" y1="100" x2="100" y2="0" stroke="rgba(255,255,255,0.06)" stroke-width="28"/>
+
+  <!-- Z — tre tratti geometrici: top, diagonale, bottom -->
+  <path
+    d="M 10,18 L 50,18 L 10,82 L 50,82"
+    fill="none"
+    stroke="white"
+    stroke-width="9.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    filter="url(#glow)"
+  />
+
+  <!-- G — arco aperto in alto-destra + barra orizzontale interna -->
+  <!-- centro (72,50) raggio 20; aperto da ~330° a 0° (in alto a destra) -->
+  <path
+    d="M 89,40 A 20,20 0 1,0 92,50 H 72"
+    fill="none"
+    stroke="rgba(255,255,255,0.88)"
+    stroke-width="9.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    filter="url(#glow)"
+  />
+</svg>

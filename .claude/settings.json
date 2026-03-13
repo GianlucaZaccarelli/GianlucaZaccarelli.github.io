@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.sigrade.it)",
+      "WebFetch(domain:www.unipr.it)",
+      "WebFetch(domain:www.cedacri.it)",
+      "Bash(curl -sL \"https://carusomenswear.com/cdn/shop/files/Artboard_2.png?v=1669052052\" -o \"c:/git/ZakkaSite/public/logos/caruso.png\")",
+      "Bash(curl -sL \"https://www.unipr.it/themes/custom/unipr_2025/logo.svg\" -o \"c:/git/ZakkaSite/public/logos/unipr.svg\")",
+      "Bash(curl -sL \"https://www.cedacri.it/themes/cedacri/assets/img/cedacri-logo.png\" -o \"c:/git/ZakkaSite/public/logos/sigrade.png\")",
+      "WebFetch(domain:www.itisgalilei.edu.it)",
+      "Bash(curl -sL \"https://scaling.spaggiari.eu/RMIT0042/logo/5111.png\" -o \"c:/git/ZakkaSite/public/logos/itis.png\")",
+      "Bash(curl -sL 'https://scaling.spaggiari.eu/RMIT0042/logo/5111.png&rs=%2FtccTw2MgxYfdxRYmYOB6HjkoZcUOGTiYi6QRxuVV5sOGTp63rmnr%2BRTYVh7%2BFO%2FGwXtspJHA9p4BXfBXCcE%2BNfMTv1f63V8Ma7anOoEpmr1vY686jQADlCXWoD41fhLPKDeb5KzEXlN3xj5VLED2HK76ruGkCrzhAMWUaH%2BXdg%3D' -o \"c:/git/ZakkaSite/public/logos/itis.png\")",
+      "WebFetch(domain:poloagroindustriale.edu.it)",
+      "Bash(curl -sL \"https://poloagroindustriale.edu.it/\")",
+      "Bash(curl -sL \"https://www.unipr.it\")",
+      "Bash(curl -sL \"https://poloagroindustriale.edu.it/wp-content/uploads/2024/02/stemma_polo-2.webp\" -o \"c:/git/ZakkaSite/public/logos/itis.webp\")",
+      "Bash(curl -sL \"https://www.unipr.it/sites/default/files/styles/social_card/public/2022-06/social-card_0.jpg?itok=e-kswSf4\" -o \"c:/git/ZakkaSite/public/logos/unipr.jpg\")",
+      "Bash(grep -E \"\\(color|background|#[0-9a-fA-F]{3,6}|rgb|hsl|--\\)\" \"c:/git/ZakkaSite/vecchio sito/assets/css/styleguide.css\")",
+      "Read(//c/git/**)",
+      "Bash(git -C c:/git/ZakkaSite log --oneline)",
+      "Bash(grep -n \"loading\\\\|home-active\\\\|loadingAnimation\\\\|gsap.*loading\\\\|loading.*gsap\" c:/git/GianlucaZaccarelli.github.io/assets/js/*.js)",
+      "Read(//c/Users/zak/.claude/**)",
+      "Read(//c/Users/zak/**)",
+      "Read(//Users/zak/.claude/**)",
+      "Read(//home/zak/.claude/**)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\zak\\.claude"
+    ]
+  }
+}

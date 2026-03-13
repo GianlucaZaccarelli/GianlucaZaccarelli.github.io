@@ -1,0 +1,353 @@
+---
+const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい', 'Hallå', 'Guten Tag', 'Hallo'];
+---
+
+<div class="loading-container">
+  <div class="loading-screen">
+
+    <!-- Blobs di sfondo animati -->
+    <div class="ls-blob ls-blob-1"></div>
+    <div class="ls-blob ls-blob-2"></div>
+    <div class="ls-blob ls-blob-3"></div>
+
+    <!-- Griglia di punti sottile -->
+    <div class="ls-grid"></div>
+
+    <!-- Parole al centro -->
+    <div class="loading-words">
+      {words.map((word, i) => (
+        <h2 class:list={[
+          'home-active',
+          { 'home-active-first': i === 0 },
+          { 'home-active-last': i === words.length - 1 },
+          { 'jap': word === 'おい' }
+        ]}>
+          {word}<div class="dot"></div>
+        </h2>
+      ))}
+    </div>
+
+    <!-- Footer con contatore e barra progresso -->
+    <div class="ls-footer">
+      <span class="ls-name">Gianluca Zaccarelli</span>
+      <div class="ls-right">
+        <span class="ls-counter"><span id="ls-count">0</span>%</span>
+      </div>
+    </div>
+    <div class="ls-progress-track">
+      <div class="ls-progress-bar" id="ls-bar"></div>
+    </div>
+
+    <!-- Bordo curvo in basso -->
+    <div class="rounded-div-wrap bottom">
+      <div class="rounded-div"></div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  /* ── Container ── */
+  .loading-container {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .loading-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #0a0f1e;
+    will-change: top;
+    overflow: hidden;
+  }
+
+  /* ── Blobs ── */
+  .ls-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0;
+    animation: blobPulse 6s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  .ls-blob-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #455ce9 0%, transparent 70%);
+    top: -10%;
+    left: -8%;
+    animation-delay: 0s;
+    animation-duration: 7s;
+  }
+
+  .ls-blob-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
+    bottom: -5%;
+    right: -5%;
+    animation-delay: 1.5s;
+    animation-duration: 9s;
+  }
+
+  .ls-blob-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
+    top: 40%;
+    right: 15%;
+    animation-delay: 0.8s;
+    animation-duration: 8s;
+  }
+
+  @keyframes blobPulse {
+    0%, 100% { transform: scale(1) translate(0, 0);   opacity: 0.18; }
+    33%       { transform: scale(1.08) translate(20px, -15px); opacity: 0.25; }
+    66%       { transform: scale(0.94) translate(-15px, 10px); opacity: 0.15; }
+  }
+
+  /* ── Griglia punti ── */
+  .ls-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0;
+    animation: gridFade 1.2s ease 0.3s forwards;
+  }
+
+  @keyframes gridFade {
+    to { opacity: 1; }
+  }
+
+  /* ── Parole ── */
+  .loading-words {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity;
+  }
+
+  .loading-words h2 {
+    margin: 0;
+    padding: 0 0.4em 0 0.6em;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    white-space: nowrap;
+    font-size: clamp(3.25em, 5vw, 4.5em);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    will-change: opacity;
+    text-shadow: 0 0 60px rgba(69, 92, 233, 0.5);
+  }
+
+  .loading-words h2.jap {
+    font-size: calc(clamp(3.25em, 5vw, 4.5em) * 0.65);
+    transform: translate(-50%, 10%);
+  }
+
+  .dot {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    background: #455ce9;
+    left: 0;
+    top: 47%;
+    width: calc(clamp(16px, 1.2vw, 19px) / 1.65);
+    height: calc(clamp(16px, 1.2vw, 19px) / 1.65);
+    box-shadow: 0 0 8px #455ce9;
+  }
+
+  @media screen and (max-width: 540px) {
+    .dot { top: 42%; }
+  }
+
+  /* ── Footer ── */
+  .ls-footer {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 2rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    animation: gridFade 0.8s ease 0.6s forwards;
+  }
+
+  .ls-name {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .ls-counter {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+
+  #ls-count {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  /* ── Progress bar ── */
+  .ls-progress-track {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .ls-progress-bar {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #455ce9, #7c3aed);
+    transform-origin: left center;
+    transform: scaleX(0);
+    box-shadow: 0 0 12px rgba(69, 92, 233, 0.8);
+  }
+
+  /* ── Curva in basso ── */
+  .rounded-div-wrap {
+    position: absolute;
+    width: 110%;
+    left: -5%;
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  .rounded-div-wrap.bottom {
+    bottom: 0;
+    transform: translateY(99%);
+    height: 0vh;
+    will-change: height;
+  }
+
+  .rounded-div-wrap .rounded-div {
+    width: 100%;
+    height: 745%;
+    background: #0a0f1e;
+    border-radius: 50%;
+  }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" is:inline></script>
+
+<script>
+  (function () {
+    const gsap = (window as any).gsap;
+    const isMobile = window.innerWidth <= 540;
+
+    const tl = gsap.timeline();
+
+    // Init
+    tl.set('.loading-screen', { top: '0' });
+    tl.set('main .once-in', { y: isMobile ? '10vh' : '50vh' });
+    tl.set('.loading-words', { opacity: 0 });
+    tl.set('.loading-words .home-active, .loading-words .home-active-last', { display: 'block', opacity: 0 });
+    tl.set('.loading-words .home-active-first', { opacity: 1 });
+    tl.set('.loading-screen .rounded-div-wrap.bottom', { height: isMobile ? '5vh' : '10vh' });
+    tl.set('html', { cursor: 'wait' });
+
+    document.body.style.overflow = 'hidden';
+
+    // Durata totale del caricamento visibile (prima dello slide-out)
+    const loadDuration = 2.2;
+
+    // Contatore 0 → 100
+    const counter = { val: 0 };
+    gsap.to(counter, {
+      val: 100,
+      duration: loadDuration,
+      ease: 'power1.inOut',
+      delay: 0.5,
+      onUpdate() {
+        const el = document.getElementById('ls-count');
+        if (el) el.textContent = String(Math.round(counter.val));
+      },
+    });
+
+    // Barra progresso
+    gsap.to('#ls-bar', {
+      scaleX: 1,
+      duration: loadDuration,
+      ease: 'power1.inOut',
+      delay: 0.5,
+    });
+
+    // Fade in parole
+    tl.to('.loading-words', {
+      duration: 0.8,
+      opacity: 1,
+      ease: 'power4.out',
+      delay: 0.5,
+    });
+
+    // Cicla le parole
+    tl.to(
+      '.loading-words .home-active',
+      {
+        duration: 0.01,
+        opacity: 1,
+        stagger: 0.15,
+        ease: 'none',
+        onStart() {
+          gsap.to('.loading-words .home-active', {
+            duration: 0.01,
+            opacity: 0,
+            stagger: 0.15,
+            ease: 'none',
+            delay: 0.15,
+          });
+        },
+      },
+      '=-0.4'
+    );
+
+    tl.to('.loading-words .home-active-last', { duration: 0.01, opacity: 1, delay: 0.15 });
+
+    // Slide-out verso l'alto
+    tl.to('.loading-screen', { duration: 0.85, top: '-100%', ease: 'power4.inOut', delay: 0.2 });
+    tl.to('.loading-screen .rounded-div-wrap.bottom', { duration: 1, height: '0vh', ease: 'power4.inOut' }, '=-0.85');
+    tl.to('.loading-words', { duration: 0.3, opacity: 0, ease: 'linear' }, '=-0.85');
+
+    tl.set('.loading-screen', { top: 'calc(-100%)' });
+    tl.set('.loading-screen .rounded-div-wrap.bottom', { height: '0vh' });
+
+    // Animazione contenuto principale
+    tl.to(
+      'main .once-in',
+      { duration: 1.5, y: '0vh', stagger: 0.07, ease: 'expo.out', clearProps: true },
+      '=-0.85'
+    );
+
+    tl.set('html', { cursor: 'auto' }, '=-1.2');
+
+    tl.call(() => {
+      document.body.style.overflow = '';
+      const c = document.querySelector<HTMLElement>('.loading-container');
+      if (c) c.style.display = 'none';
+    });
+  })();
+</script>

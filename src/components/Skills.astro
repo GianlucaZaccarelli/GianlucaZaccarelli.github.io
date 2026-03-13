@@ -1,0 +1,131 @@
+---
+const BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
+
+const row1 = [
+  { name: 'C#',         icon: `${BASE}/csharp/csharp-original.svg` },
+  { name: '.NET',       icon: `${BASE}/dotnetcore/dotnetcore-original.svg` },
+  { name: 'Node.js',    icon: `${BASE}/nodejs/nodejs-original.svg` },
+  { name: 'SQL Server', icon: `${BASE}/microsoftsqlserver/microsoftsqlserver-plain.svg` },
+  { name: 'Docker',     icon: `${BASE}/docker/docker-original.svg` },
+  { name: 'Kubernetes', icon: `${BASE}/kubernetes/kubernetes-plain.svg` },
+  { name: 'Git',        icon: `${BASE}/git/git-original.svg` },
+];
+
+const row2 = [
+  { name: 'JavaScript', icon: `${BASE}/javascript/javascript-original.svg` },
+  { name: 'TypeScript', icon: `${BASE}/typescript/typescript-original.svg` },
+  { name: 'HTML5',      icon: `${BASE}/html5/html5-original.svg` },
+  { name: 'CSS3',       icon: `${BASE}/css3/css3-original.svg` },
+  { name: 'Astro',      icon: `${BASE}/astro/astro-original.svg` },
+];
+---
+
+<section id="skills" class="py-16 bg-white dark:bg-surface overflow-hidden">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="section-title">Competenze</h2>
+
+  <!-- Row 1: scorre a sinistra -->
+  <div class="marquee-wrapper mb-4">
+    <div class="marquee-track marquee-left">
+      {[...row1, ...row1].map(item => (
+        <div class="skill-chip">
+          {item.icon && (
+            <img src={item.icon} alt={item.name} width="22" height="22" loading="lazy" decoding="async" class="skill-icon" />
+          )}
+          <span>{item.name}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Row 2: scorre a destra -->
+  <div class="marquee-wrapper">
+    <div class="marquee-track marquee-right">
+      {[...row2, ...row2].map(item => (
+        <div class="skill-chip">
+          {item.icon && (
+            <img src={item.icon} alt={item.name} width="22" height="22" loading="lazy" decoding="async" class="skill-icon" />
+          )}
+          <span>{item.name}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  </div><!-- end max-w-4xl -->
+</section>
+
+<style>
+  .marquee-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    /* fade sui bordi */
+    mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 0.75rem;
+    width: max-content;
+    padding: 0.5rem 0;
+  }
+
+  .marquee-left {
+    animation: scrollLeft 30s linear infinite;
+  }
+
+  .marquee-right {
+    animation: scrollRight 30s linear infinite;
+  }
+
+  .marquee-wrapper:hover .marquee-left,
+  .marquee-wrapper:hover .marquee-right {
+    animation-play-state: paused;
+  }
+
+  @keyframes scrollLeft {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @keyframes scrollRight {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+  }
+
+  .skill-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    border-radius: 9999px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #374151;
+    white-space: nowrap;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+
+  :global(.dark) .skill-chip {
+    background: #25262a;
+    border-color: rgba(255,255,255,0.08);
+    color: #d1d5db;
+  }
+
+  .skill-chip:hover {
+    border-color: #455ce9;
+    box-shadow: 0 0 0 1px #455ce944;
+  }
+
+  .skill-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+</style>
