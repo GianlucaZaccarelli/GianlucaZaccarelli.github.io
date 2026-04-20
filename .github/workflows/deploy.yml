@@ -40,6 +40,12 @@ jobs:
       - name: Type check
         run: npm run check
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E smoke tests
+        run: npm run test:e2e
+
       - name: Build with Astro
         run: npm run build
 
