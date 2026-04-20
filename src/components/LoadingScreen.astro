@@ -253,13 +253,11 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
 </style>
 
 <script>
-  import gsap from 'gsap';
-
   (function () {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const alreadySeen = sessionStorage.getItem('zakka:intro-seen') === '1';
 
-    // Skip intro se l'utente l'ha già vista in questa sessione o preferisce ridotto movimento
+    // Skip intro se l'utente l'ha già vista o preferisce ridotto movimento
     if (alreadySeen || reduceMotion) {
       const c = document.querySelector<HTMLElement>('.loading-container');
       if (c) c.style.display = 'none';
@@ -270,100 +268,96 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
     }
 
     const isMobile = window.innerWidth <= 540;
+    const screen = document.querySelector<HTMLElement>('.loading-screen');
+    const container = document.querySelector<HTMLElement>('.loading-container');
+    const wordsEl = document.querySelector<HTMLElement>('.loading-words');
+    const words = Array.from(document.querySelectorAll<HTMLElement>('.loading-words h2'));
+    const bar = document.getElementById('ls-bar');
+    const count = document.getElementById('ls-count');
+    const curve = document.querySelector<HTMLElement>('.loading-screen .rounded-div-wrap.bottom');
+    const onceIn = Array.from(document.querySelectorAll<HTMLElement>('main .once-in'));
 
-    const tl = gsap.timeline({
-      onComplete() {
-        sessionStorage.setItem('zakka:intro-seen', '1');
-      },
-    });
+    if (!screen || !container || !wordsEl || !bar || !curve) return;
 
     // Init
-    tl.set('.loading-screen', { top: '0' });
-    tl.set('main .once-in', { y: isMobile ? '10vh' : '50vh' });
-    tl.set('.loading-words', { opacity: 0 });
-    tl.set('.loading-words .home-active, .loading-words .home-active-last', { display: 'block', opacity: 0 });
-    tl.set('.loading-words .home-active-first', { opacity: 1 });
-    tl.set('.loading-screen .rounded-div-wrap.bottom', { height: isMobile ? '5vh' : '10vh' });
-    tl.set('html', { cursor: 'wait' });
-
+    document.documentElement.style.cursor = 'wait';
     document.body.style.overflow = 'hidden';
+    onceIn.forEach((el) => (el.style.transform = `translateY(${isMobile ? '10vh' : '50vh'})`));
+    curve.style.height = isMobile ? '5vh' : '10vh';
+    words.forEach((w) => ((w.style.display = 'block'), (w.style.opacity = '0')));
+    const first = words[0];
+    const last = words[words.length - 1];
+    if (first) first.style.opacity = '1';
 
-    // Durata totale del caricamento visibile (prima dello slide-out)
-    const loadDuration = 2.2;
+    // Durata totale del caricamento visibile (ms)
+    const LOAD_MS = 2200;
+    const DELAY_MS = 500;
 
-    // Contatore 0 → 100
-    const counter = { val: 0 };
-    gsap.to(counter, {
-      val: 100,
-      duration: loadDuration,
-      ease: 'power1.inOut',
-      delay: 0.5,
-      onUpdate() {
-        const el = document.getElementById('ls-count');
-        if (el) el.textContent = String(Math.round(counter.val));
-      },
-    });
+    // Contatore 0 → 100 + barra progresso
+    const startCounter = performance.now() + DELAY_MS;
+    function tickCounter(now: number) {
+      const t = Math.min(1, Math.max(0, (now - startCounter) / LOAD_MS));
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      if (count) count.textContent = String(Math.round(eased * 100));
+      if (bar) bar.style.transform = `scaleX(${eased})`;
+      if (t < 1) requestAnimationFrame(tickCounter);
+    }
+    requestAnimationFrame(tickCounter);
 
-    // Barra progresso
-    gsap.to('#ls-bar', {
-      scaleX: 1,
-      duration: loadDuration,
-      ease: 'power1.inOut',
-      delay: 0.5,
-    });
-
-    // Fade in parole
-    tl.to('.loading-words', {
-      duration: 0.8,
-      opacity: 1,
-      ease: 'power4.out',
-      delay: 0.5,
-    });
-
-    // Cicla le parole
-    tl.to(
-      '.loading-words .home-active',
-      {
-        duration: 0.01,
-        opacity: 1,
-        stagger: 0.15,
-        ease: 'none',
-        onStart() {
-          gsap.to('.loading-words .home-active', {
-            duration: 0.01,
-            opacity: 0,
-            stagger: 0.15,
-            ease: 'none',
-            delay: 0.15,
-          });
-        },
-      },
-      '=-0.4'
+    // Fade-in contenitore parole
+    wordsEl.animate(
+      [{ opacity: 0 }, { opacity: 1 }],
+      { duration: 800, delay: DELAY_MS, fill: 'forwards', easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
     );
 
-    tl.to('.loading-words .home-active-last', { duration: 0.01, opacity: 1, delay: 0.15 });
-
-    // Slide-out verso l'alto
-    tl.to('.loading-screen', { duration: 0.85, top: '-100%', ease: 'power4.inOut', delay: 0.2 });
-    tl.to('.loading-screen .rounded-div-wrap.bottom', { duration: 1, height: '0vh', ease: 'power4.inOut' }, '=-0.85');
-    tl.to('.loading-words', { duration: 0.3, opacity: 0, ease: 'linear' }, '=-0.85');
-
-    tl.set('.loading-screen', { top: 'calc(-100%)' });
-    tl.set('.loading-screen .rounded-div-wrap.bottom', { height: '0vh' });
-
-    // Animazione contenuto principale
-    tl.to(
-      'main .once-in',
-      { duration: 1.5, y: '0vh', stagger: 0.07, ease: 'expo.out', clearProps: true },
-      '=-0.85'
-    );
-
-    tl.set('html', { cursor: 'auto' }, '=-1.2');
-
-    tl.call(() => {
-      document.body.style.overflow = '';
-      const c = document.querySelector<HTMLElement>('.loading-container');
-      if (c) c.style.display = 'none';
+    // Ciclo parole: ogni parola resta visibile 150ms poi fade out quando parte la successiva
+    const cycleStart = DELAY_MS + 400;
+    const step = 150;
+    words.forEach((w, i) => {
+      if (i === 0) {
+        w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 1, delay: cycleStart + step, fill: 'forwards' });
+        return;
+      }
+      const isLast = w === last;
+      const keyframes = isLast
+        ? [{ opacity: 0 }, { opacity: 1 }]
+        : [{ opacity: 0 }, { opacity: 1, offset: 0.5 }, { opacity: 0 }];
+      w.animate(keyframes, {
+        duration: isLast ? 1 : step * 2,
+        delay: cycleStart + step * i,
+        fill: 'forwards',
+      });
     });
+
+    // Slide-out curtain
+    const slideOutAt = cycleStart + step * words.length + 200;
+
+    setTimeout(() => {
+      screen.style.transition = 'top 850ms cubic-bezier(0.76, 0, 0.24, 1)';
+      screen.style.top = '-100%';
+      curve.style.transition = 'height 1000ms cubic-bezier(0.76, 0, 0.24, 1)';
+      curve.style.height = '0vh';
+      wordsEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards', easing: 'linear' });
+
+      // Animazione contenuto principale (stagger)
+      onceIn.forEach((el, i) => {
+        el.style.transition = `transform 1500ms cubic-bezier(0.16, 1, 0.3, 1) ${i * 70}ms`;
+        el.style.transform = 'translateY(0)';
+      });
+
+      setTimeout(() => {
+        document.documentElement.style.cursor = 'auto';
+      }, 650);
+
+      setTimeout(() => {
+        document.body.style.overflow = '';
+        container.style.display = 'none';
+        onceIn.forEach((el) => {
+          el.style.transition = '';
+          el.style.transform = '';
+        });
+        sessionStorage.setItem('zakka:intro-seen', '1');
+      }, 1500);
+    }, slideOutAt);
   })();
 </script>

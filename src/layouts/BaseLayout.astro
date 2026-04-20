@@ -1,7 +1,9 @@
 ---
 import '../styles/global.css';
+import { getImage } from 'astro:assets';
 import LoadingScreen from '../components/LoadingScreen.astro';
 import { profile, socialLinks } from '../data/profile';
+import mainImage from '../assets/MainImage.jpg';
 
 interface Props {
   title?: string;
@@ -15,7 +17,8 @@ const {
 
 const siteUrl = (Astro.site ?? new URL('https://gianlucazaccarelli.github.io')).toString().replace(/\/$/, '');
 const canonical = new URL(Astro.url.pathname, siteUrl).toString();
-const ogImage = `${siteUrl}/assets/MainImage.jpg`;
+const ogImageAsset = await getImage({ src: mainImage, width: 1200, format: 'jpg' });
+const ogImage = new URL(ogImageAsset.src, siteUrl).toString();
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -59,11 +62,19 @@ const personSchema = {
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Font: Neue Montreal (custom) -->
-    <link rel="preload" as="font" href="/assets/fonts/NeueMontreal-Regular.otf" type="font/otf" crossorigin="anonymous" />
-
     <!-- JSON-LD -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+
+    {
+      import.meta.env.PROD && import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN && (
+        <script
+          is:inline
+          defer
+          data-domain={import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN}
+          src="https://plausible.io/js/script.js"
+        />
+      )
+    }
 
     <title>{title}</title>
 

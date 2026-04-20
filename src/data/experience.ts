@@ -1,10 +1,13 @@
 import type { Experience } from './types';
+import codeitLogo from '../assets/logos/codeit.jpg';
+import carusoLogo from '../assets/logos/caruso.jpg';
+import sigradeLogo from '../assets/logos/sigrade.jpg';
 
 export const experience: Experience[] = [
   {
     company: 'Code It Digital Solutions S.r.l.',
     url: 'https://www.linkedin.com/company/code-it-digital-solutions-s-r-l/',
-    logo: '/logos/codeit.jpg',
+    logo: codeitLogo,
     role: 'Senior Full-Stack Developer',
     period: 'Set 2024 – Presente',
     location: 'Parma (PR) — Body Rental',
@@ -18,7 +21,7 @@ export const experience: Experience[] = [
   {
     company: 'Raffaele Caruso S.p.A.',
     url: 'https://carusomenswear.com/',
-    logo: '/logos/caruso.jpg',
+    logo: carusoLogo,
     role: 'IT Management & Dev-Analyst',
     period: 'Mar 2022 – Lug 2024',
     location: 'Soragna (PR)',
@@ -32,7 +35,7 @@ export const experience: Experience[] = [
   {
     company: 'SiGrade S.p.A.',
     url: 'https://www.sigrade.it',
-    logo: '/logos/sigrade.jpg',
+    logo: sigradeLogo,
     role: 'Full-Stack Developer (Junior → Senior)',
     period: 'Set 2017 – Mar 2022',
     location: 'Parma (PR)',

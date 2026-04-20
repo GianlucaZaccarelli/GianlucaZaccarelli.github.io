@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { experience } from '../data/experience';
 ---
 
@@ -13,12 +14,13 @@ import { experience } from '../data/experience';
             <div class="flex items-center gap-4">
               {job.logo && (
                 <div class="shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-surface-card flex items-center justify-center overflow-hidden p-2 shadow-sm">
-                  <img
+                  <Image
                     src={job.logo}
                     alt={`Logo ${job.company}`}
+                    widths={[64, 80, 160]}
+                    sizes="(min-width: 640px) 80px, 64px"
                     class="w-full h-full object-contain"
                     loading="lazy"
-                    decoding="async"
                   />
                 </div>
               )}

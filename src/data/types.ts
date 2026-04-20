@@ -1,7 +1,9 @@
+import type { ImageMetadata } from 'astro';
+
 export interface Experience {
   company: string;
   url?: string;
-  logo?: string;
+  logo?: ImageMetadata;
   role: string;
   period: string;
   location: string;
@@ -11,7 +13,7 @@ export interface Experience {
 export interface Education {
   institution: string;
   url?: string;
-  logo?: string;
+  logo?: ImageMetadata;
   degree: string;
   field: string;
   year: string;

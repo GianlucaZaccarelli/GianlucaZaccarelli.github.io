@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import { profile, socialLinks } from '../data/profile';
 import SocialIcon from './SocialIcon.astro';
+import mainImage from '../assets/MainImage.jpg';
 ---
 
 <header
@@ -110,11 +112,13 @@ import SocialIcon from './SocialIcon.astro';
 
   <!-- Immagine centrale con parallax -->
   <div class="hero-img-wrap" id="hero-bg">
-    <img
-      src="/assets/MainImage.jpg"
+    <Image
+      src={mainImage}
       alt={profile.name}
+      widths={[640, 960, 1280, 1920]}
+      sizes="100vw"
       loading="eager"
-      decoding="async"
+      fetchpriority="high"
       class="hero-img"
     />
   </div>
@@ -352,8 +356,6 @@ import SocialIcon from './SocialIcon.astro';
 </style>
 
 <script>
-  import gsap from 'gsap';
-
   /* ── Navbar theme / shadow ── */
   const btn    = document.getElementById('theme-toggle');
   const header = document.getElementById('top') as HTMLElement | null;
@@ -405,52 +407,51 @@ import SocialIcon from './SocialIcon.astro';
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  /* ── Marquee rolling (GSAP) ── */
+  /* ── Marquee rolling (WAAPI) ── */
   (function initMarquee() {
     const inner   = document.getElementById('hero-marquee-inner');
     const textEl  = inner?.querySelector('.hero-marquee-text') as HTMLElement | null;
     if (!inner || !textEl) return;
 
-    // Clona il testo fino a riempire 3× la viewport
-    const fill = () => {
-      // Rimuovi cloni precedenti
-      inner.querySelectorAll('.hero-marquee-clone').forEach(el => el.remove());
-      const totalW  = textEl.offsetWidth;
-      const needed  = Math.ceil((window.innerWidth * 3) / totalW) + 1;
+    let animation: Animation | null = null;
+
+    const build = () => {
+      inner.querySelectorAll('.hero-marquee-clone').forEach((el) => el.remove());
+      const totalW = textEl.offsetWidth;
+      if (totalW === 0) return;
+      const needed = Math.ceil((window.innerWidth * 3) / totalW) + 1;
       for (let i = 0; i < needed; i++) {
         const clone = textEl.cloneNode(true) as HTMLElement;
         clone.classList.add('hero-marquee-clone');
         inner.appendChild(clone);
       }
+
+      const totalChildren = inner.children.length;
+      const distancePct = 100 / totalChildren;
+      animation?.cancel();
+      animation = inner.animate(
+        [{ transform: 'translateX(0)' }, { transform: `translateX(-${distancePct}%)` }],
+        { duration: 22000, iterations: Infinity, easing: 'linear' }
+      );
     };
-    fill();
-    window.addEventListener('resize', fill, { passive: true });
 
-    let direction = 1; // 1 = forward, -1 = backward
+    build();
+    window.addEventListener('resize', build, { passive: true });
 
-    const tl: gsap.core.Timeline = gsap.timeline({
-      repeat: -1,
-      onReverseComplete() {
-        tl.totalTime(tl.rawTime() + tl.duration() * 10);
-      },
-    });
-
-    tl.to(inner, {
-      xPercent: -100 / (inner.children.length),
-      duration: 22,
-      ease: 'none',
-    });
-
-    // Cambia direzione in base allo scroll
+    let direction = 1;
     let lastScrollY = window.scrollY;
-    window.addEventListener('scroll', () => {
-      const curr = window.scrollY;
-      const newDir = curr > lastScrollY ? 1 : -1;
-      if (newDir !== direction) {
-        direction = newDir;
-        gsap.to(tl, { timeScale: direction, duration: 0.5, overwrite: true });
-      }
-      lastScrollY = curr;
-    }, { passive: true });
+    window.addEventListener(
+      'scroll',
+      () => {
+        const curr = window.scrollY;
+        const newDir = curr > lastScrollY ? 1 : -1;
+        if (newDir !== direction && animation) {
+          direction = newDir;
+          animation.playbackRate = direction;
+        }
+        lastScrollY = curr;
+      },
+      { passive: true }
+    );
   })();
 </script>
