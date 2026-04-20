@@ -29,17 +29,19 @@ jobs:
           cache: npm
 
       - name: Setup Pages
-        id: pages
         uses: actions/configure-pages@v4
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run check
+
       - name: Build with Astro
         run: npm run build
-        env:
-          SITE: ${{ steps.pages.outputs.origin }}
-          BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
       - name: Generate CV PDF
         run: node scripts/generate-pdf.mjs

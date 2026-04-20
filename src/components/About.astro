@@ -5,6 +5,8 @@ const flagMap: Record<string, string> = {
   'Italiano': '🇮🇹',
   'Inglese':  '🇬🇧',
 };
+
+const [bioLead, bioBody, bioTail] = profile.bioParagraphs;
 ---
 
 <section id="about" class="py-16 bg-gray-50 dark:bg-surface-alt">
@@ -17,25 +19,13 @@ const flagMap: Record<string, string> = {
           <span class="block text-6xl leading-none text-brand-200 dark:text-brand-700/50 font-serif select-none -mb-4" aria-hidden="true">"</span>
 
           <!-- Frase 1: personalità e leadership -->
-          <p class="text-gray-800 dark:text-gray-100 text-lg leading-relaxed font-medium">
-            Sono una persona <mark class="bg-transparent text-brand-600 dark:text-brand-400 font-semibold">determinata e ambiziosa</mark>,
-            con spiccate doti di <mark class="bg-transparent text-brand-600 dark:text-brand-400 font-semibold">leadership</mark> e
-            una forte inclinazione alla <mark class="bg-transparent text-brand-600 dark:text-brand-400 font-semibold">pianificazione strategica</mark>.
-          </p>
+          <p class="text-gray-800 dark:text-gray-100 text-lg leading-relaxed font-medium">{bioLead}</p>
 
           <!-- Frase 2: obiettivi e approccio -->
-          <p class="text-gray-600 dark:text-gray-300 text-base leading-relaxed">
-            Mi concentro sul raggiungimento degli obiettivi, affrontando le sfide con
-            <mark class="bg-transparent text-gray-800 dark:text-gray-100 font-medium">sicurezza, razionalità e un approccio analitico</mark>.
-            Comunico in modo chiaro e diretto, motivando e guidando chi mi circonda verso il successo.
-          </p>
+          <p class="text-gray-600 dark:text-gray-300 text-base leading-relaxed">{bioBody}</p>
 
           <!-- Frase 3: psicologia — elemento differenziante -->
-          <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed border-l-2 border-brand-200 dark:border-brand-700/50 pl-4 italic">
-            Sto approfondendo questi aspetti con una
-            <mark class="bg-transparent text-brand-600 dark:text-brand-400 not-italic font-medium">Laurea in Scienze Psicologiche</mark>,
-            per unire alla solidità tecnica una comprensione più profonda delle persone e dei team.
-          </p>
+          <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed border-l-2 border-brand-200 dark:border-brand-700/50 pl-4 italic">{bioTail}</p>
 
           <span class="block text-6xl leading-none text-brand-200 dark:text-brand-700/50 font-serif select-none text-right -mt-4" aria-hidden="true">"</span>
         </div>

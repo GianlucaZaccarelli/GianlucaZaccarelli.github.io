@@ -34,14 +34,17 @@ if (!existsSync(DIST)) {
   process.exit(1);
 }
 
-// Minimal static file server for dist/
+// Minimal static file server for dist/ (with path-traversal guard)
 const server = createServer(async (req, res) => {
-  let urlPath = req.url.split('?')[0];
+  let urlPath = (req.url ?? '/').split('?')[0];
   if (urlPath.endsWith('/')) urlPath += 'index.html';
 
-  let filePath = join(DIST, urlPath);
+  const candidate = resolve(DIST, '.' + urlPath);
+  if (!candidate.startsWith(DIST)) { res.writeHead(403); res.end('Forbidden'); return; }
+
+  let filePath = candidate;
   if (existsSync(filePath) && (await stat(filePath)).isDirectory()) filePath = join(filePath, 'index.html');
-  if (!existsSync(filePath)) filePath = join(DIST, urlPath + '.html');
+  if (!existsSync(filePath)) filePath = candidate + '.html';
   if (!existsSync(filePath)) { res.writeHead(404); res.end('Not found'); return; }
 
   const ext  = extname(filePath);

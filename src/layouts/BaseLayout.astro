@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import LoadingScreen from '../components/LoadingScreen.astro';
+import { profile, socialLinks } from '../data/profile';
 
 interface Props {
   title?: string;
@@ -12,8 +13,25 @@ const {
   description = 'Portfolio e curriculum vitae di Gianluca Zaccarelli, Senior Full-Stack Developer con esperienza in C#, microservizi, Docker e sviluppo enterprise.',
 } = Astro.props;
 
-const siteUrl = Astro.site ?? 'https://gianlucazaccarelli.github.io';
-const ogImage = `${siteUrl}/og-image.png`;
+const siteUrl = (Astro.site ?? new URL('https://gianlucazaccarelli.github.io')).toString().replace(/\/$/, '');
+const canonical = new URL(Astro.url.pathname, siteUrl).toString();
+const ogImage = `${siteUrl}/assets/MainImage.jpg`;
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.title,
+  email: `mailto:${profile.email}`,
+  url: siteUrl,
+  image: ogImage,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: profile.city,
+    addressCountry: profile.country,
+  },
+  sameAs: socialLinks.filter((l) => l.icon !== 'mail').map((l) => l.href),
+};
 ---
 
 <!doctype html>
@@ -22,24 +40,30 @@ const ogImage = `${siteUrl}/og-image.png`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={siteUrl} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="it_IT" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- Font: Neue Montreal (custom) -->
     <link rel="preload" as="font" href="/assets/fonts/NeueMontreal-Regular.otf" type="font/otf" crossorigin="anonymous" />
+
+    <!-- JSON-LD -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
 
     <title>{title}</title>
 
@@ -55,6 +79,7 @@ const ogImage = `${siteUrl}/og-image.png`;
     </script>
   </head>
   <body class="min-h-screen antialiased">
+    <a href="#about" class="skip-to-content">Salta al contenuto</a>
     <LoadingScreen />
     <slot />
   </body>

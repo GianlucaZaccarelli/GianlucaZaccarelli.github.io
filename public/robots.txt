@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /cv-print
+
+Sitemap: https://gianlucazaccarelli.github.io/sitemap-index.xml

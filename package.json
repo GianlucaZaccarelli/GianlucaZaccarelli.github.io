@@ -10,14 +10,28 @@
     "build": "astro build",
     "generate:cv": "node scripts/generate-pdf.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "astro check",
+    "lint": "eslint . --ext .js,.mjs,.ts,.astro",
+    "format": "prettier --write \"**/*.{astro,ts,mjs,js,json,md,css}\"",
+    "format:check": "prettier --check \"**/*.{astro,ts,mjs,js,json,md,css}\""
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
     "@tailwindcss/vite": "^4.2.1",
-    "astro": "^6.0.4",
+    "astro": "^6.1.8",
+    "gsap": "^3.15.0",
     "tailwindcss": "^4.2.1"
   },
   "devDependencies": {
-    "puppeteer": "^24.39.1"
+    "@astrojs/check": "^0.9.8",
+    "@typescript-eslint/eslint-plugin": "^8.59.0",
+    "@typescript-eslint/parser": "^8.59.0",
+    "eslint": "^10.2.1",
+    "eslint-plugin-astro": "^1.7.0",
+    "prettier": "^3.8.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "puppeteer": "^24.39.1",
+    "typescript": "^5.9.3"
   }
 }

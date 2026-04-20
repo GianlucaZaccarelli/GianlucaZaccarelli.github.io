@@ -252,14 +252,30 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
   }
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" is:inline></script>
-
 <script>
+  import gsap from 'gsap';
+
   (function () {
-    const gsap = (window as any).gsap;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const alreadySeen = sessionStorage.getItem('zakka:intro-seen') === '1';
+
+    // Skip intro se l'utente l'ha già vista in questa sessione o preferisce ridotto movimento
+    if (alreadySeen || reduceMotion) {
+      const c = document.querySelector<HTMLElement>('.loading-container');
+      if (c) c.style.display = 'none';
+      document.querySelectorAll<HTMLElement>('main .once-in').forEach((el) => {
+        el.style.transform = 'none';
+      });
+      return;
+    }
+
     const isMobile = window.innerWidth <= 540;
 
-    const tl = gsap.timeline();
+    const tl = gsap.timeline({
+      onComplete() {
+        sessionStorage.setItem('zakka:intro-seen', '1');
+      },
+    });
 
     // Init
     tl.set('.loading-screen', { top: '0' });
