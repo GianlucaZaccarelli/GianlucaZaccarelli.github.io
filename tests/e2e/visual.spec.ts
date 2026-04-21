@@ -56,4 +56,43 @@ test.describe('ZakkaSite visual regression', () => {
       maxDiffPixelRatio: 0.02,
     });
   });
+
+  test('education snapshot', async ({ page }) => {
+    await openStableHomepage(page);
+
+    const education = page.locator('#education');
+    await education.scrollIntoViewIfNeeded();
+    await expect(education).toBeVisible();
+    await expect(education).toHaveScreenshot('education.png', {
+      animations: 'disabled',
+      caret: 'hide',
+      maxDiffPixelRatio: 0.02,
+    });
+  });
+
+  test('skills snapshot', async ({ page }) => {
+    await openStableHomepage(page);
+
+    const skills = page.locator('#skills');
+    await skills.scrollIntoViewIfNeeded();
+    await expect(skills).toBeVisible();
+    await expect(skills).toHaveScreenshot('skills.png', {
+      animations: 'disabled',
+      caret: 'hide',
+      maxDiffPixelRatio: 0.02,
+    });
+  });
+
+  test('contact snapshot', async ({ page }) => {
+    await openStableHomepage(page);
+
+    const contact = page.locator('#contact');
+    await contact.scrollIntoViewIfNeeded();
+    await expect(contact).toBeVisible();
+    await expect(contact).toHaveScreenshot('contact.png', {
+      animations: 'disabled',
+      caret: 'hide',
+      maxDiffPixelRatio: 0.02,
+    });
+  });
 });
