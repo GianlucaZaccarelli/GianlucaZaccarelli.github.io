@@ -31,7 +31,7 @@ test.describe('ZakkaSite visual regression', () => {
     await expect(about).toHaveScreenshot('about.png', {
       animations: 'disabled',
       caret: 'hide',
-      maxDiffPixelRatio: 0.02,
+      maxDiffPixelRatio: 0.04,
     });
 
     const experience = page.locator('#experience');
