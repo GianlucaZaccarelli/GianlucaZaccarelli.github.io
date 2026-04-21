@@ -4,9 +4,14 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      update-snapshots:
+        description: 'Actualize visual snapshots'
+        type: boolean
+        default: false
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -44,15 +49,21 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: E2E smoke tests
-        run: npm run test:e2e
+        run: |
+          if [ "${{ github.event.inputs.update-snapshots }}" == "true" ]; then
+            npm run test:e2e -- --update-snapshots
+          else
+            npm run test:e2e
+          fi
 
-      - name: Upload visual test results
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
+      - name: Commit updated snapshots
+        if: github.event.inputs.update-snapshots == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add tests/e2e/visual.spec.ts-snapshots/*.png
+          git commit -m "chore(e2e): update visual snapshots [skip ci]" || echo "No changes to commit"
+          git push
 
       - name: Build with Astro
         run: npm run build
