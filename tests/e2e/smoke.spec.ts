@@ -33,12 +33,12 @@ test.describe('ZakkaSite smoke', () => {
     await page.goto('/en/');
 
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-    await expect(page.locator('#about .section-title')).toHaveText('About');
-    await expect(page.locator('#experience .section-title')).toHaveText('Experience');
-    await expect(page.locator('#education .section-title')).toHaveText('Education');
-    await expect(page.locator('#skills .section-title')).toHaveText('Skills');
-    await expect(page.locator('#projects .section-title')).toHaveText('Projects');
-    await expect(page.locator('#contact .section-title')).toHaveText('Contact');
+    await expect(page.locator('#about .section-title')).toContainText('Who I am');
+    await expect(page.locator('#experience .section-title')).toContainText('Career path');
+    await expect(page.locator('#education .section-title')).toContainText('Formal studies');
+    await expect(page.locator('#skills .section-title')).toContainText('Tech stack');
+    await expect(page.locator('#projects .section-title')).toContainText('Selected work');
+    await expect(page.locator('#contact .section-title')).toContainText('Say hello');
 
     const aboutParagraphs = page.locator('#about p');
     await expect(aboutParagraphs.first()).toBeVisible();
