@@ -1,5 +1,16 @@
 ---
-import { skills } from '../data/skills';
+import { getSkills } from '../data/skills';
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const skills = getSkills(locale);
+const labels = locale === 'en'
+  ? { title: 'Tech', em: 'stack', eyebrow: 'Skills' }
+  : { title: 'Competenze', em: 'tecniche', eyebrow: 'Competenze' };
 
 const BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons';
 
@@ -7,15 +18,63 @@ const iconMap: Record<string, string> = {
   'C#':                   `${BASE}/csharp/csharp-original.svg`,
   '.NET':                 `${BASE}/dotnetcore/dotnetcore-original.svg`,
   'Node.js':              `${BASE}/nodejs/nodejs-original.svg`,
+  'OpenAPI/Swagger':      `${BASE}/swagger/swagger-original.svg`,
+  'API Versioning':       `${BASE}/postman/postman-original.svg`,
+  'Backward Compatibility': `${BASE}/git/git-original.svg`,
+  'OAuth2':               `${BASE}/vault/vault-original.svg`,
+  'OpenID Connect':       `${BASE}/vault/vault-original.svg`,
+  'RabbitMQ':             `${BASE}/rabbitmq/rabbitmq-original.svg`,
+  'Kafka':                `${BASE}/apachekafka/apachekafka-original.svg`,
+  'Event-Driven Architecture': `${BASE}/apachekafka/apachekafka-original.svg`,
+  'Microservizi':         `${BASE}/kubernetes/kubernetes-plain.svg`,
+  'Microservices':        `${BASE}/kubernetes/kubernetes-plain.svg`,
   'Microsoft SQL Server': `${BASE}/microsoftsqlserver/microsoftsqlserver-plain.svg`,
   'Docker':               `${BASE}/docker/docker-original.svg`,
   'Kubernetes':           `${BASE}/kubernetes/kubernetes-plain.svg`,
   'Git':                  `${BASE}/git/git-original.svg`,
+  'GitHub':               `${BASE}/github/github-original.svg`,
+  'NuGet':                `${BASE}/nuget/nuget-original.svg`,
+  'CI/CD':                `${BASE}/githubactions/githubactions-original.svg`,
+  'GitHub Actions':       `${BASE}/githubactions/githubactions-original.svg`,
+  'Quality Gates':        `${BASE}/sonarqube/sonarqube-original.svg`,
+  'Staging/Production Pipelines': `${BASE}/githubactions/githubactions-original.svg`,
+  'Azure':                `${BASE}/azure/azure-original.svg`,
+  'AWS':                  `${BASE}/amazonwebservices/amazonwebservices-original-wordmark.svg`,
+  'Grafana':              `${BASE}/grafana/grafana-original.svg`,
+  'Logging & Monitoring': `${BASE}/grafana/grafana-original.svg`,
+  'MainFrame':            `${BASE}/linux/linux-original.svg`,
+  'Crystal Reports':      `${BASE}/oracle/oracle-original.svg`,
   'JavaScript':           `${BASE}/javascript/javascript-original.svg`,
   'TypeScript':           `${BASE}/typescript/typescript-original.svg`,
   'HTML5':                `${BASE}/html5/html5-original.svg`,
   'CSS3':                 `${BASE}/css3/css3-original.svg`,
+  'Dart':                 `${BASE}/dart/dart-original.svg`,
+  'Flutter':              `${BASE}/flutter/flutter-original.svg`,
+  'Responsive Design':    `${BASE}/bootstrap/bootstrap-original.svg`,
+  'Accessibilita (WCAG)': `${BASE}/chrome/chrome-original.svg`,
+  'Accessibility (WCAG)': `${BASE}/chrome/chrome-original.svg`,
+  'State Management':     `${BASE}/redux/redux-original.svg`,
+  'UI Performance (Core Web Vitals)': `${BASE}/vitejs/vitejs-original.svg`,
+  'Design Systems':       `${BASE}/storybook/storybook-original.svg`,
+  'Form Validation':      `${BASE}/eslint/eslint-original.svg`,
   'Astro':                `${BASE}/astro/astro-original.svg`,
+  'Project Management':   `${BASE}/trello/trello-plain.svg`,
+  'Team Leadership':      `${BASE}/slack/slack-original.svg`,
+  'Analisi dei requisiti': `${BASE}/confluence/confluence-original.svg`,
+  'Requirements analysis': `${BASE}/confluence/confluence-original.svg`,
+  'GDPR compliance':      `${BASE}/vault/vault-original.svg`,
+  'Visual Studio':        `${BASE}/visualstudio/visualstudio-original.svg`,
+  'Visual Studio Code':   `${BASE}/vscode/vscode-original.svg`,
+  'Office Suite':         `${BASE}/windows8/windows8-original.svg`,
+  'Playwright':           `${BASE}/playwright/playwright-original.svg`,
+  'Unit Testing':         `${BASE}/playwright/playwright-original.svg`,
+  'Integration Testing':  `${BASE}/postman/postman-original.svg`,
+  'API Testing':          `${BASE}/postman/postman-original.svg`,
+  'E2E Testing':          `${BASE}/playwright/playwright-original.svg`,
+  'Coverage Analysis':    `${BASE}/sonarqube/sonarqube-original.svg`,
+  'Performance Profiling': `${BASE}/grafana/grafana-original.svg`,
+  'Query Optimization':   `${BASE}/microsoftsqlserver/microsoftsqlserver-plain.svg`,
+  'OWASP':                `${BASE}/vault/vault-original.svg`,
 };
 
 const toChips = (categories: string[]) =>
@@ -24,43 +83,89 @@ const toChips = (categories: string[]) =>
     .flatMap(s => s.items)
     .map(name => ({ name, icon: iconMap[name] ?? null }));
 
-const row1 = toChips(['Backend', 'DevOps & Infrastruttura']);
-const row2 = toChips(['Frontend', 'Metodologie & Soft Skills']);
+const row1 = toChips(['Backend', 'DevOps']);
+const row2 = toChips(['Frontend', 'Soft Skills & Tools']);
+
+// Cluster view: each category on its own
+const clusters = skills.map(s => ({
+  ...s,
+  items: s.items.map(name => ({ name, icon: iconMap[name] ?? null })),
+}));
 ---
 
-<section id="skills" class="py-16 bg-white dark:bg-surface overflow-hidden">
-  <div class="max-w-4xl mx-auto px-6">
-    <h2 class="section-title">Competenze</h2>
+<section id="skills" class="relative py-24 md:py-32 bg-white dark:bg-surface overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6">
 
-  <!-- Row 1: scorre a sinistra -->
-  <div class="marquee-wrapper mb-4">
-    <div class="marquee-track marquee-left">
-      {[...row1, ...row1].map(item => (
-        <div class="skill-chip">
-          {item.icon && (
-            <img src={item.icon} alt={item.name} width="22" height="22" loading="lazy" decoding="async" class="skill-icon" />
-          )}
-          <span>{item.name}</span>
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">·04</span>
+      <span class="eyebrow-line"></span>
+      <span>{labels.eyebrow}</span>
+    </div>
+
+    <h2 class="section-title">
+      {labels.title} <em>{labels.em}</em>
+    </h2>
+
+    <!-- Cluster view (desktop focus) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-12 mb-20">
+      {clusters.map((cluster, idx) => (
+        <div class="group">
+          <div class="flex items-baseline gap-3 mb-5 pb-3 border-b border-ink-300/40 dark:border-white/10">
+            <span class="meta-mono text-xs text-accent-600 dark:text-accent-400">
+              ·{String(idx + 1).padStart(2, '0')}
+            </span>
+            <h3 class="meta-label !text-[0.78rem] !tracking-[0.2em] text-ink-900 dark:text-white">
+              {cluster.category}
+            </h3>
+            <span class="flex-1 h-px bg-ink-300/30 dark:bg-white/8"></span>
+            <span class="meta-mono text-[0.65rem] text-ink-500 dark:text-white/40">
+              {cluster.items.length}
+            </span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            {cluster.items.map(item => (
+              <div class="skill-chip">
+                {item.icon && (
+                  <img src={item.icon} alt={item.name} width="16" height="16" loading="lazy" decoding="async" class="skill-icon" />
+                )}
+                <span>{item.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </div>
-  </div>
 
-  <!-- Row 2: scorre a destra -->
-  <div class="marquee-wrapper">
-    <div class="marquee-track marquee-right">
-      {[...row2, ...row2].map(item => (
-        <div class="skill-chip">
-          {item.icon && (
-            <img src={item.icon} alt={item.name} width="22" height="22" loading="lazy" decoding="async" class="skill-icon" />
-          )}
-          <span>{item.name}</span>
+    <!-- Marquee (atmosphere) -->
+    <div class="space-y-3 opacity-70">
+      <div class="marquee-wrapper">
+        <div class="marquee-track marquee-left">
+          {[...row1, ...row1, ...row1].map(item => (
+            <div class="skill-chip skill-chip-ghost">
+              {item.icon && (
+                <img src={item.icon} alt={item.name} width="18" height="18" loading="lazy" decoding="async" class="skill-icon" />
+              )}
+              <span>{item.name}</span>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  </div>
+      </div>
 
-  </div><!-- end max-w-4xl -->
+      <div class="marquee-wrapper">
+        <div class="marquee-track marquee-right">
+          {[...row2, ...row2, ...row2].map(item => (
+            <div class="skill-chip skill-chip-ghost">
+              {item.icon && (
+                <img src={item.icon} alt={item.name} width="18" height="18" loading="lazy" decoding="async" class="skill-icon" />
+              )}
+              <span>{item.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+  </div>
 </section>
 
 <style>
@@ -74,18 +179,13 @@ const row2 = toChips(['Frontend', 'Metodologie & Soft Skills']);
 
   .marquee-track {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.6rem;
     width: max-content;
-    padding: 0.5rem 0;
+    padding: 0.4rem 0;
   }
 
-  .marquee-left {
-    animation: scrollLeft 30s linear infinite;
-  }
-
-  .marquee-right {
-    animation: scrollRight 30s linear infinite;
-  }
+  .marquee-left  { animation: scrollLeft  40s linear infinite; }
+  .marquee-right { animation: scrollRight 40s linear infinite; }
 
   .marquee-wrapper:hover .marquee-left,
   .marquee-wrapper:hover .marquee-right {
@@ -94,52 +194,64 @@ const row2 = toChips(['Frontend', 'Metodologie & Soft Skills']);
 
   @media (prefers-reduced-motion: reduce) {
     .marquee-left,
-    .marquee-right {
-      animation: none;
-    }
+    .marquee-right { animation: none; }
   }
 
-  @keyframes scrollLeft {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-
-  @keyframes scrollRight {
-    from { transform: translateX(-50%); }
-    to   { transform: translateX(0); }
-  }
+  @keyframes scrollLeft  { from { transform: translateX(0); } to { transform: translateX(-33.333%); } }
+  @keyframes scrollRight { from { transform: translateX(-33.333%); } to { transform: translateX(0); } }
 
   .skill-chip {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.45rem 1rem;
-    border-radius: 9999px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    font-size: 0.85rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
     font-weight: 500;
-    color: #374151;
+    letter-spacing: 0.02em;
+    color: var(--color-ink-700);
     white-space: nowrap;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.2s;
     cursor: default;
   }
 
   :global(.dark) .skill-chip {
-    background: #25262a;
-    border-color: rgba(255,255,255,0.08);
-    color: #d1d5db;
+    background: transparent;
+    border-color: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.8);
   }
 
   .skill-chip:hover {
-    border-color: #455ce9;
-    box-shadow: 0 0 0 1px #455ce944;
+    border-color: var(--color-accent-500);
+    color: var(--color-accent-700);
+    background: color-mix(in oklch, var(--color-accent-500) 8%, transparent);
+    transform: translateY(-1px);
+  }
+
+  :global(.dark) .skill-chip:hover {
+    color: var(--color-accent-400);
+  }
+
+  .skill-chip-ghost {
+    border-color: rgba(0, 0, 0, 0.08);
+    font-size: 0.75rem;
+  }
+  :global(.dark) .skill-chip-ghost {
+    border-color: rgba(255,255,255,0.08);
   }
 
   .skill-icon {
-    width: 22px;
-    height: 22px;
+    width: 16px;
+    height: 16px;
     object-fit: contain;
     flex-shrink: 0;
+  }
+
+  .skill-chip-ghost .skill-icon {
+    width: 18px;
+    height: 18px;
   }
 </style>

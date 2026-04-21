@@ -1,67 +1,143 @@
 ---
-import { profile } from '../data/profile';
+import { getProfile } from '../data/profile';
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const profile = getProfile(locale);
+
+const labels = locale === 'en'
+  ? {
+      sectionTitle: 'Who I am',
+      sectionTitleEm: 'am',
+      eyebrow: 'About',
+      position: 'Location',
+      languages: 'Languages',
+      personality: 'Personality',
+      availability: 'Availability',
+    }
+  : {
+      sectionTitle: 'Chi sono',
+      sectionTitleEm: 'sono',
+      eyebrow: 'Chi sono',
+      position: 'Posizione',
+      languages: 'Lingue',
+      personality: 'Personalità',
+      availability: 'Disponibilità',
+    };
 
 const flagMap: Record<string, string> = {
-  'Italiano': '🇮🇹',
-  'Inglese':  '🇬🇧',
+  Italiano: '🇮🇹',
+  Inglese: '🇬🇧',
+  Italian: '🇮🇹',
+  English: '🇬🇧',
 };
 
 const [bioLead, bioBody, bioTail] = profile.bioParagraphs;
+const titleBase = labels.sectionTitle.replace(labels.sectionTitleEm, '').trim();
 ---
 
-<section id="about" class="py-16 bg-gray-50 dark:bg-surface-alt">
-  <div class="max-w-4xl mx-auto px-6">
-    <h2 class="section-title">Chi sono</h2>
-    <div class="grid sm:grid-cols-3 gap-10">
+<section id="about" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6">
 
-      <div class="sm:col-span-2 relative">
-        <div class="space-y-2">
-          <span class="block text-6xl leading-none text-brand-200 dark:text-brand-700/50 font-serif select-none -mb-4" aria-hidden="true">"</span>
+    <!-- Editorial header -->
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">·01</span>
+      <span class="eyebrow-line"></span>
+      <span>{labels.eyebrow}</span>
+    </div>
 
-          <!-- Frase 1: personalità e leadership -->
-          <p class="text-gray-800 dark:text-gray-100 text-lg leading-relaxed font-medium">{bioLead}</p>
+    <h2 class="section-title">
+      {titleBase} <em>{labels.sectionTitleEm}</em>
+    </h2>
 
-          <!-- Frase 2: obiettivi e approccio -->
-          <p class="text-gray-600 dark:text-gray-300 text-base leading-relaxed">{bioBody}</p>
+    <!-- Magazine layout: 12 cols -->
+    <div class="grid grid-cols-12 gap-x-6 gap-y-12">
 
-          <!-- Frase 3: psicologia — elemento differenziante -->
-          <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed border-l-2 border-brand-200 dark:border-brand-700/50 pl-4 italic">{bioTail}</p>
+      <!-- Pull-quote lead: takes 8 cols, offset 1 -->
+      <div class="col-span-12 md:col-span-8 md:col-start-1 relative">
+        <div class="relative">
+          <span class="absolute -top-6 -left-2 md:-left-8 font-serif text-[8rem] leading-none text-accent-500/25 dark:text-accent-400/20 select-none pointer-events-none" aria-hidden="true" style="font-variation-settings: 'opsz' 144;">"</span>
 
-          <span class="block text-6xl leading-none text-brand-200 dark:text-brand-700/50 font-serif select-none text-right -mt-4" aria-hidden="true">"</span>
+          <p class="editorial-lead relative z-10 mb-8">
+            {bioLead}
+          </p>
+
+          <p class="text-ink-700 dark:text-white/70 text-base md:text-lg leading-relaxed max-w-2xl">
+            {bioBody}
+          </p>
+
+          <div class="mt-10 pt-6 border-t border-ink-300/40 dark:border-white/10 max-w-2xl">
+            <p class="meta-label mb-2">Postilla</p>
+            <p class="text-ink-500 dark:text-white/55 text-sm md:text-base leading-relaxed italic font-serif">
+              {bioTail}
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- Sidebar info -->
-      <div class="space-y-5 text-sm">
-        <div>
-          <p class="text-xs font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider mb-1">Posizione</p>
-          <p class="text-gray-700 dark:text-gray-300">{profile.location}</p>
-        </div>
-        <div>
-          <p class="text-xs font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider mb-1">Lingue</p>
-          <ul class="space-y-1">
-            {profile.languages.map(lang => {
-              const key = lang.split(' ')[0];
-              const flag = flagMap[key] ?? '';
-              return (
-                <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                  <span class="text-base leading-none">{flag}</span>
-                  <span>{lang}</span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-        <div>
-          <p class="text-xs font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider mb-1">Personalità</p>
-          <p class="text-gray-700 dark:text-gray-300">MBTI — <span class="font-semibold">{profile.mbti}</span></p>
-        </div>
-        <div>
-          <p class="text-xs font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider mb-1">Disponibilità</p>
-          <p class="text-gray-700 dark:text-gray-300">{profile.availability}</p>
-        </div>
-      </div>
+      <!-- Sidebar: 4 cols, right side -->
+      <aside class="col-span-12 md:col-span-4 md:col-start-9 md:pl-6 md:border-l md:border-ink-300/40 md:dark:border-white/10 md:sticky md:top-28 self-start">
+        <dl class="space-y-7">
+          <div>
+            <dt class="meta-label mb-1.5">/ {labels.position}</dt>
+            <dd class="text-ink-900 dark:text-white text-sm md:text-base leading-snug">{profile.location}</dd>
+          </div>
+
+          <div>
+            <dt class="meta-label mb-1.5">/ {labels.languages}</dt>
+            <dd>
+              <ul class="space-y-1.5">
+                {profile.languages.map(lang => {
+                  const key = lang.split(' ')[0];
+                  const flag = flagMap[key] ?? '';
+                  return (
+                    <li class="flex items-baseline gap-2 text-ink-900 dark:text-white/90 text-sm md:text-base">
+                      <span class="text-base leading-none">{flag}</span>
+                      <span>{lang}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="meta-label mb-1.5">/ {labels.personality}</dt>
+            <dd class="text-ink-900 dark:text-white text-sm md:text-base">
+              <span class="meta-mono text-accent-600 dark:text-accent-400 font-medium">{profile.mbti}</span>
+              <span class="text-ink-500 dark:text-white/50 text-xs ml-1">— MBTI</span>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="meta-label mb-1.5">/ {labels.availability}</dt>
+            <dd class="flex items-center gap-2 text-ink-900 dark:text-white text-sm md:text-base">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent-500 status-pulse"></span>
+              <span>{profile.availability}</span>
+            </dd>
+          </div>
+        </dl>
+      </aside>
 
     </div>
   </div>
 </section>
+
+<style>
+  .status-pulse {
+    box-shadow: 0 0 0 0 rgba(217, 119, 87, 0.6);
+    animation: statusPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes statusPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(217, 119, 87, 0.6); }
+    70%  { box-shadow: 0 0 0 8px rgba(217, 119, 87, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(217, 119, 87, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .status-pulse { animation: none; }
+  }
+</style>

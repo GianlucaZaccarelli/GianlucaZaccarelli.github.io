@@ -1,5 +1,25 @@
 import type { ImageMetadata } from 'astro';
 
+export type Locale = 'it' | 'en';
+
+export interface Profile {
+  name: string;
+  nickname: string;
+  title: string;
+  titleLead: string;
+  titleRest: string;
+  bio: string;
+  bioParagraphs: readonly string[];
+  mbti: string;
+  location: string;
+  city: string;
+  country: string;
+  languages: readonly string[];
+  availability: string;
+  email: string;
+  cvPath: string;
+}
+
 export interface Experience {
   company: string;
   url?: string;
@@ -17,7 +37,7 @@ export interface Education {
   degree: string;
   field: string;
   year: string;
-  description?: string;
+  description?: string[];
 }
 
 export interface Skill {

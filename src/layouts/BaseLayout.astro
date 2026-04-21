@@ -2,23 +2,43 @@
 import '../styles/global.css';
 import { getImage } from 'astro:assets';
 import LoadingScreen from '../components/LoadingScreen.astro';
-import { profile, socialLinks } from '../data/profile';
+import { getProfile, socialLinks } from '../data/profile';
+import type { Locale } from '../data/types';
 import mainImage from '../assets/MainImage.jpg';
 
 interface Props {
   title?: string;
   description?: string;
+  locale?: Locale;
 }
 
+const { locale = 'it' } = Astro.props;
+
+const defaultMeta = locale === 'en'
+  ? {
+      title: 'Gianluca Zaccarelli - Senior Full-Stack Developer',
+      description:
+        'Portfolio and curriculum vitae of Gianluca Zaccarelli, Senior Full-Stack Developer with experience in C#, microservices, Docker, and enterprise development.',
+    }
+  : {
+      title: 'Gianluca Zaccarelli - Senior Full-Stack Developer',
+      description:
+        'Portfolio e curriculum vitae di Gianluca Zaccarelli, Senior Full-Stack Developer con esperienza in C#, microservizi, Docker e sviluppo enterprise.',
+    };
+
 const {
-  title = 'Gianluca Zaccarelli — Senior Full-Stack Developer',
-  description = 'Portfolio e curriculum vitae di Gianluca Zaccarelli, Senior Full-Stack Developer con esperienza in C#, microservizi, Docker e sviluppo enterprise.',
+  title = defaultMeta.title,
+  description = defaultMeta.description,
 } = Astro.props;
+
+const profile = getProfile(locale);
 
 const siteUrl = (Astro.site ?? new URL('https://gianlucazaccarelli.github.io')).toString().replace(/\/$/, '');
 const canonical = new URL(Astro.url.pathname, siteUrl).toString();
 const ogImageAsset = await getImage({ src: mainImage, width: 1200, format: 'jpg' });
 const ogImage = new URL(ogImageAsset.src, siteUrl).toString();
+const ogLocale = locale === 'en' ? 'en_US' : 'it_IT';
+const skipLabel = locale === 'en' ? 'Skip to content' : 'Salta al contenuto';
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -38,7 +58,7 @@ const personSchema = {
 ---
 
 <!doctype html>
-<html lang="it">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,7 +71,7 @@ const personSchema = {
     <meta property="og:image" content={ogImage} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content="it_IT" />
+    <meta property="og:locale" content={ogLocale} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -90,7 +110,7 @@ const personSchema = {
     </script>
   </head>
   <body class="min-h-screen antialiased">
-    <a href="#about" class="skip-to-content">Salta al contenuto</a>
+    <a href="#about" class="skip-to-content">{skipLabel}</a>
     <LoadingScreen />
     <slot />
   </body>

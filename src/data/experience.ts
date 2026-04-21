@@ -1,9 +1,9 @@
-import type { Experience } from './types';
+import type { Experience, Locale } from './types';
 import codeitLogo from '../assets/logos/codeit.jpg';
 import carusoLogo from '../assets/logos/caruso.jpg';
 import sigradeLogo from '../assets/logos/sigrade.jpg';
 
-export const experience: Experience[] = [
+const experienceIt: Experience[] = [
   {
     company: 'Code It Digital Solutions S.r.l.',
     url: 'https://www.linkedin.com/company/code-it-digital-solutions-s-r-l/',
@@ -47,3 +47,60 @@ export const experience: Experience[] = [
     ],
   },
 ];
+
+const experienceEnDescriptions = [
+  [
+    'Software development and IT consulting in body rental mode on management and banking solutions.',
+    'HR management system: functional analysis, design, and implementation of a system for resource management and company timesheet reporting.',
+    'Banking/insurance domain: development of applications for insurance contract management, integration with banking systems, and document digitalization.',
+    'Stack: C# · Docker · Kubernetes · Git · CI/CD · Microservices.',
+  ],
+  [
+    'Sole IT resource supporting the IT Manager and System Administrator in a leading high-end tailoring company.',
+    'Requirements analysis, feasibility assessment, development and debugging of software procedures, and maintenance/extension of the corporate ERP.',
+    'User support after application releases and management of infrastructure-related issues.',
+    'Stack: JavaScript · Ext.js Sencha · .NET ASPX · HTML · CSS · Microsoft SQL Server · Crystal Reports.',
+  ],
+  [
+    'Internship (Sep 2017 - Mar 2018): COBOL development on MainFrame systems and testing on the bank check digitalization procedure.',
+    'Middle Developer apprenticeship (Mar 2018 - Mar 2021): development of GDPR-compliant apps for visitor check-in/check-out management; Project Lead coordinating a team of 3 interns.',
+    'Senior Developer (Apr 2021 - Mar 2022): project estimation drafting, development and maintenance of the corporate management system, and the automated ticketing system certified by S.I.A.E.',
+    'Stack: COBOL · MainFrame · Full-Stack Web · GDPR compliance · Project Management.',
+  ],
+] as const;
+
+const experienceEnOverride: Array<Partial<Experience>> = [
+  {
+    period: 'Sep 2024 - Present',
+    location: 'Parma (PR) - Body Rental',
+    description: [],
+  },
+  {
+    period: 'Mar 2022 - Jul 2024',
+    description: [],
+  },
+  {
+    period: 'Sep 2017 - Mar 2022',
+    description: [],
+  },
+];
+
+export function getExperience(locale: Locale = 'it'): Experience[] {
+  if (locale === 'it') {
+    return experienceIt;
+  }
+
+  return experienceIt.map((job, index) => {
+    const override = experienceEnOverride[index] ?? {};
+    const draftDescription = experienceEnDescriptions[index] ?? [];
+    const description = draftDescription.length ? [...draftDescription] : job.description;
+
+    return {
+      ...job,
+      ...override,
+      description,
+    };
+  });
+}
+
+export const experience = getExperience('it');

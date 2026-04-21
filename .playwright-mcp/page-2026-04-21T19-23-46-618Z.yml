@@ -1,0 +1,629 @@
+- generic [active] [ref=e1]:
+  - link "Salta al contenuto" [ref=e2] [cursor=pointer]:
+    - /url: "#about"
+  - generic:
+    - generic:
+      - generic:
+        - heading "Ciao" [level=2]: Ciao
+        - heading "Bonjour" [level=2]: Bonjour
+        - heading "स्वागत" [level=2]: स्वागत
+        - heading "Hello" [level=2]: Hello
+        - heading "Olá" [level=2]: Olá
+        - heading "おい" [level=2]: おい
+        - heading "Hallå" [level=2]: Hallå
+        - heading "Guten Tag" [level=2]: Guten Tag
+        - heading "Hallo" [level=2]: Hallo
+      - generic:
+        - generic: Gianluca Zaccarelli
+        - generic:
+          - generic: 1%
+  - banner [ref=e3]:
+    - navigation [ref=e5]:
+      - link "Zakka / Senior Full-Stack Developer" [ref=e6] [cursor=pointer]:
+        - /url: "#top"
+        - generic [ref=e7]: Zakka
+        - generic [ref=e8]: / Senior Full-Stack Developer
+      - list [ref=e9]:
+        - listitem [ref=e10]:
+          - link "About" [ref=e11] [cursor=pointer]:
+            - /url: "#about"
+        - listitem [ref=e12]:
+          - link "Esperienza" [ref=e13] [cursor=pointer]:
+            - /url: "#experience"
+        - listitem [ref=e14]:
+          - link "Formazione" [ref=e15] [cursor=pointer]:
+            - /url: "#education"
+        - listitem [ref=e16]:
+          - link "Skills" [ref=e17] [cursor=pointer]:
+            - /url: "#skills"
+        - listitem [ref=e18]:
+          - link "Progetti" [ref=e19] [cursor=pointer]:
+            - /url: "#projects"
+        - listitem [ref=e20]:
+          - link "Contatti" [ref=e21] [cursor=pointer]:
+            - /url: "#contact"
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - link "LinkedIn" [ref=e24] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/gianluca-zaccarelli-389807153/
+            - img [ref=e25]
+            - text: LinkedIn
+          - link "GitHub" [ref=e27] [cursor=pointer]:
+            - /url: https://github.com/gianlucazaccarelli
+            - img [ref=e28]
+            - text: GitHub
+          - link "Instagram" [ref=e30] [cursor=pointer]:
+            - /url: https://www.instagram.com/gianlucazaccarelli/
+            - img [ref=e31]
+            - text: Instagram
+          - link "Email" [ref=e33] [cursor=pointer]:
+            - /url: mailto:gianluca.zaccarelli.work@gmail.com
+            - img [ref=e34]
+            - text: Email
+        - button "Cambia tema" [ref=e37] [cursor=pointer]:
+          - img [ref=e38]
+          - text: Tema scuro
+        - link "Apri CV stampabile" [ref=e40] [cursor=pointer]:
+          - /url: /cv-print
+          - img [ref=e41]
+          - text: CV Apri CV stampabile
+  - generic [ref=e44]:
+    - generic [ref=e45]:
+      - img "Gianluca Zaccarelli"
+    - generic [ref=e46]:
+      - generic [ref=e47]:
+        - generic [ref=e48]: N° 00 / Portfolio
+        - heading "Situato in Italia" [level=4] [ref=e49]:
+          - generic [ref=e50]: Situato
+          - text: in Italia
+        - paragraph [ref=e51]: — San Secondo Parmense (PR)
+      - generic [ref=e54]: Scroll
+    - generic [ref=e55]:
+      - generic [ref=e56]: ENTJ · MMXXVI
+      - generic [ref=e57]:
+        - heading "Senior Full-Stack Developer" [level=4] [ref=e58]:
+          - generic [ref=e59]: Senior
+          - emphasis [ref=e60]: Full-Stack Developer
+        - paragraph [ref=e61]: Open to opportunities
+    - generic [ref=e63]:
+      - generic [ref=e64]:
+        - text: Gianluca Zaccarelli
+        - emphasis [ref=e65]: —
+      - generic [ref=e66]:
+        - text: Gianluca Zaccarelli
+        - emphasis [ref=e67]: —
+      - generic [ref=e68]:
+        - text: Gianluca Zaccarelli
+        - emphasis [ref=e69]: —
+      - generic [ref=e70]:
+        - text: Gianluca Zaccarelli
+        - emphasis [ref=e71]: —
+      - generic [ref=e72]:
+        - text: Gianluca Zaccarelli
+        - emphasis [ref=e73]: —
+      - generic [ref=e74]:
+        - text: Gianluca Zaccarelli
+        - emphasis [ref=e75]: —
+      - generic [ref=e76]:
+        - text: Gianluca Zaccarelli
+        - emphasis [ref=e77]: —
+      - generic [ref=e78]:
+        - text: Gianluca Zaccarelli
+        - emphasis [ref=e79]: —
+  - main [ref=e80]:
+    - generic [ref=e83]:
+      - generic [ref=e84]:
+        - generic [ref=e85]: ·01
+        - generic [ref=e87]: Chi sono
+      - heading "Chi sono" [level=2] [ref=e88]:
+        - text: Chi
+        - emphasis [ref=e89]: sono
+      - generic [ref=e90]:
+        - generic [ref=e92]:
+          - generic: "\""
+          - paragraph [ref=e93]: Sono una persona determinata e ambiziosa, con spiccate doti di leadership e una forte inclinazione alla pianificazione strategica.
+          - paragraph [ref=e94]: Mi concentro sul raggiungimento degli obiettivi, affrontando le sfide con sicurezza, razionalità e un approccio analitico. Comunico in modo chiaro e diretto, motivando e guidando chi mi circonda verso il successo.
+          - generic [ref=e95]:
+            - paragraph [ref=e96]: Postilla
+            - paragraph [ref=e97]: Sto approfondendo questi aspetti con una Laurea in Scienze Psicologiche, per unire alla solidità tecnica una comprensione più profonda delle persone e dei team.
+        - complementary [ref=e98]:
+          - generic [ref=e99]:
+            - generic [ref=e100]:
+              - term [ref=e101]: / Posizione
+              - definition [ref=e102]: San Secondo Parmense (PR), Italia
+            - generic [ref=e103]:
+              - term [ref=e104]: / Lingue
+              - definition [ref=e105]:
+                - list [ref=e106]:
+                  - listitem [ref=e107]:
+                    - generic [ref=e108]: 🇮🇹
+                    - generic [ref=e109]: Italiano — madrelingua
+                  - listitem [ref=e110]:
+                    - generic [ref=e111]: 🇬🇧
+                    - generic [ref=e112]: Inglese — professionale
+            - generic [ref=e113]:
+              - term [ref=e114]: / Personalità
+              - definition [ref=e115]: ENTJ — MBTI
+            - generic [ref=e116]:
+              - term [ref=e117]: / Disponibilità
+              - definition [ref=e118]:
+                - generic [ref=e120]: Open to opportunities
+    - generic [ref=e123]:
+      - generic [ref=e124]:
+        - generic [ref=e125]: ·02
+        - generic [ref=e127]: Esperienza
+      - heading "Percorso professionale" [level=2] [ref=e128]:
+        - text: Percorso
+        - emphasis [ref=e129]: professionale
+      - list [ref=e130]:
+        - listitem [ref=e131]:
+          - generic [ref=e133]:
+            - generic [ref=e134]: "01"
+            - generic [ref=e135]:
+              - paragraph [ref=e136]: "2024"
+              - paragraph [ref=e137]: Set 2024 – Presente
+              - paragraph [ref=e138]: Parma (PR) — Body Rental
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - img "Logo Code It Digital Solutions S.r.l." [ref=e142]
+              - generic [ref=e143]:
+                - heading "Senior Full-Stack Developer" [level=3] [ref=e144]
+                - link "→ Code It Digital Solutions S.r.l." [ref=e145] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/company/code-it-digital-solutions-s-r-l/
+            - list [ref=e146]:
+              - listitem [ref=e147]: — Sviluppo software e consulenza in ambito informatico in modalità body rental su soluzioni gestionali e bancarie.
+              - listitem [ref=e148]: "— Gestionale HR: analisi funzionale, progettazione e implementazione di un sistema per la gestione delle risorse e dei rapportini aziendali."
+              - listitem [ref=e149]: "— Settore bancario/assicurativo: sviluppo di applicazioni per la gestione dei contratti assicurativi, integrazione con sistemi bancari e digitalizzazione documentale."
+              - listitem [ref=e150]: "— Stack: C# · Docker · Kubernetes · Git · CI/CD · Microservizi."
+        - listitem [ref=e151]:
+          - generic [ref=e153]:
+            - generic [ref=e154]: "02"
+            - generic [ref=e155]:
+              - paragraph [ref=e156]: "2022"
+              - paragraph [ref=e157]: Mar 2022 – Lug 2024
+              - paragraph [ref=e158]: Soragna (PR)
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - img "Logo Raffaele Caruso S.p.A." [ref=e162]
+              - generic [ref=e163]:
+                - heading "IT Management & Dev-Analyst" [level=3] [ref=e164]
+                - link "→ Raffaele Caruso S.p.A." [ref=e165] [cursor=pointer]:
+                  - /url: https://carusomenswear.com/
+            - list [ref=e166]:
+              - listitem [ref=e167]: — Unica risorsa IT a supporto dell'IT Manager e del Sistemista in un'azienda leader nella sartoria di alta moda.
+              - listitem [ref=e168]: — Analisi delle esigenze, valutazione di fattibilità, sviluppo e debug di procedure software; manutenzione ed estensione dell'ERP aziendale.
+              - listitem [ref=e169]: — Supporto agli utenti a seguito di rilasci applicativi e gestione delle problematiche infrastrutturali.
+              - listitem [ref=e170]: "— Stack: JavaScript · Ext.js Sencha · .NET ASPX · HTML · CSS · Microsoft SQL Server · Crystal Reports."
+        - listitem [ref=e171]:
+          - generic [ref=e173]:
+            - generic [ref=e174]: "03"
+            - generic [ref=e175]:
+              - paragraph [ref=e176]: "2017"
+              - paragraph [ref=e177]: Set 2017 – Mar 2022
+              - paragraph [ref=e178]: Parma (PR)
+          - generic [ref=e179]:
+            - generic [ref=e180]:
+              - img "Logo SiGrade S.p.A." [ref=e182]
+              - generic [ref=e183]:
+                - heading "Full-Stack Developer (Junior → Senior)" [level=3] [ref=e184]
+                - link "→ SiGrade S.p.A." [ref=e185] [cursor=pointer]:
+                  - /url: https://www.sigrade.it
+            - list [ref=e186]:
+              - listitem [ref=e187]: "— Tirocinio (set 2017 – mar 2018): sviluppo in COBOL su sistemi MainFrame e test sulla procedura di digitalizzazione degli assegni bancari."
+              - listitem [ref=e188]: "— Middle Developer in apprendistato (mar 2018 – mar 2021): sviluppo app GDPR-compliant per la gestione ingresso/uscita visitatori; Capo Progetto con coordinamento di un team di 3 stagisti."
+              - listitem [ref=e189]: "— Senior Developer (apr 2021 – mar 2022): redazione stime di progetto, sviluppo e manutenzione del gestionale aziendale e del sistema di biglietteria automatizzata certificato S.I.A.E."
+              - listitem [ref=e190]: "— Stack: COBOL · MainFrame · Full-Stack Web · GDPR compliance · Project Management."
+    - generic [ref=e193]:
+      - generic [ref=e194]:
+        - generic [ref=e195]: ·03
+        - generic [ref=e197]: Formazione
+      - heading "Studi accademici" [level=2] [ref=e198]:
+        - text: Studi
+        - emphasis [ref=e199]: accademici
+      - generic [ref=e200]:
+        - article [ref=e201]:
+          - generic [ref=e202]: "01"
+          - generic [ref=e204]: Sett. 2025 – In corso
+          - generic [ref=e205]:
+            - img "Logo Università degli Studi di Parma" [ref=e207]
+            - generic [ref=e208]:
+              - heading "Laurea Breve — Scienze e tecniche psicologiche per le sfide contemporanee" [level=3] [ref=e209]
+              - link "→ Università degli Studi di Parma" [ref=e210] [cursor=pointer]:
+                - /url: https://www.unipr.it
+              - paragraph [ref=e211]: Corso ad orientamento innovativo con integrazione delle prospettive psicobiologica, cognitiva, evolutiva, socio-relazionale e clinico-dinamica. Focus su sostenibilità, resilienza, tecnologie e competenze per psicologi in équipe multiprofessionali.
+        - article [ref=e214]:
+          - generic [ref=e215]: "02"
+          - generic [ref=e217]: 2012 – 2017
+          - generic [ref=e218]:
+            - img "Logo I.T.I.S Galileo Galilei — San Secondo Parmense" [ref=e220]
+            - generic [ref=e221]:
+              - heading "Diploma — Perito Informatico — Scienze Informatiche" [level=3] [ref=e222]
+              - link "→ I.T.I.S Galileo Galilei — San Secondo Parmense" [ref=e223] [cursor=pointer]:
+                - /url: https://poloagroindustriale.edu.it/
+              - paragraph [ref=e224]: "Votazione: 70/100. Competenze acquisite: T-SQL, C#."
+    - generic [ref=e229]:
+      - generic [ref=e230]:
+        - generic [ref=e231]: ·04
+        - generic [ref=e233]: Competenze
+      - heading "Competenze tecniche" [level=2] [ref=e234]:
+        - text: Competenze
+        - emphasis [ref=e235]: tecniche
+      - generic [ref=e236]:
+        - generic [ref=e237]:
+          - generic [ref=e238]:
+            - generic [ref=e239]: ·01
+            - heading "Backend" [level=3] [ref=e240]
+            - generic [ref=e242]: 7 items
+          - generic [ref=e243]:
+            - generic [ref=e244]:
+              - img "C#" [ref=e245]
+              - generic [ref=e246]: C#
+            - generic [ref=e247]:
+              - img ".NET" [ref=e248]
+              - generic [ref=e249]: .NET
+            - generic [ref=e251]: COBOL
+            - generic [ref=e252]:
+              - img "Node.js" [ref=e253]
+              - generic [ref=e254]: Node.js
+            - generic [ref=e256]: REST API
+            - generic [ref=e258]: Microservizi
+            - generic [ref=e259]:
+              - img "Microsoft SQL Server" [ref=e260]
+              - generic [ref=e261]: Microsoft SQL Server
+        - generic [ref=e262]:
+          - generic [ref=e263]:
+            - generic [ref=e264]: ·02
+            - heading "Frontend" [level=3] [ref=e265]
+            - generic [ref=e267]: 6 items
+          - generic [ref=e268]:
+            - generic [ref=e269]:
+              - img "JavaScript" [ref=e270]
+              - generic [ref=e271]: JavaScript
+            - generic [ref=e272]:
+              - img "TypeScript" [ref=e273]
+              - generic [ref=e274]: TypeScript
+            - generic [ref=e275]:
+              - img "HTML5" [ref=e276]
+              - generic [ref=e277]: HTML5
+            - generic [ref=e278]:
+              - img "CSS3" [ref=e279]
+              - generic [ref=e280]: CSS3
+            - generic [ref=e282]: Ext.js Sencha
+            - generic [ref=e284]: ASPX
+        - generic [ref=e285]:
+          - generic [ref=e286]:
+            - generic [ref=e287]: ·03
+            - heading "DevOps" [level=3] [ref=e288]
+            - generic [ref=e290]: 6 items
+          - generic [ref=e291]:
+            - generic [ref=e292]:
+              - img "Docker" [ref=e293]
+              - generic [ref=e294]: Docker
+            - generic [ref=e295]:
+              - img "Kubernetes" [ref=e296]
+              - generic [ref=e297]: Kubernetes
+            - generic [ref=e298]:
+              - img "Git" [ref=e299]
+              - generic [ref=e300]: Git
+            - generic [ref=e302]: CI/CD
+            - generic [ref=e304]: MainFrame
+            - generic [ref=e306]: Crystal Reports
+        - generic [ref=e307]:
+          - generic [ref=e308]:
+            - generic [ref=e309]: ·04
+            - heading "Soft Skills" [level=3] [ref=e310]
+            - generic [ref=e312]: 6 items
+          - generic [ref=e313]:
+            - generic [ref=e315]: Project Management
+            - generic [ref=e317]: Team Leadership
+            - generic [ref=e319]: Analisi dei requisiti
+            - generic [ref=e321]: GDPR compliance
+            - generic [ref=e323]: Mentoring
+            - generic [ref=e325]: ERP implementation
+      - generic [ref=e326]:
+        - generic [ref=e328]:
+          - generic [ref=e329]:
+            - img "C#" [ref=e330]
+            - generic [ref=e331]: C#
+          - generic [ref=e332]:
+            - img ".NET" [ref=e333]
+            - generic [ref=e334]: .NET
+          - generic [ref=e336]: COBOL
+          - generic [ref=e337]:
+            - img "Node.js" [ref=e338]
+            - generic [ref=e339]: Node.js
+          - generic [ref=e341]: REST API
+          - generic [ref=e343]: Microservizi
+          - generic [ref=e344]:
+            - img "Microsoft SQL Server" [ref=e345]
+            - generic [ref=e346]: Microsoft SQL Server
+          - generic [ref=e347]:
+            - img "Docker" [ref=e348]
+            - generic [ref=e349]: Docker
+          - generic [ref=e350]:
+            - img "Kubernetes" [ref=e351]
+            - generic [ref=e352]: Kubernetes
+          - generic [ref=e353]:
+            - img "Git" [ref=e354]
+            - generic [ref=e355]: Git
+          - generic [ref=e357]: CI/CD
+          - generic [ref=e359]: MainFrame
+          - generic [ref=e361]: Crystal Reports
+          - generic [ref=e362]:
+            - img "C#" [ref=e363]
+            - generic [ref=e364]: C#
+          - generic [ref=e365]:
+            - img ".NET" [ref=e366]
+            - generic [ref=e367]: .NET
+          - generic [ref=e369]: COBOL
+          - generic [ref=e370]:
+            - img "Node.js" [ref=e371]
+            - generic [ref=e372]: Node.js
+          - generic [ref=e374]: REST API
+          - generic [ref=e376]: Microservizi
+          - generic [ref=e377]:
+            - img "Microsoft SQL Server" [ref=e378]
+            - generic [ref=e379]: Microsoft SQL Server
+          - generic [ref=e380]:
+            - img "Docker" [ref=e381]
+            - generic [ref=e382]: Docker
+          - generic [ref=e383]:
+            - img "Kubernetes" [ref=e384]
+            - generic [ref=e385]: Kubernetes
+          - generic [ref=e386]:
+            - img "Git" [ref=e387]
+            - generic [ref=e388]: Git
+          - generic [ref=e390]: CI/CD
+          - generic [ref=e392]: MainFrame
+          - generic [ref=e394]: Crystal Reports
+          - generic [ref=e395]:
+            - img "C#" [ref=e396]
+            - generic [ref=e397]: C#
+          - generic [ref=e398]:
+            - img ".NET" [ref=e399]
+            - generic [ref=e400]: .NET
+          - generic [ref=e402]: COBOL
+          - generic [ref=e403]:
+            - img "Node.js" [ref=e404]
+            - generic [ref=e405]: Node.js
+          - generic [ref=e407]: REST API
+          - generic [ref=e409]: Microservizi
+          - generic [ref=e410]:
+            - img "Microsoft SQL Server" [ref=e411]
+            - generic [ref=e412]: Microsoft SQL Server
+          - generic [ref=e413]:
+            - img "Docker" [ref=e414]
+            - generic [ref=e415]: Docker
+          - generic [ref=e416]:
+            - img "Kubernetes" [ref=e417]
+            - generic [ref=e418]: Kubernetes
+          - generic [ref=e419]:
+            - img "Git" [ref=e420]
+            - generic [ref=e421]: Git
+          - generic [ref=e423]: CI/CD
+          - generic [ref=e425]: MainFrame
+          - generic [ref=e427]: Crystal Reports
+        - generic [ref=e429]:
+          - generic [ref=e430]:
+            - img "JavaScript" [ref=e431]
+            - generic [ref=e432]: JavaScript
+          - generic [ref=e433]:
+            - img "TypeScript" [ref=e434]
+            - generic [ref=e435]: TypeScript
+          - generic [ref=e436]:
+            - img "HTML5" [ref=e437]
+            - generic [ref=e438]: HTML5
+          - generic [ref=e439]:
+            - img "CSS3" [ref=e440]
+            - generic [ref=e441]: CSS3
+          - generic [ref=e443]: Ext.js Sencha
+          - generic [ref=e445]: ASPX
+          - generic [ref=e447]: Project Management
+          - generic [ref=e449]: Team Leadership
+          - generic [ref=e451]: Analisi dei requisiti
+          - generic [ref=e453]: GDPR compliance
+          - generic [ref=e455]: Mentoring
+          - generic [ref=e457]: ERP implementation
+          - generic [ref=e458]:
+            - img "JavaScript" [ref=e459]
+            - generic [ref=e460]: JavaScript
+          - generic [ref=e461]:
+            - img "TypeScript" [ref=e462]
+            - generic [ref=e463]: TypeScript
+          - generic [ref=e464]:
+            - img "HTML5" [ref=e465]
+            - generic [ref=e466]: HTML5
+          - generic [ref=e467]:
+            - img "CSS3" [ref=e468]
+            - generic [ref=e469]: CSS3
+          - generic [ref=e471]: Ext.js Sencha
+          - generic [ref=e473]: ASPX
+          - generic [ref=e475]: Project Management
+          - generic [ref=e477]: Team Leadership
+          - generic [ref=e479]: Analisi dei requisiti
+          - generic [ref=e481]: GDPR compliance
+          - generic [ref=e483]: Mentoring
+          - generic [ref=e485]: ERP implementation
+          - generic [ref=e486]:
+            - img "JavaScript" [ref=e487]
+            - generic [ref=e488]: JavaScript
+          - generic [ref=e489]:
+            - img "TypeScript" [ref=e490]
+            - generic [ref=e491]: TypeScript
+          - generic [ref=e492]:
+            - img "HTML5" [ref=e493]
+            - generic [ref=e494]: HTML5
+          - generic [ref=e495]:
+            - img "CSS3" [ref=e496]
+            - generic [ref=e497]: CSS3
+          - generic [ref=e499]: Ext.js Sencha
+          - generic [ref=e501]: ASPX
+          - generic [ref=e503]: Project Management
+          - generic [ref=e505]: Team Leadership
+          - generic [ref=e507]: Analisi dei requisiti
+          - generic [ref=e509]: GDPR compliance
+          - generic [ref=e511]: Mentoring
+          - generic [ref=e513]: ERP implementation
+    - generic [ref=e516]:
+      - generic [ref=e517]:
+        - generic [ref=e518]: ·05
+        - generic [ref=e520]: Progetti
+      - heading "Progetti selezionati" [level=2] [ref=e521]:
+        - text: Progetti
+        - emphasis [ref=e522]: selezionati
+      - generic [ref=e523]:
+        - article [ref=e524]:
+          - generic: "01"
+          - generic [ref=e525]:
+            - generic [ref=e526]: Project / 01
+            - generic [ref=e527]: Featured
+          - heading "Portfolio Personale v2" [level=3] [ref=e528]
+          - paragraph [ref=e529]: Questo sito — portfolio personale statico realizzato con Astro e Tailwind CSS v4, deployato su GitHub Pages con GitHub Actions.
+          - generic [ref=e530]:
+            - generic [ref=e531]:
+              - generic [ref=e532]:
+                - img "Astro" [ref=e533]
+                - text: Astro
+              - generic [ref=e534]:
+                - img "TypeScript" [ref=e535]
+                - text: TypeScript
+              - generic [ref=e536]:
+                - img "Tailwind CSS" [ref=e537]
+                - text: Tailwind CSS
+              - generic [ref=e538]:
+                - img "GitHub Actions" [ref=e539]
+                - text: GitHub Actions
+            - link "Demo ↗" [ref=e541] [cursor=pointer]:
+              - /url: https://gianlucazaccarelli.github.io
+              - text: Demo
+              - generic [ref=e542]: ↗
+        - article [ref=e543]:
+          - generic: "02"
+          - generic [ref=e545]: Project / 02
+          - heading "Sistema Biglietteria S.I.A.E." [level=3] [ref=e546]
+          - paragraph [ref=e547]: Software di biglietteria automatizzata certificato S.I.A.E. sviluppato e mantenuto durante il percorso in SiGrade S.p.A.
+          - generic [ref=e548]:
+            - generic [ref=e549]:
+              - generic [ref=e550]: Full-Stack Web
+              - generic [ref=e551]:
+                - img "SQL" [ref=e552]
+                - text: SQL
+              - generic [ref=e553]: GDPR compliance
+            - generic [ref=e555]: Progetto interno — non pubblico
+        - article [ref=e556]:
+          - generic: "03"
+          - generic [ref=e558]: Project / 03
+          - heading "App Gestione Visitatori (GDPR)" [level=3] [ref=e559]
+          - paragraph [ref=e560]: Applicazione per la gestione delle procedure di ingresso/uscita visitatori, conforme al GDPR. Progetto gestito in autonomia come Capo Progetto con un team di 3 stagisti.
+          - generic [ref=e561]:
+            - generic [ref=e562]:
+              - generic [ref=e563]: Full-Stack Web
+              - generic [ref=e564]:
+                - img "SQL" [ref=e565]
+                - text: SQL
+              - generic [ref=e566]: GDPR
+            - generic [ref=e568]: Progetto interno — non pubblico
+        - article [ref=e569]:
+          - generic: "04"
+          - generic [ref=e571]: Project / 04
+          - heading "Gestionale Risorse HR" [level=3] [ref=e572]
+          - paragraph [ref=e573]: Gestionale aziendale per la gestione e allocazione delle risorse umane e dei rapportini. Progettato e sviluppato per un cliente del settore fintech.
+          - generic [ref=e574]:
+            - generic [ref=e575]:
+              - generic [ref=e576]:
+                - img "C#" [ref=e577]
+                - text: C#
+              - generic [ref=e578]: Microservizi
+              - generic [ref=e579]:
+                - img "Docker" [ref=e580]
+                - text: Docker
+              - generic [ref=e581]:
+                - img "Kubernetes" [ref=e582]
+                - text: Kubernetes
+            - generic [ref=e584]: Progetto interno — non pubblico
+    - generic [ref=e587]:
+      - generic [ref=e588]:
+        - generic [ref=e589]: ·06
+        - generic [ref=e591]: Contatti
+      - heading "Scrivimi pure." [level=2] [ref=e592]:
+        - text: Scrivimi
+        - emphasis [ref=e593]: pure
+        - text: .
+      - generic [ref=e594]:
+        - generic [ref=e595]:
+          - paragraph [ref=e596]: Sono disponibile per nuove opportunità, collaborazioni o semplicemente per una chiacchierata tecnica.
+          - link "→ gianluca.zaccarelli.work@gmail.com" [ref=e597] [cursor=pointer]:
+            - /url: mailto:gianluca.zaccarelli.work@gmail.com
+            - generic [ref=e598]: →
+            - generic [ref=e599]: gianluca.zaccarelli.work@gmail.com
+        - complementary [ref=e600]:
+          - paragraph [ref=e601]: / Elsewhere
+          - list [ref=e602]:
+            - listitem [ref=e603]:
+              - link "LinkedIn ↗" [ref=e604] [cursor=pointer]:
+                - /url: https://www.linkedin.com/in/gianluca-zaccarelli-389807153/
+                - generic [ref=e605]:
+                  - img [ref=e606]
+                  - generic [ref=e608]: LinkedIn
+                - generic [ref=e609]: ↗
+            - listitem [ref=e610]:
+              - link "GitHub ↗" [ref=e611] [cursor=pointer]:
+                - /url: https://github.com/gianlucazaccarelli
+                - generic [ref=e612]:
+                  - img [ref=e613]
+                  - generic [ref=e615]: GitHub
+                - generic [ref=e616]: ↗
+            - listitem [ref=e617]:
+              - link "Instagram ↗" [ref=e618] [cursor=pointer]:
+                - /url: https://www.instagram.com/gianlucazaccarelli/
+                - generic [ref=e619]:
+                  - img [ref=e620]
+                  - generic [ref=e622]: Instagram
+                - generic [ref=e623]: ↗
+  - contentinfo [ref=e624]:
+    - generic [ref=e626]:
+      - generic [ref=e627]:
+        - generic [ref=e628]: Zakka
+        - paragraph [ref=e629]: Senior Full-Stack Developer
+        - paragraph [ref=e630]:
+          - img [ref=e631]
+          - generic [ref=e634]: Roma - 21:23:45
+      - generic [ref=e636]:
+        - generic [ref=e637]: / Contatti
+        - generic [ref=e638]:
+          - link "LinkedIn" [ref=e639] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/gianluca-zaccarelli-389807153/
+            - img [ref=e640]
+            - text: LinkedIn
+          - link "GitHub" [ref=e642] [cursor=pointer]:
+            - /url: https://github.com/gianlucazaccarelli
+            - img [ref=e643]
+            - text: GitHub
+          - link "Instagram" [ref=e645] [cursor=pointer]:
+            - /url: https://www.instagram.com/gianlucazaccarelli/
+            - img [ref=e646]
+            - text: Instagram
+          - link "Email" [ref=e648] [cursor=pointer]:
+            - /url: mailto:gianluca.zaccarelli.work@gmail.com
+            - img [ref=e649]
+            - text: Email
+      - generic [ref=e653]:
+        - paragraph [ref=e654]:
+          - text: © 2026 Gianluca Zaccarelli
+          - text: Tutti i diritti riservati.
+        - button "Torna all'inizio" [ref=e655] [cursor=pointer]:
+          - img [ref=e656]
+          - text: Torna all'inizio
+  - generic [ref=e660]:
+    - button "Menu" [ref=e661]:
+      - img [ref=e663]
+      - generic: Menu
+    - button "Inspect" [ref=e667]:
+      - img [ref=e669]
+      - generic: Inspect
+    - button "Audit" [ref=e671]:
+      - img [ref=e673]
+      - generic: Audit
+    - button "Settings" [ref=e676]:
+      - img [ref=e678]
+      - generic: Settings

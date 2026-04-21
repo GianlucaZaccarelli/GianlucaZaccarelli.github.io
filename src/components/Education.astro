@@ -1,42 +1,126 @@
 ---
 import { Image } from 'astro:assets';
-import { education } from '../data/education';
+import { getEducation } from '../data/education';
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const education = getEducation(locale);
+const labels = locale === 'en'
+  ? { title: 'Formal', em: 'studies', eyebrow: 'Education' }
+  : { title: 'Studi', em: 'accademici', eyebrow: 'Formazione' };
+
+function splitYearLabel(yearLabel: string): { main: string; detail: string } {
+  const parts = yearLabel
+    .split(/\s*[–—-]\s*/)
+    .map(part => part.trim())
+    .filter(Boolean);
+
+  if (parts.length <= 1) {
+    return { main: yearLabel, detail: '' };
+  }
+
+  return {
+    main: parts[0],
+    detail: parts.slice(1).join(' – '),
+  };
+}
 ---
 
-<section id="education" class="py-16 bg-gray-50 dark:bg-surface-alt">
-  <div class="max-w-4xl mx-auto px-6">
-    <h2 class="section-title">Formazione</h2>
-    <div class="space-y-6">
-      {education.map(edu => (
-        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 p-6 bg-white dark:bg-surface-card rounded-xl border border-gray-100 dark:border-white/10">
-          <div class="flex items-start gap-4">
-            {edu.logo && (
-              <div class="shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white flex items-center justify-center overflow-hidden p-2 shadow-sm">
-                <Image
-                  src={edu.logo}
-                  alt={`Logo ${edu.institution}`}
-                  widths={[64, 80, 160]}
-                  sizes="(min-width: 640px) 80px, 64px"
-                  class="w-full h-full object-contain"
-                  loading="lazy"
-                />
+<section id="education" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">·03</span>
+      <span class="eyebrow-line"></span>
+      <span>{labels.eyebrow}</span>
+    </div>
+
+    <h2 class="section-title">
+      {labels.title} <em>{labels.em}</em>
+    </h2>
+
+    <ol class="space-y-24 md:space-y-32">
+      {education.map((edu, idx) => {
+        const { main, detail } = splitYearLabel(edu.year);
+
+        return (
+        <li class="grid grid-cols-12 gap-x-6 gap-y-6 group relative">
+
+          <!-- Left: giant year + index -->
+          <div class="col-span-12 md:col-span-3 md:sticky md:top-28 self-start">
+            <div class="flex flex-col items-center md:items-center gap-5 text-center">
+              <div class="flex items-start justify-center gap-3 text-left">
+                <span class="meta-mono text-xs text-ink-500 dark:text-white/40 mt-3 shrink-0">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div>
+                  <p class="font-serif text-6xl md:text-7xl font-light leading-none text-ink-900 dark:text-white tracking-tight italic" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">
+                    {main}
+                  </p>
+                  {detail && (
+                    <p class="meta-mono text-xs uppercase tracking-widest text-ink-500 dark:text-white/50 mt-3">
+                      {detail}
+                    </p>
+                  )}
+                </div>
               </div>
-            )}
-            <div>
-              <h3 class="font-semibold text-gray-900 dark:text-white">{edu.degree} in {edu.field}</h3>
-              {edu.url ? (
-                <a href={edu.url} target="_blank" rel="noopener noreferrer" class="text-brand-600 dark:text-brand-400 text-sm mt-0.5 hover:underline underline-offset-2 inline-block">{edu.institution} ↗</a>
-              ) : (
-                <p class="text-brand-600 dark:text-brand-400 text-sm mt-0.5">{edu.institution}</p>
-              )}
-              {edu.description && (
-                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">{edu.description}</p>
-              )}
             </div>
           </div>
-          <span class="text-sm font-medium text-gray-400 dark:text-gray-500 shrink-0 sm:text-right">{edu.year}</span>
-        </div>
-      ))}
-    </div>
+
+          <!-- Right: content -->
+          <div class="col-span-12 md:col-span-9 md:pl-8 md:border-l md:border-ink-300/40 md:dark:border-white/10">
+            <div class="mb-6 flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
+              {edu.logo && (
+                <div class="w-24 h-24 md:w-28 md:h-28 shrink-0 rounded-2xl border border-ink-300/60 dark:border-white/10 bg-transparent dark:bg-surface-card flex items-center justify-center overflow-hidden p-4">
+                  <Image
+                    src={edu.logo}
+                    alt={`Logo ${edu.institution}`}
+                    widths={[112, 224]}
+                    sizes="112px"
+                    class="block h-full w-full object-contain object-center"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+
+              <div class="min-w-0">
+                <h3 class="font-serif text-2xl md:text-3xl text-ink-900 dark:text-white leading-tight" style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
+                  {edu.degree}
+                </h3>
+                {edu.url ? (
+                  <a href={edu.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 meta-mono text-xs text-accent-600 dark:text-accent-400 mt-1.5 uppercase tracking-wider hover:text-accent-700 dark:hover:text-accent-500 transition-colors">
+                    → {edu.institution}
+                  </a>
+                ) : (
+                  <p class="meta-mono text-xs text-accent-600 dark:text-accent-400 mt-1.5 uppercase tracking-wider">
+                    — {edu.institution}
+                  </p>
+                )}
+
+                <p class="meta-mono text-xs text-ink-500 dark:text-white/50 mt-2 uppercase tracking-widest">
+                  {edu.field}
+                </p>
+
+                {edu.description && (
+                  <ul class="mt-4 space-y-2.5 text-ink-700 dark:text-white/75 text-sm md:text-[0.95rem] leading-relaxed max-w-2xl">
+                    {edu.description.map(item => (
+                      <li class="relative pl-6 before:content-['—'] before:absolute before:left-0 before:text-accent-500 before:font-serif">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+
+        </li>
+        );
+      })}
+    </ol>
   </div>
 </section>

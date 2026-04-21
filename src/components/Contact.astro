@@ -1,33 +1,107 @@
 ---
-import { profile, socialLinks } from '../data/profile';
+import { getProfile, socialLinks } from '../data/profile';
+import type { Locale } from '../data/types';
 import SocialIcon from './SocialIcon.astro';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const profile = getProfile(locale);
+
+const labels = locale === 'en'
+  ? {
+      title: 'Say',
+      em: 'hello',
+      eyebrow: 'Contact',
+      intro: 'I am available for new opportunities, collaborations, or simply a technical chat.',
+      cta: 'Write me at',
+    }
+  : {
+      title: 'Scrivimi',
+      em: 'pure',
+      eyebrow: 'Contatti',
+      intro: 'Sono disponibile per nuove opportunità, collaborazioni o semplicemente per una chiacchierata tecnica.',
+      cta: 'Scrivimi su',
+    };
 ---
 
-<section id="contact" class="py-16 bg-white dark:bg-surface">
-  <div class="max-w-4xl mx-auto px-6 text-center overflow-x-hidden">
-    <h2 class="section-title">Contatti</h2>
-    <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
-      Sono disponibile per nuove opportunità, collaborazioni o semplicemente per una chiacchierata tecnica.
-    </p>
-    <a
-      href={`mailto:${profile.email}`}
-      class="inline-flex items-center justify-center gap-3 bg-brand-600 text-white font-medium px-6 py-3 rounded-xl hover:bg-brand-700 transition-colors text-base w-full sm:w-auto max-w-full overflow-hidden"
-    >
-      <SocialIcon icon="mail" class="w-5 h-5 shrink-0" />
-      <span class="truncate">{profile.email}</span>
-    </a>
-    <div class="mt-10 flex justify-center gap-6">
-      {socialLinks.filter(l => l.icon !== 'mail').map(link => (
+<section id="contact" class="relative py-24 md:py-36 bg-white dark:bg-surface overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">·06</span>
+      <span class="eyebrow-line"></span>
+      <span>{labels.eyebrow}</span>
+    </div>
+
+    <h2 class="section-title mb-8">
+      {labels.title} <em>{labels.em}</em>.
+    </h2>
+
+    <div class="grid grid-cols-12 gap-y-10">
+      <div class="col-span-12 md:col-span-8">
+        <p class="editorial-lead text-ink-700 dark:text-white/75 max-w-2xl mb-12">
+          {labels.intro}
+        </p>
+
         <a
-          href={link.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 text-gray-400 dark:text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors font-medium"
+          href={`mailto:${profile.email}`}
+          class="email-cta group inline-flex items-baseline gap-3 font-serif text-ink-900 dark:text-white leading-tight transition-colors hover:text-accent-600 dark:hover:text-accent-400"
+          style="font-variation-settings: 'opsz' 96, 'SOFT' 100;"
         >
-          <SocialIcon icon={link.icon} class="w-5 h-5" />
-          {link.label}
+          <span class="meta-mono text-[0.65rem] uppercase tracking-[0.2em] text-ink-500 dark:text-white/45 translate-y-0">
+            →
+          </span>
+          <span class="email-text relative">{profile.email}</span>
         </a>
-      ))}
+      </div>
+
+      <!-- Social column -->
+      <aside class="col-span-12 md:col-span-4 md:pl-6 md:border-l md:border-ink-300/40 md:dark:border-white/10">
+        <p class="meta-label mb-5">/ Elsewhere</p>
+        <ul class="space-y-4">
+          {socialLinks.filter(l => l.icon !== 'mail').map(link => (
+            <li>
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex items-center justify-between gap-3 py-2 border-b border-ink-300/40 dark:border-white/10 hover:border-accent-500 dark:hover:border-accent-400 transition-colors"
+              >
+                <span class="flex items-center gap-3">
+                  <SocialIcon icon={link.icon} class="w-4 h-4 text-ink-500 dark:text-white/50 group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors" />
+                  <span class="text-ink-900 dark:text-white text-base">{link.label}</span>
+                </span>
+                <span class="meta-mono text-xs text-ink-500 dark:text-white/40 group-hover:text-accent-600 dark:group-hover:text-accent-400 group-hover:translate-x-1 transition-all">
+                  ↗
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </aside>
     </div>
   </div>
 </section>
+
+<style>
+  .email-cta {
+    font-size: clamp(1rem, 2.2vw, 1.75rem);
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .email-text {
+    background-image: linear-gradient(to right, currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    transition: background-size 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    padding-bottom: 0.08em;
+    font-style: italic;
+  }
+  .email-cta:hover .email-text {
+    background-size: 0% 1px;
+  }
+</style>

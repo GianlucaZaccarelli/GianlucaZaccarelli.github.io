@@ -1,50 +1,115 @@
 ---
 import { Image } from 'astro:assets';
-import { experience } from '../data/experience';
+import { getExperience } from '../data/experience';
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const experience = getExperience(locale);
+const labels = locale === 'en'
+  ? { title: 'Career', em: 'path', eyebrow: 'Experience' }
+  : { title: 'Percorso', em: 'professionale', eyebrow: 'Esperienza' };
+
+const titleBase = labels.title;
+const emPart = labels.em;
+
+/**
+ * Estrae l'anno di inizio dal periodo (es. "Set 2024 – Presente" → "2024").
+ */
+function extractStartYear(period: string): string {
+  const match = period.match(/\d{4}/);
+  return match ? match[0] : '—';
+}
 ---
 
-<section id="experience" class="py-16 bg-white dark:bg-surface">
-  <div class="max-w-4xl mx-auto px-6">
-    <h2 class="section-title">Esperienza</h2>
-    <ol class="relative border-l border-brand-100 dark:border-brand-700/40 space-y-10 ml-3">
-      {experience.map(job => (
-        <li class="pl-8 relative">
-          <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-brand-500 border-2 border-white dark:border-surface ring-2 ring-brand-100 dark:ring-brand-700/40"></span>
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div class="flex items-center gap-4">
-              {job.logo && (
-                <div class="shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-surface-card flex items-center justify-center overflow-hidden p-2 shadow-sm">
-                  <Image
-                    src={job.logo}
-                    alt={`Logo ${job.company}`}
-                    widths={[64, 80, 160]}
-                    sizes="(min-width: 640px) 80px, 64px"
-                    class="w-full h-full object-contain"
-                    loading="lazy"
-                  />
+<section id="experience" class="relative py-24 md:py-32 bg-white dark:bg-surface overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">·02</span>
+      <span class="eyebrow-line"></span>
+      <span>{labels.eyebrow}</span>
+    </div>
+
+    <h2 class="section-title">
+      {titleBase} <em>{emPart}</em>
+    </h2>
+
+    <ol class="space-y-24 md:space-y-32">
+      {experience.map((job, idx) => {
+        const year = extractStartYear(job.period);
+        return (
+          <li class="grid grid-cols-12 gap-x-6 gap-y-6 group relative">
+
+            <!-- Left: giant year + index -->
+            <div class="col-span-12 md:col-span-3 md:sticky md:top-28 self-start">
+              <div class="flex flex-col items-center md:items-center gap-5 text-center">
+                <div class="flex items-start justify-center gap-3 text-left">
+                  <span class="meta-mono text-xs text-ink-500 dark:text-white/40 mt-3 shrink-0">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <div>
+                    <p class="font-serif text-6xl md:text-7xl font-light leading-none text-ink-900 dark:text-white tracking-tight italic" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">
+                      {year}
+                    </p>
+                    <p class="meta-mono text-xs text-ink-500 dark:text-white/50 mt-3 uppercase tracking-widest">
+                      {job.period}
+                    </p>
+                    <p class="text-xs text-ink-500 dark:text-white/40 mt-1">
+                      {job.location}
+                    </p>
+                  </div>
                 </div>
-              )}
-              <div>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{job.role}</h3>
-                {job.url ? (
-                  <a href={job.url} target="_blank" rel="noopener noreferrer" class="text-brand-600 dark:text-brand-400 font-medium hover:underline underline-offset-2">{job.company} ↗</a>
-                ) : (
-                  <p class="text-brand-600 dark:text-brand-400 font-medium">{job.company}</p>
-                )}
               </div>
             </div>
-            <div class="text-right shrink-0">
-              <p class="text-sm text-gray-500 dark:text-gray-400">{job.period}</p>
-              <p class="text-sm text-gray-400 dark:text-gray-500">{job.location}</p>
+
+            <!-- Right: content -->
+            <div class="col-span-12 md:col-span-9 md:pl-8 md:border-l md:border-ink-300/40 md:dark:border-white/10">
+              <div class="mb-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                {job.logo && (
+                  <div class="w-24 h-24 md:w-28 md:h-28 shrink-0 rounded-2xl border border-ink-300/60 dark:border-white/10 bg-white dark:bg-surface-card shadow-[0_1px_0_rgba(255,255,255,0.04),0_12px_30px_rgba(0,0,0,0.08)] flex items-center justify-center overflow-hidden p-4">
+                    <Image
+                      src={job.logo}
+                      alt={`Logo ${job.company}`}
+                      widths={[112, 224]}
+                      sizes="112px"
+                      class="block h-full w-full object-contain object-center"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+
+                <div class="min-w-0">
+                  <h3 class="font-serif text-2xl md:text-3xl text-ink-900 dark:text-white leading-tight" style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
+                    {job.role}
+                  </h3>
+                  {job.url ? (
+                    <a href={job.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 meta-mono text-xs text-accent-600 dark:text-accent-400 mt-1.5 uppercase tracking-wider hover:text-accent-700 dark:hover:text-accent-500 transition-colors">
+                      → {job.company}
+                    </a>
+                  ) : (
+                    <p class="meta-mono text-xs text-accent-600 dark:text-accent-400 mt-1.5 uppercase tracking-wider">
+                      — {job.company}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <ul class="space-y-2.5 text-ink-700 dark:text-white/75 text-[0.95rem] md:text-base leading-relaxed">
+                {job.description.map(item => (
+                  <li class="relative pl-6 before:content-['—'] before:absolute before:left-0 before:text-accent-500 before:font-serif">
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-          <ul class="mt-3 space-y-1 list-disc list-inside text-gray-600 dark:text-gray-300 text-sm">
-            {job.description.map(item => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </li>
-      ))}
+
+          </li>
+        );
+      })}
     </ol>
   </div>
 </section>

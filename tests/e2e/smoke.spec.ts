@@ -28,4 +28,19 @@ test.describe('ZakkaSite smoke', () => {
     const toggledDark = await html.evaluate((el) => el.classList.contains('dark'));
     expect(toggledDark).not.toBe(initialDark);
   });
+
+  test('en route renders localized headings with content fallback', async ({ page }) => {
+    await page.goto('/en/');
+
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.locator('#about .section-title')).toHaveText('About');
+    await expect(page.locator('#experience .section-title')).toHaveText('Experience');
+    await expect(page.locator('#education .section-title')).toHaveText('Education');
+    await expect(page.locator('#skills .section-title')).toHaveText('Skills');
+    await expect(page.locator('#projects .section-title')).toHaveText('Projects');
+    await expect(page.locator('#contact .section-title')).toHaveText('Contact');
+
+    const aboutParagraphs = page.locator('#about p');
+    await expect(aboutParagraphs.first()).toBeVisible();
+  });
 });

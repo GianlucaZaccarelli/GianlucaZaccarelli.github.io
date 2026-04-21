@@ -1,6 +1,6 @@
-import type { Project } from './types';
+import type { Locale, Project } from './types';
 
-export const projects: Project[] = [
+const projectsIt: Project[] = [
   {
     title: 'Portfolio Personale v2',
     description: 'Questo sito — portfolio personale statico realizzato con Astro e Tailwind CSS v4, deployato su GitHub Pages con GitHub Actions.',
@@ -23,3 +23,39 @@ export const projects: Project[] = [
     stack: ['C#', 'Microservizi', 'Docker', 'Kubernetes'],
   },
 ];
+
+const projectsEnOverride: Array<Partial<Project>> = [
+  {
+    title: 'Personal Portfolio v2',
+    description:
+      'This website - a personal static portfolio built with Astro and Tailwind CSS v4, deployed on GitHub Pages via GitHub Actions.',
+  },
+  {
+    title: 'S.I.A.E. Ticketing System',
+    description:
+      'Automated ticketing software certified by S.I.A.E., developed and maintained during my experience at SiGrade S.p.A.',
+  },
+  {
+    title: 'Visitor Management App (GDPR)',
+    description:
+      'Application for managing visitor check-in/check-out procedures, compliant with GDPR. Project managed autonomously as Project Lead with a team of 3 interns.',
+  },
+  {
+    title: 'HR Resource Management Platform',
+    description:
+      'Corporate management platform for human resource allocation and timesheet reporting. Designed and developed for a fintech-sector client.',
+  },
+];
+
+export function getProjects(locale: Locale = 'it'): Project[] {
+  if (locale === 'it') {
+    return projectsIt;
+  }
+
+  return projectsIt.map((project, index) => ({
+    ...project,
+    ...(projectsEnOverride[index] ?? {}),
+  }));
+}
+
+export const projects = getProjects('it');

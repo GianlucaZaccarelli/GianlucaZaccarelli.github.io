@@ -1,5 +1,31 @@
 ---
-import { projects } from '../data/projects';
+import { getProjects } from '../data/projects';
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const projects = getProjects(locale);
+
+const labels = locale === 'en'
+  ? {
+      title: 'Selected',
+      em: 'work',
+      eyebrow: 'Projects',
+      github: 'Source',
+      demo: 'Live',
+      privateProject: 'Internal project — not public',
+    }
+  : {
+      title: 'Progetti',
+      em: 'selezionati',
+      eyebrow: 'Progetti',
+      github: 'Codice',
+      demo: 'Demo',
+      privateProject: 'Progetto interno — non pubblico',
+    };
 
 const BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons';
 
@@ -19,55 +45,121 @@ const iconMap: Record<string, string> = {
   'HTML5':           `${BASE}/html5/html5-original.svg`,
   'CSS3':            `${BASE}/css3/css3-original.svg`,
 };
+
+// Layout recipe for bento: alternate sizes. Supports up to ~8 projects.
+// feature = large card (2 cols, 2 rows). Rest flow naturally.
+const layoutSizes = ['feature', 'standard', 'standard', 'wide'] as const;
+type Size = typeof layoutSizes[number];
+
+const getSizeClass = (size: Size): string => {
+  switch (size) {
+    case 'feature':  return 'md:col-span-2 md:row-span-2';
+    case 'wide':     return 'md:col-span-2';
+    case 'standard':
+    default:         return 'md:col-span-1';
+  }
+};
+
+const projectsWithLayout = projects.map((p, i) => ({
+  ...p,
+  size: (layoutSizes[i % layoutSizes.length] ?? 'standard') as Size,
+}));
 ---
 
-<section id="projects" class="py-16 bg-gray-50 dark:bg-surface-alt">
-  <div class="max-w-4xl mx-auto px-6">
-    <h2 class="section-title">Progetti</h2>
-    <div class="grid sm:grid-cols-2 gap-6">
-      {projects.map(project => (
-        <article class="bg-white dark:bg-surface-card rounded-xl border border-gray-100 dark:border-white/10 p-6 flex flex-col gap-4 hover:shadow-md dark:hover:shadow-black/30 transition-shadow">
-          <div>
-            <h3 class="font-semibold text-gray-900 dark:text-white text-lg">{project.title}</h3>
-            <p class="text-gray-500 dark:text-gray-400 text-sm mt-2 leading-relaxed">{project.description}</p>
+<section id="projects" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">·05</span>
+      <span class="eyebrow-line"></span>
+      <span>{labels.eyebrow}</span>
+    </div>
+
+    <h2 class="section-title">
+      {labels.title} <em>{labels.em}</em>
+    </h2>
+
+    <div class="bento-grid grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 auto-rows-[320px] md:auto-rows-[300px]">
+      {projectsWithLayout.map((project, idx) => (
+        <article class:list={[
+          'project-card group relative overflow-hidden rounded-2xl border border-ink-300/40 dark:border-white/10 bg-white dark:bg-surface-card px-6 md:px-8 pt-6 md:pt-8 pb-7 md:pb-10 flex flex-col transition-all duration-500',
+          getSizeClass(project.size),
+          { 'is-feature': project.size === 'feature' },
+        ]}>
+
+          <!-- Noise texture backdrop on hover -->
+          <div class="grain-overlay opacity-0 group-hover:opacity-[0.06] transition-opacity duration-700"></div>
+
+          <!-- Decorative background number -->
+          <span class="absolute -top-4 -right-2 font-serif text-[8rem] md:text-[10rem] leading-none text-ink-900/[0.03] dark:text-white/[0.04] select-none pointer-events-none font-light italic" style="font-variation-settings: 'opsz' 144;" aria-hidden="true">
+            {String(idx + 1).padStart(2, '0')}
+          </span>
+
+          <!-- Index + year -->
+          <div class="flex items-center justify-between mb-4 relative z-10">
+            <span class="meta-mono text-[0.65rem] uppercase tracking-[0.18em] text-accent-600 dark:text-accent-400">
+              Project / {String(idx + 1).padStart(2, '0')}
+            </span>
+            {project.size === 'feature' && (
+              <span class="meta-mono text-[0.6rem] uppercase tracking-[0.2em] text-ink-500 dark:text-white/40 px-2 py-0.5 border border-ink-300/60 dark:border-white/15 rounded-full">
+                Featured
+              </span>
+            )}
           </div>
-          <div class="flex flex-wrap gap-2">
-            {project.stack.map(tech => {
-              const icon = iconMap[tech];
-              return (
-                <span class:list={['tech-badge', { 'has-icon': !!icon }]}>
-                  {icon && (
-                    <img src={icon} alt={tech} width="14" height="14" loading="lazy" decoding="async" class="tech-icon" />
-                  )}
-                  {tech}
+
+          <!-- Title -->
+          <h3 class={`font-serif text-ink-900 dark:text-white leading-[1.08] relative z-10 ${project.size === 'feature' ? 'text-3xl md:text-4xl mb-5' : 'text-xl md:text-2xl mb-3'}`} style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
+            {project.title}
+          </h3>
+
+          <!-- Description -->
+          <p class={`text-ink-700 dark:text-white/70 leading-relaxed relative z-10 ${project.size === 'feature' ? 'text-base md:text-lg max-w-lg' : 'text-sm'}`}>
+            {project.description}
+          </p>
+
+          <!-- Stack + links (mt-auto pushes to bottom) -->
+          <div class="mt-auto pt-6 relative z-10">
+            <div class="flex flex-wrap gap-1.5 mb-4">
+              {project.stack.map(tech => {
+                const icon = iconMap[tech];
+                return (
+                  <span class:list={['tech-badge', { 'has-icon': !!icon }]}>
+                    {icon && (
+                      <img src={icon} alt={tech} width="12" height="12" loading="lazy" decoding="async" class="tech-icon" />
+                    )}
+                    {tech}
+                  </span>
+                );
+              })}
+            </div>
+
+            <div class="flex items-center gap-4 pt-3 pb-1 border-t border-ink-300/40 dark:border-white/10">
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="meta-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-900 dark:text-white hover:text-accent-600 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
+                >
+                  {labels.github} <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span>
+                </a>
+              )}
+              {project.demo && (
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="meta-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-900 dark:text-white hover:text-accent-600 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
+                >
+                  {labels.demo} <span class="inline-block transition-transform group-hover:translate-x-0.5">↗</span>
+                </a>
+              )}
+              {!project.github && !project.demo && (
+                <span class="meta-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-500 dark:text-white/40 italic">
+                  {labels.privateProject}
                 </span>
-              );
-            })}
-          </div>
-          <div class="flex gap-3 mt-auto pt-2 items-center">
-            {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-sm font-medium text-brand-600 dark:text-brand-400 hover:underline"
-              >
-                GitHub →
-              </a>
-            )}
-            {project.demo && (
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:underline"
-              >
-                Demo →
-              </a>
-            )}
-            {!project.github && !project.demo && (
-              <span class="text-xs text-gray-400 dark:text-gray-600 italic">Progetto interno — non pubblico</span>
-            )}
+              )}
+            </div>
           </div>
         </article>
       ))}
@@ -76,41 +168,80 @@ const iconMap: Record<string, string> = {
 </section>
 
 <style>
+  .project-card {
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba(217,119,87,0.04) 0%, transparent 50%),
+      radial-gradient(circle at 0% 100%, rgba(69,92,233,0.03) 0%, transparent 50%);
+  }
+  :global(.dark) .project-card {
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba(217,119,87,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 0% 100%, rgba(69,92,233,0.05) 0%, transparent 50%);
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-accent-500);
+    box-shadow: 0 20px 40px -20px rgba(217, 119, 87, 0.15);
+  }
+
+  :global(.dark) .project-card:hover {
+    box-shadow: 0 20px 40px -20px rgba(217, 119, 87, 0.25);
+  }
+
+  .project-card.is-feature {
+    background-image:
+      radial-gradient(circle at 90% 10%, rgba(217,119,87,0.08) 0%, transparent 55%),
+      radial-gradient(circle at 10% 90%, rgba(69,92,233,0.06) 0%, transparent 55%);
+  }
+  :global(.dark) .project-card.is-feature {
+    background-image:
+      radial-gradient(circle at 90% 10%, rgba(217,119,87,0.12) 0%, transparent 55%),
+      radial-gradient(circle at 10% 90%, rgba(69,92,233,0.08) 0%, transparent 55%);
+  }
+
   .tech-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    padding: 0.2rem 0.6rem;
-    font-size: 0.72rem;
-    font-family: ui-monospace, monospace;
-    border-radius: 0.375rem;
-    background: #f1f5f9;
-    color: #475569;
-    border: 1px solid #e2e8f0;
+    padding: 0.18rem 0.55rem;
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-ink-700);
+    border: 1px solid rgba(0,0,0,0.1);
   }
 
   :global(.dark) .tech-badge {
-    background: rgba(255,255,255,0.07);
-    color: #cbd5e1;
-    border-color: rgba(255,255,255,0.1);
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    border-color: rgba(255,255,255,0.12);
   }
 
   .tech-badge.has-icon {
-    border-color: rgba(69, 92, 233, 0.2);
-    background: rgba(69, 92, 233, 0.05);
-    color: #3b4fd4;
+    border-color: rgba(69, 92, 233, 0.3);
+    color: var(--color-brand-700);
   }
 
   :global(.dark) .tech-badge.has-icon {
-    background: rgba(69, 92, 233, 0.12);
-    border-color: rgba(69, 92, 233, 0.3);
-    color: #a5b4fc;
+    border-color: rgba(165, 180, 252, 0.25);
+    color: #c7d2fe;
   }
 
   .tech-icon {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     object-fit: contain;
     flex-shrink: 0;
+  }
+
+  /* On small screens, disable auto-rows / row-spans to prevent awkward gaps */
+  @media (max-width: 767px) {
+    .bento-grid {
+      grid-auto-rows: auto !important;
+    }
   }
 </style>
