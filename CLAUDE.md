@@ -13,7 +13,17 @@ Deve essere professionale, veloce, accessibile e moderno.
 - **Astro 6** — framework statico, zero JS di default
 - **TypeScript** — tipizzazione su tutti i file `.ts` e `.astro` (`astro/tsconfigs/strict`)
 - **Tailwind CSS v4** — utility-first, plugin Vite `@tailwindcss/vite`; configurazione tramite `@theme` in `src/styles/global.css` (nessun `tailwind.config.ts`)
-- **GSAP** — animazioni hero marquee e loading screen (bundle locale, non CDN)
+- **Font**: Fontsource variable (Inter, Fraunces, JetBrains Mono) importati in `global.css`
+- **Animazioni native**: Web Animations API (WAAPI) per il marquee dell'hero, CSS keyframes / transition per il loading screen. Nessuna libreria di animazione (no GSAP, no Motion).
+- **Sitemap**: `@astrojs/sitemap` genera `sitemap-index.xml` in build (esclude `/cv-print`)
+
+### Internazionalizzazione
+- **Locale supportati**: `it` (default, `/`) e `en` (`/en/`)
+- Tipo `Locale` in `src/data/types.ts`; tutti i componenti accettano la prop `locale`
+- `getProfile(locale)` in `src/data/profile.ts` restituisce il profilo con override per lingua
+- Le pagine `src/pages/index.astro` (it) e `src/pages/en.astro` (en) sono identiche tranne per il `locale` passato ai componenti
+- Tutte le label UI sono inline nei componenti (oggetto `labels` switchato per `locale`)
+- Per SEO: `<html lang={locale}>`, `<link rel="alternate" hreflang>` e `og:locale` gestiti in `BaseLayout.astro`
 
 ### Deployment
 - **GitHub Pages** — via GitHub Actions (workflow `.github/workflows/deploy.yml`)
@@ -23,6 +33,7 @@ Deve essere professionale, veloce, accessibile e moderno.
 ### Qualità del Codice
 - **ESLint** (flat config, `eslint.config.mjs`) + **Prettier** (con `prettier-plugin-astro`)
 - **Astro Check** — controllo tipi nei file `.astro` (`npm run check`)
+- **Playwright** — test e2e + visual regression (`npm run test:e2e`); workflow manuale `update-snapshots.yml` per aggiornare gli snapshot
 
 ### Generazione PDF del CV
 - Script `scripts/generate-pdf.mjs` avvia un server statico su `dist/` e usa Puppeteer per stampare `/cv-print` in `public/cv.pdf`
@@ -54,6 +65,7 @@ ZakkaSite/
 │   │   ├── Contact.astro
 │   │   ├── Footer.astro
 │   │   └── SocialIcon.astro      # SVG inline per linkedin/github/instagram/mail
+│   ├── assets/                   # Immagini importabili da src/ (es. MainImage.jpg per <Image>)
 │   ├── data/
 │   │   ├── types.ts              # Interfacce condivise
 │   │   ├── profile.ts            # Info personali + socialLinks
@@ -64,7 +76,8 @@ ZakkaSite/
 │   ├── layouts/
 │   │   └── BaseLayout.astro      # <head> SEO/OG + LoadingScreen + slot
 │   ├── pages/
-│   │   ├── index.astro           # Single-page CV
+│   │   ├── index.astro           # Single-page CV (locale: it)
+│   │   ├── en.astro              # Versione inglese (/en/)
 │   │   └── cv-print.astro        # Versione stampabile A4 per Puppeteer
 │   └── styles/
 │       └── global.css            # @import tailwindcss + @theme design tokens
@@ -81,11 +94,11 @@ ZakkaSite/
 ## Regole di Sviluppo
 
 ### Generale
-- **Single Page Application**: tutto il CV in `index.astro`, sezioni con anchor link (`#about`, `#experience`, ...). La pagina `cv-print.astro` è dedicata alla generazione PDF e non va linkata dalla navigazione.
+- **Single Page Application**: tutto il CV in `index.astro` (it) / `en.astro` (en), sezioni con anchor link (`#about`, `#experience`, ...). La pagina `cv-print.astro` è dedicata alla generazione PDF e non va linkata dalla navigazione.
 - **No dipendenze superflue**: aggiungere un pacchetto solo se strettamente necessario
 - **Dati separati dalla UI**: tutti i contenuti (esperienze, skill, ecc.) vivono in `src/data/` come TypeScript con tipi espliciti in `types.ts`
-- **Nessun framework UI runtime** (no React, no Vue): solo componenti Astro + piccoli script. GSAP è ammesso per animazioni complesse ed è importato come modulo (`import gsap from 'gsap'`), mai da CDN
-- **Accessibilità**: tag semantici HTML5 (`<section>`, `<article>`, `<nav>`, `<main>`), attributi `aria-label` dove necessario, contrasto WCAG AA, rispetto di `prefers-reduced-motion` per le animazioni decorative
+- **Nessun framework UI runtime** (no React, no Vue) e **nessuna libreria di animazione**: solo componenti Astro + piccoli script vanilla. Le animazioni complesse usano CSS, Web Animations API e `requestAnimationFrame`
+- **Accessibilità**: tag semantici HTML5 (`<section>`, `<article>`, `<nav>`, `<main id="main">`), attributi `aria-label` dove necessario, contrasto WCAG AA, rispetto di `prefers-reduced-motion` per le animazioni decorative, skip link verso `#main`
 
 ### TypeScript
 - `strict: true` (ereditato da `astro/tsconfigs/strict`)
@@ -100,10 +113,13 @@ ZakkaSite/
 - Design responsive mobile-first: `sm:`, `md:`, `lg:` breakpoints
 
 ### Contenuto e SEO
-- `<title>`, `<meta name="description">`, Open Graph e Twitter Card in `BaseLayout.astro`
-- `lang="it"` sul tag `<html>`
+- `<title>`, `<meta name="description">`, Open Graph e Twitter Card in `BaseLayout.astro` differenziati per `locale`
+- `lang={locale}` sul tag `<html>`, `og:locale` coerente (`it_IT` / `en_US`)
+- `<link rel="alternate" hreflang="it|en|x-default">` per ogni pagina
+- JSON-LD `Person` schema con `knowsAbout`, `sameAs` (social), `subjectOf` (CV PDF)
 - Immagini con `loading="lazy" decoding="async"` (ad eccezione dell'immagine hero, che usa `loading="eager"` per LCP)
 - Link a GitHub, LinkedIn, Instagram, email sia nell'header che nel footer (tramite `socialLinks` in `profile.ts`)
+- `robots.txt` in `public/` con riferimento alla sitemap
 
 ### Immagini e Asset statici
 - Asset serviti da `public/` restano `<img>` HTML standard (il componente `<Image>` di Astro richiede import da `src/` e in questo progetto foto/loghi vivono in `public/`)
@@ -135,6 +151,8 @@ npm run generate:cv      # Genera public/cv.pdf (richiede build previa)
 npm run lint             # ESLint
 npm run format           # Prettier --write
 npm run format:check     # Prettier --check
+npm run test:e2e         # Playwright e2e + visual regression
+npm run test:e2e:ui      # Playwright in modalità UI interattiva
 ```
 
 ---

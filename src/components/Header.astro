@@ -23,6 +23,7 @@ const labels = locale === 'en'
       contacts: 'Contact',
       themeToggle: 'Toggle theme',
       darkTheme: 'Dark theme',
+      lightTheme: 'Light theme',
       downloadCv: 'Download CV (PDF)',
       openPrintableCv: 'Open printable CV',
       downloadCvAria: 'Download CV in PDF',
@@ -37,6 +38,7 @@ const labels = locale === 'en'
       contacts: 'Contatti',
       themeToggle: 'Cambia tema',
       darkTheme: 'Tema scuro',
+      lightTheme: 'Tema chiaro',
       downloadCv: 'Scarica CV (PDF)',
       openPrintableCv: 'Apri CV stampabile',
       downloadCvAria: 'Scarica CV in PDF',
@@ -50,8 +52,7 @@ const isCvDownload = !import.meta.env.DEV;
 
 <header
   id="top"
-  class="sticky top-0 z-50 transition-all duration-300"
-  style="background: rgba(255,255,255,0.80); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);"
+  class="site-header sticky top-0 z-50 transition-all duration-300"
 >
   <!-- Bottom accent line -->
   <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-500/50 to-transparent"></div>
@@ -142,6 +143,8 @@ const isCvDownload = !import.meta.env.DEV;
         id="theme-toggle"
         aria-label={labels.themeToggle}
         data-tooltip={labels.darkTheme}
+        data-label-dark={labels.darkTheme}
+        data-label-light={labels.lightTheme}
         class="theme-toggle cursor-pointer relative w-9 h-9 flex items-center justify-center rounded-full"
       >
         <svg class="theme-toggle-icon icon-sun w-4.5 h-4.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -241,6 +244,27 @@ const isCvDownload = !import.meta.env.DEV;
 </section>
 
 <style>
+  /* ── Header background + blur ── */
+  .site-header {
+    background: rgba(255, 255, 255, 0.80);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  :global(.dark) .site-header {
+    background: rgba(28, 29, 32, 0.85);
+  }
+  /* Su mobile il blur costa troppo: fallback opaco */
+  @media (max-width: 720px) {
+    .site-header {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    :global(.dark) .site-header {
+      background: rgba(28, 29, 32, 0.96);
+    }
+  }
+
   /* ── Hero Section ── */
   .hero-section {
     position: relative;
@@ -482,10 +506,26 @@ const isCvDownload = !import.meta.env.DEV;
   .brand-word {
     font-size: 1.12rem;
     letter-spacing: -0.07em;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+    /* Gradiente arancione (chiaro → scuro) */
+    background-image: linear-gradient(
+      100deg,
+      #ffd3ad 0%,
+      #f0a060 25%,
+      #e8804a 50%,
+      #c0611a 75%,
+      #8a3f0a 100%
+    );
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-shadow: none;
+    transition: background-position 0.6s ease;
   }
-  :global(.dark) .brand-word {
-    text-shadow: 0 1px 0 rgba(0,0,0,0.35);
+  .brand-mark:hover .brand-word {
+    background-position: 100% 50%;
   }
 
   /* ── Language toggle (segmented pill) ── */
@@ -615,6 +655,8 @@ const isCvDownload = !import.meta.env.DEV;
     .hero-col-right { padding: 1.25rem; }
     .hero-subtitle  { font-size: 1rem; }
     .hero-img {
+      /* Rimuovo filter (grayscale+contrast) e mask laterale soft: troppo costoso sul mobile */
+      filter: none;
       -webkit-mask-image: linear-gradient(
         to right,
         transparent 0%,
@@ -630,34 +672,30 @@ const isCvDownload = !import.meta.env.DEV;
         transparent 100%
       );
     }
+    .hero-mbti {
+      backdrop-filter: none;
+    }
   }
 </style>
 
 <script>
-  /* ── Navbar theme / shadow ── */
+  /* ── Theme toggle + tooltip sync (header background is handled in CSS) ── */
   const btn    = document.getElementById('theme-toggle');
   const header = document.getElementById('top') as HTMLElement | null;
 
-  function applyHeaderTheme(isDark: boolean) {
-    if (!header) return;
-    header.style.background = isDark
-      ? 'rgba(28,29,32,0.85)'
-      : 'rgba(255,255,255,0.80)';
-  }
+  const labelDark = btn?.dataset.labelDark ?? 'Dark theme';
+  const labelLight = btn?.dataset.labelLight ?? 'Light theme';
+
   function updateTooltip(isDark: boolean) {
-    btn?.setAttribute('data-tooltip', isDark ? 'Tema chiaro' : 'Tema scuro');
-  }
-  function syncTheme(isDark: boolean) {
-    applyHeaderTheme(isDark);
-    updateTooltip(isDark);
+    btn?.setAttribute('data-tooltip', isDark ? labelLight : labelDark);
   }
 
-  syncTheme(document.documentElement.classList.contains('dark'));
+  updateTooltip(document.documentElement.classList.contains('dark'));
 
   btn?.addEventListener('click', () => {
     const isDark = document.documentElement.classList.toggle('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    syncTheme(isDark);
+    updateTooltip(isDark);
   });
 
   /* ── Sync tema tra tab aperti ── */
@@ -665,14 +703,22 @@ const isCvDownload = !import.meta.env.DEV;
     if (e.key !== 'theme') return;
     const isDark = e.newValue === 'dark';
     document.documentElement.classList.toggle('dark', isDark);
-    syncTheme(isDark);
+    updateTooltip(isDark);
   });
 
-  /* ── Scroll: header shadow + hero parallax (rAF throttled) ── */
+  /* ── Scroll: header shadow + hero parallax + marquee direction (rAF throttled) ── */
   const heroBg = document.getElementById('hero-bg') as HTMLElement | null;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const parallaxEnabled = !reduceMotion && window.innerWidth > 720;
+
+  // Hook globale per il marquee, popolato da initMarquee
+  type MarqueeApi = { setDirection: (dir: 1 | -1) => void };
+  const marquee: { api: MarqueeApi | null } = { api: null };
+  (window as unknown as { __zakkaMarquee: typeof marquee }).__zakkaMarquee = marquee;
+
   let scrollScheduled = false;
+  let lastScrollY = window.scrollY;
+  let marqueeDir: 1 | -1 = 1;
   function onScroll() {
     if (scrollScheduled) return;
     scrollScheduled = true;
@@ -680,6 +726,12 @@ const isCvDownload = !import.meta.env.DEV;
       const y = window.scrollY;
       header?.classList.toggle('shadow-md', y > 8);
       if (parallaxEnabled && heroBg) heroBg.style.transform = `translateY(${y * 0.35}px)`;
+      const newDir: 1 | -1 = y > lastScrollY ? 1 : -1;
+      if (newDir !== marqueeDir) {
+        marqueeDir = newDir;
+        marquee.api?.setDirection(newDir);
+      }
+      lastScrollY = y;
       scrollScheduled = false;
     });
   }
@@ -719,13 +771,15 @@ const isCvDownload = !import.meta.env.DEV;
     sections.forEach(({ el }) => observer.observe(el));
   })();
 
-  /* ── Marquee rolling (WAAPI) ── */
+  /* ── Marquee rolling (WAAPI) — direzione gestita dallo scroll listener unificato ── */
   (function initMarquee() {
     const inner   = document.getElementById('hero-marquee-inner');
     const textEl  = inner?.querySelector('.hero-marquee-text') as HTMLElement | null;
     if (!inner || !textEl) return;
 
     let animation: Animation | null = null;
+    let lastWidth = window.innerWidth;
+    let rebuildScheduled = false;
 
     const build = () => {
       inner.querySelectorAll('.hero-marquee-clone').forEach((el) => el.remove());
@@ -748,22 +802,30 @@ const isCvDownload = !import.meta.env.DEV;
     };
 
     build();
-    window.addEventListener('resize', build, { passive: true });
 
-    let direction = 1;
-    let lastScrollY = window.scrollY;
-    window.addEventListener(
-      'scroll',
-      () => {
-        const curr = window.scrollY;
-        const newDir = curr > lastScrollY ? 1 : -1;
-        if (newDir !== direction && animation) {
-          direction = newDir;
-          animation.playbackRate = direction;
+    // Resize debounced via rAF; rebuild solo se la larghezza orizzontale è cambiata
+    // (su mobile la barra indirizzi che si chiude triggera un resize verticale).
+    const scheduleRebuild = () => {
+      if (rebuildScheduled) return;
+      rebuildScheduled = true;
+      requestAnimationFrame(() => {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          build();
         }
-        lastScrollY = curr;
-      },
-      { passive: true }
-    );
+        rebuildScheduled = false;
+      });
+    };
+    window.addEventListener('resize', scheduleRebuild, { passive: true });
+
+    // API esposta allo scroll listener unificato sopra
+    const apiHolder = (window as unknown as { __zakkaMarquee?: { api: { setDirection: (dir: 1 | -1) => void } | null } }).__zakkaMarquee;
+    if (apiHolder) {
+      apiHolder.api = {
+        setDirection: (dir) => {
+          if (animation) animation.playbackRate = dir;
+        },
+      };
+    }
   })();
 </script>

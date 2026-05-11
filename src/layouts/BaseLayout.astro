@@ -5,6 +5,8 @@ import LoadingScreen from '../components/LoadingScreen.astro';
 import { getProfile, socialLinks } from '../data/profile';
 import type { Locale } from '../data/types';
 import mainImage from '../assets/MainImage.jpg';
+import frauncesLatinWght from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
+import interLatinWght from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -16,14 +18,14 @@ const { locale = 'it' } = Astro.props;
 
 const defaultMeta = locale === 'en'
   ? {
-      title: 'Gianluca Zaccarelli - Senior Full-Stack Developer',
+      title: 'Gianluca Zaccarelli — Senior Full-Stack Developer',
       description:
-        'Portfolio and curriculum vitae of Gianluca Zaccarelli, Senior Full-Stack Developer with experience in C#, microservices, Docker, and enterprise development.',
+        'Portfolio and curriculum vitae of Gianluca Zaccarelli, Senior Full-Stack Developer with experience in C#, .NET, microservices, Docker and enterprise development.',
     }
   : {
-      title: 'Gianluca Zaccarelli - Senior Full-Stack Developer',
+      title: 'Gianluca Zaccarelli — Sviluppatore Full-Stack Senior',
       description:
-        'Portfolio e curriculum vitae di Gianluca Zaccarelli, Senior Full-Stack Developer con esperienza in C#, microservizi, Docker e sviluppo enterprise.',
+        'Portfolio e curriculum vitae di Gianluca Zaccarelli, Sviluppatore Full-Stack Senior con esperienza in C#, .NET, microservizi, Docker e sviluppo enterprise.',
     };
 
 const {
@@ -37,13 +39,36 @@ const siteUrl = (Astro.site ?? new URL('https://gianlucazaccarelli.github.io')).
 const canonical = new URL(Astro.url.pathname, siteUrl).toString();
 const ogImageAsset = await getImage({ src: mainImage, width: 1200, format: 'jpg' });
 const ogImage = new URL(ogImageAsset.src, siteUrl).toString();
+const ogImageWidth = ogImageAsset.attributes?.width ?? 1200;
+const ogImageHeight = ogImageAsset.attributes?.height;
 const ogLocale = locale === 'en' ? 'en_US' : 'it_IT';
+const ogLocaleAlternate = locale === 'en' ? 'it_IT' : 'en_US';
 const skipLabel = locale === 'en' ? 'Skip to content' : 'Salta al contenuto';
+
+const itHref = new URL('/', siteUrl).toString();
+const enHref = new URL('/en/', siteUrl).toString();
+
+const knowsAbout = [
+  'C#',
+  '.NET',
+  'Microservices',
+  'Docker',
+  'Kubernetes',
+  'TypeScript',
+  'JavaScript',
+  'OAuth2',
+  'OpenID Connect',
+  'Event-Driven Architecture',
+  'CI/CD',
+  'Azure',
+  'AWS',
+];
 
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: profile.name,
+  alternateName: profile.nickname,
   jobTitle: profile.title,
   email: `mailto:${profile.email}`,
   url: siteUrl,
@@ -53,7 +78,15 @@ const personSchema = {
     addressLocality: profile.city,
     addressCountry: profile.country,
   },
+  knowsAbout,
+  knowsLanguage: locale === 'en' ? ['Italian', 'English'] : ['Italiano', 'Inglese'],
   sameAs: socialLinks.filter((l) => l.icon !== 'mail').map((l) => l.href),
+  subjectOf: {
+    '@type': 'DigitalDocument',
+    name: locale === 'en' ? 'Curriculum Vitae (PDF)' : 'Curriculum Vitae (PDF)',
+    url: new URL(profile.cvPath, siteUrl).toString(),
+    encodingFormat: 'application/pdf',
+  },
 };
 ---
 
@@ -65,22 +98,41 @@ const personSchema = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
+    <!-- hreflang alternates (SEO multilingua) -->
+    <link rel="alternate" hreflang="it" href={itHref} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="x-default" href={itHref} />
+
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content={String(ogImageWidth)} />
+    {ogImageHeight && <meta property="og:image:height" content={String(ogImageHeight)} />}
+    <meta property="og:image:alt" content={profile.name} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlternate} />
+    <meta property="og:site_name" content={profile.name} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={profile.name} />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Preload font primari per LCP (hero usa Fraunces; body usa Inter) -->
+    <link rel="preload" as="font" type="font/woff2" href={frauncesLatinWght} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={interLatinWght} crossorigin />
+
+    <!-- Theme color (browser chrome) -->
+    <meta name="theme-color" content="#fafaf7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1c1d20" media="(prefers-color-scheme: dark)" />
 
     <!-- JSON-LD -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
@@ -110,7 +162,7 @@ const personSchema = {
     </script>
   </head>
   <body class="min-h-screen antialiased">
-    <a href="#about" class="skip-to-content">{skipLabel}</a>
+    <a href="#main" class="skip-to-content">{skipLabel}</a>
     <LoadingScreen />
     <slot />
   </body>
