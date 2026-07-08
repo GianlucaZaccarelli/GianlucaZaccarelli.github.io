@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { getProfile } from '../data/profile';
 import type { Locale } from '../data/types';
 import mainImage from '../assets/MainImage.jpg';
+import FlagIcon from './FlagIcon.astro';
 
 interface Props {
   locale?: Locale;
@@ -29,6 +30,9 @@ const labels = locale === 'en'
       downloadCvAria: 'Download CV in PDF',
       openPrintableCvAria: 'Open printable CV',
       located: 'Located',
+      openMenu: 'Open menu',
+      closeMenu: 'Close menu',
+      sections: 'Sections',
     }
   : {
       about: 'About',
@@ -44,7 +48,19 @@ const labels = locale === 'en'
       downloadCvAria: 'Scarica CV in PDF',
       openPrintableCvAria: 'Apri CV stampabile',
       located: 'Situato',
+      openMenu: 'Apri il menu',
+      closeMenu: 'Chiudi il menu',
+      sections: 'Sezioni',
     };
+
+const navItems = [
+  { href: '#about',      label: labels.about      },
+  { href: '#experience', label: labels.experience },
+  { href: '#education',  label: labels.education  },
+  { href: '#skills',     label: 'Skills'          },
+  { href: '#projects',   label: labels.projects   },
+  { href: '#contact',    label: labels.contacts   },
+];
 
 const cvHref = import.meta.env.DEV ? '/cv-print' : profile.cvPath;
 const isCvDownload = !import.meta.env.DEV;
@@ -52,10 +68,10 @@ const isCvDownload = !import.meta.env.DEV;
 
 <header
   id="top"
-  class="site-header sticky top-0 z-50 transition-all duration-300"
+  class="site-header fixed top-0 left-0 right-0 z-50 transition-all duration-300"
 >
   <!-- Bottom accent line -->
-  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-500/50 to-transparent"></div>
+  <div class="header-accent absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-500/50 to-transparent"></div>
 
   <nav class="max-w-6xl mx-auto px-6 py-3 grid grid-cols-[auto_1fr_auto] items-center gap-6">
 
@@ -65,7 +81,7 @@ const isCvDownload = !import.meta.env.DEV;
         {profile.nickname}
       </span>
       <span class="hidden lg:inline-flex h-4 w-px bg-ink-300/60 dark:bg-white/15"></span>
-      <span class="hidden lg:inline font-mono text-[0.6rem] uppercase tracking-[0.16em] text-ink-500 dark:text-white/45 font-medium leading-none">
+      <span class="hidden lg:inline font-mono text-[0.6rem] uppercase tracking-[0.16em] text-ink-500 dark:text-white/60 font-medium leading-none">
         Full-Stack Dev
       </span>
     </a>
@@ -73,17 +89,9 @@ const isCvDownload = !import.meta.env.DEV;
     <!-- Tab bar -->
     <div class="hidden md:flex justify-center">
       <ul
-        role="tablist"
         class="tab-bar inline-flex items-center gap-1 p-1 rounded-full border border-ink-300/60 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-sm"
       >
-        {[
-          { href: '#about',      label: labels.about      },
-          { href: '#experience', label: labels.experience },
-          { href: '#education',  label: labels.education  },
-          { href: '#skills',     label: 'Skills'          },
-          { href: '#projects',   label: labels.projects   },
-          { href: '#contact',    label: labels.contacts   },
-        ].map(({ href, label }) => (
+        {navItems.map(({ href, label }) => (
           <li>
             <a
               href={href}
@@ -112,11 +120,7 @@ const isCvDownload = !import.meta.env.DEV;
           class:list={['lang-option', { 'is-active': locale === 'it' }]}
           aria-current={locale === 'it' ? 'page' : undefined}
         >
-          <svg class="flag" viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect width="1" height="2" x="0" fill="#009246"/>
-            <rect width="1" height="2" x="1" fill="#ffffff"/>
-            <rect width="1" height="2" x="2" fill="#ce2b37"/>
-          </svg>
+          <FlagIcon country="it" />
         </a>
         <a
           href={enHref}
@@ -125,16 +129,7 @@ const isCvDownload = !import.meta.env.DEV;
           class:list={['lang-option', { 'is-active': locale === 'en' }]}
           aria-current={locale === 'en' ? 'page' : undefined}
         >
-          <svg class="flag" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <clipPath id="uk-clip"><rect width="60" height="30"/></clipPath>
-            <g clip-path="url(#uk-clip)">
-              <rect width="60" height="30" fill="#012169"/>
-              <path d="M0,0 L60,30 M60,0 L0,30" stroke="#ffffff" stroke-width="6"/>
-              <path d="M0,0 L60,30 M60,0 L0,30" stroke="#c8102e" stroke-width="4" clip-path="polygon(0 0, 50% 50%, 100% 0, 100% 100%, 50% 50%, 0 100%)"/>
-              <path d="M30,0 V30 M0,15 H60" stroke="#ffffff" stroke-width="10"/>
-              <path d="M30,0 V30 M0,15 H60" stroke="#c8102e" stroke-width="6"/>
-            </g>
-          </svg>
+          <FlagIcon country="gb" />
         </a>
       </div>
 
@@ -147,7 +142,7 @@ const isCvDownload = !import.meta.env.DEV;
         data-label-light={labels.lightTheme}
         class="theme-toggle cursor-pointer relative w-9 h-9 flex items-center justify-center rounded-full"
       >
-        <svg class="theme-toggle-icon icon-sun w-4.5 h-4.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg class="theme-toggle-icon icon-sun w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4"/>
           <g class="sun-rays">
             <line x1="12" y1="2" x2="12" y2="4"/>
@@ -160,7 +155,7 @@ const isCvDownload = !import.meta.env.DEV;
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
           </g>
         </svg>
-        <svg class="theme-toggle-icon icon-moon w-4.5 h-4.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg class="theme-toggle-icon icon-moon w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
       </button>
@@ -171,7 +166,7 @@ const isCvDownload = !import.meta.env.DEV;
         download={isCvDownload}
         data-tooltip={isCvDownload ? labels.downloadCv : labels.openPrintableCv}
         aria-label={isCvDownload ? labels.downloadCvAria : labels.openPrintableCvAria}
-        class="cv-button group inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.14em] font-medium bg-ink-900 dark:bg-white text-paper dark:text-ink-900 px-4 py-2.5 rounded-full transition-all"
+        class="cv-button group inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.14em] font-medium px-4 py-2.5 rounded-full transition-all"
       >
         <svg class="w-3 h-3 transition-transform group-hover:translate-y-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -180,8 +175,37 @@ const isCvDownload = !import.meta.env.DEV;
         </svg>
         CV
       </a>
+
+      <!-- Mobile menu toggle -->
+      <button
+        id="menu-toggle"
+        aria-label={labels.openMenu}
+        data-label-close={labels.closeMenu}
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="menu-toggle md:hidden cursor-pointer relative w-9 h-9 flex items-center justify-center rounded-full"
+      >
+        <span class="menu-bar menu-bar-top"></span>
+        <span class="menu-bar menu-bar-bottom"></span>
+      </button>
     </div>
   </nav>
+
+  <!-- Mobile menu overlay -->
+  <div id="mobile-menu" class="mobile-menu md:hidden">
+    <nav aria-label={labels.sections}>
+      <ul class="mobile-menu-list">
+        {navItems.map(({ href, label }, i) => (
+          <li>
+            <a href={href} class="mobile-menu-link">
+              <span class="mobile-menu-num">·{String(i + 1).padStart(2, '0')}</span>
+              <span class="mobile-menu-label">{label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
 </header>
 
 <!-- ── HERO ──────────────────────────────────────────── -->
@@ -208,10 +232,10 @@ const isCvDownload = !import.meta.env.DEV;
   <div class="hero-col hero-col-left">
     <div class="hero-location-badge">
       <span class="hero-index">N° 00 / Portfolio</span>
-      <h4 class="hero-subtitle">
+      <p class="hero-subtitle">
         <span>{labels.located}</span>
         in {profile.country}
-      </h4>
+      </p>
       <p class="hero-availability">— {profile.city}</p>
     </div>
     <div class="hero-scroll-hint">
@@ -226,10 +250,11 @@ const isCvDownload = !import.meta.env.DEV;
       <span class="hero-mbti">{profile.mbti} · MMXXVI</span>
     </div>
     <div class="hero-right-center">
-      <h4 class="hero-subtitle">
+      <h1 class="hero-subtitle">
+        <span class="sr-only">{profile.name} — </span>
         <span>{profile.titleLead}</span>
         <em>{profile.titleRest}</em>
-      </h4>
+      </h1>
       <p class="hero-availability">{profile.availability}</p>
     </div>
   </div>
@@ -249,9 +274,22 @@ const isCvDownload = !import.meta.env.DEV;
     background: rgba(255, 255, 255, 0.80);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    transition: background-color 0.35s ease;
   }
   :global(.dark) .site-header {
     background: rgba(28, 29, 32, 0.85);
+  }
+  /* Sopra la hero (sempre scura) l'header diventa vetro scuro,
+     così in light mode non appare una banda bianca sull'immagine */
+  .site-header.over-hero,
+  :global(.dark) .site-header.over-hero {
+    background: rgba(15, 16, 18, 0.35);
+  }
+  .site-header.over-hero .header-accent {
+    opacity: 0;
+  }
+  .header-accent {
+    transition: opacity 0.35s ease;
   }
   /* Su mobile il blur costa troppo: fallback opaco */
   @media (max-width: 720px) {
@@ -262,6 +300,10 @@ const isCvDownload = !import.meta.env.DEV;
     }
     :global(.dark) .site-header {
       background: rgba(28, 29, 32, 0.96);
+    }
+    .site-header.over-hero,
+    :global(.dark) .site-header.over-hero {
+      background: rgba(15, 16, 18, 0.45);
     }
   }
 
@@ -351,9 +393,9 @@ const isCvDownload = !import.meta.env.DEV;
     font-size: 0.62rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.75);
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255,255,255,0.14);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
     align-self: flex-start;
     margin-bottom: 0.2rem;
   }
@@ -367,7 +409,7 @@ const isCvDownload = !import.meta.env.DEV;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.6);
     font-family: var(--font-mono);
     font-size: 0.6rem;
     letter-spacing: 0.2em;
@@ -386,10 +428,10 @@ const isCvDownload = !import.meta.env.DEV;
     100% { transform: scaleY(0); transform-origin: bottom; }
   }
 
-  /* Right: top MBTI */
+  /* Right: top MBTI (l'offset extra evita la barra fixed dell'header) */
   .hero-right-top {
     position: absolute;
-    top: clamp(1.5rem, 3vw, 3rem);
+    top: calc(clamp(1.5rem, 3vw, 3rem) + 3.5rem);
     right: clamp(1.5rem, 3vw, 3rem);
   }
   .hero-mbti {
@@ -397,9 +439,9 @@ const isCvDownload = !import.meta.env.DEV;
     font-size: 0.62rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.75);
     padding: 0.35rem 0.75rem;
-    border: 1px solid rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.25);
     border-radius: 999px;
     backdrop-filter: blur(6px);
   }
@@ -429,7 +471,7 @@ const isCvDownload = !import.meta.env.DEV;
     color: var(--color-accent-400, #e8a28c);
   }
   .hero-availability {
-    color: rgba(255,255,255,0.45);
+    color: rgba(255,255,255,0.72);
     font-family: var(--font-mono);
     font-size: 0.62rem;
     letter-spacing: 0.18em;
@@ -506,6 +548,10 @@ const isCvDownload = !import.meta.env.DEV;
   .brand-word {
     font-size: 1.12rem;
     letter-spacing: -0.07em;
+    /* Il corsivo sborda dall'inline box e background-clip: text lo
+       taglierebbe: il padding estende l'area dipinta, il margine compensa */
+    padding: 0.05em 0.14em 0.08em 0.05em;
+    margin: -0.05em -0.14em -0.08em -0.05em;
     /* Gradiente arancione (chiaro → scuro) */
     background-image: linear-gradient(
       100deg,
@@ -537,7 +583,7 @@ const isCvDownload = !import.meta.env.DEV;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.3rem 0.5rem;
+    padding: 0.45rem 0.6rem;
     border-radius: 999px;
     transition: background-color 0.3s ease, transform 0.2s ease;
     text-decoration: none;
@@ -554,28 +600,130 @@ const isCvDownload = !import.meta.env.DEV;
   :global(.dark) .lang-option.is-active {
     background: rgba(255, 255, 255, 0.12);
   }
-  .flag {
-    width: 1.15rem;
-    height: 0.8rem;
-    border-radius: 2px;
-    display: block;
-    box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
+  /* ── Mobile menu ── */
+  .menu-toggle {
+    color: var(--color-ink-900, #1c1d20);
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(28, 29, 32, 0.18);
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+  :global(.dark) .menu-toggle,
+  .site-header.over-hero .menu-toggle {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+  .menu-bar {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 15px;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: 1px;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .menu-bar-top    { transform: translate(-50%, calc(-50% - 2.5px)); }
+  .menu-bar-bottom { transform: translate(-50%, calc(-50% + 2.5px)); }
+  .menu-toggle.is-open .menu-bar-top    { transform: translate(-50%, -50%) rotate(45deg); }
+  .menu-toggle.is-open .menu-bar-bottom { transform: translate(-50%, -50%) rotate(-45deg); }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: -1; /* sotto la barra dell'header, che resta cliccabile */
+    display: flex;
+    align-items: center;
+    background: var(--color-paper, #fafaf7);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  :global(.dark) .mobile-menu {
+    background: var(--color-surface, #1c1d20);
+  }
+  .mobile-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  .mobile-menu nav {
+    width: 100%;
+  }
+  .mobile-menu-list {
+    width: 100%;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+  }
+  .mobile-menu-link {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    padding: 0.55rem 0;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(28, 29, 32, 0.08);
+    transform: translateY(12px);
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  }
+  :global(.dark) .mobile-menu-link {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+  .mobile-menu.is-open .mobile-menu-link {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .mobile-menu-num {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-accent-600, #c0611a);
+  }
+  :global(.dark) .mobile-menu-num {
+    color: var(--color-accent-400, #e8a28c);
+  }
+  .mobile-menu-label {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+    color: var(--color-ink-900, #1c1d20);
+    font-variation-settings: 'opsz' 96, 'SOFT' 100;
+  }
+  :global(.dark) .mobile-menu-label {
+    color: #fff;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu,
+    .mobile-menu-link { transition: none; }
   }
 
   /* ── Theme toggle (subtle animated) ── */
   .theme-toggle {
-    color: #c0611a;
-    background: rgba(192, 97, 26, 0.08);
-    border: 1px solid rgba(192, 97, 26, 0.22);
+    color: #b4531f;
+    background: rgba(192, 97, 26, 0.14);
+    border: 1px solid rgba(192, 97, 26, 0.45);
     transition: color 0.35s ease, background-color 0.3s ease,
                 border-color 0.3s ease, transform 0.2s ease,
                 box-shadow 0.3s ease;
   }
   :global(.dark) .theme-toggle {
-    color: #a5b4fc;
-    background: rgba(165, 180, 252, 0.08);
-    border-color: rgba(165, 180, 252, 0.22);
+    color: #c7d2fe;
+    background: rgba(165, 180, 252, 0.14);
+    border-color: rgba(165, 180, 252, 0.4);
+  }
+  /* Sopra la hero (sfondo scuro) serve una versione chiara e luminosa;
+     in dark mode resta l'indigo, in light diventa arancio caldo */
+  .site-header.over-hero .theme-toggle {
+    color: #ffc08a;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 190, 138, 0.55);
+  }
+  :global(.dark) .site-header.over-hero .theme-toggle {
+    color: #c7d2fe;
+    background: rgba(165, 180, 252, 0.14);
+    border-color: rgba(165, 180, 252, 0.5);
   }
   .theme-toggle:hover {
     background: rgba(192, 97, 26, 0.16);
@@ -589,6 +737,18 @@ const isCvDownload = !import.meta.env.DEV;
     border-color: rgba(165, 180, 252, 0.4);
     color: #c7d2fe;
     box-shadow: 0 4px 12px -4px rgba(165, 180, 252, 0.35);
+  }
+  .site-header.over-hero .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 211, 173, 0.8);
+    color: #ffd3ad;
+    box-shadow: 0 4px 12px -4px rgba(255, 190, 138, 0.4);
+  }
+  :global(.dark) .site-header.over-hero .theme-toggle:hover {
+    background: rgba(165, 180, 252, 0.22);
+    border-color: rgba(199, 210, 254, 0.75);
+    color: #e0e7ff;
+    box-shadow: 0 4px 12px -4px rgba(165, 180, 252, 0.45);
   }
   .theme-toggle:active {
     transform: scale(0.95);
@@ -634,6 +794,28 @@ const isCvDownload = !import.meta.env.DEV;
     position: relative;
     z-index: 1;
   }
+  /* Sopra la hero la pillola poggia sull'immagine scura: serve più
+     opacità di fondo e testo più scuro per restare leggibile */
+  .site-header.over-hero .tab-bar {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  :global(.dark) .site-header.over-hero .tab-bar {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  .site-header.over-hero .tab-link {
+    color: var(--color-ink-700);
+  }
+  .site-header.over-hero .tab-link:hover {
+    color: var(--color-ink-900);
+  }
+  :global(.dark) .site-header.over-hero .tab-link {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  :global(.dark) .site-header.over-hero .tab-link:hover {
+    color: #fff;
+  }
   .tab-link.is-active {
     background: var(--color-ink-900, #1c1d20);
     color: var(--color-paper, #fafaf7);
@@ -643,17 +825,53 @@ const isCvDownload = !import.meta.env.DEV;
     color: #1c1d20;
   }
 
-  /* ── CV button hover ── */
+  /* ── CV button: stessa famiglia outline dei controlli accanto,
+        in tinta terracotta per mantenere il ruolo di CTA ── */
+  .cv-button {
+    color: #b4531f;
+    background: rgba(192, 97, 26, 0.14);
+    border: 1px solid rgba(192, 97, 26, 0.45);
+    transition: color 0.3s ease, background-color 0.3s ease,
+                border-color 0.3s ease, transform 0.2s ease,
+                box-shadow 0.3s ease;
+  }
+  :global(.dark) .cv-button {
+    color: #e8a28c;
+    background: rgba(217, 119, 87, 0.12);
+    border-color: rgba(217, 119, 87, 0.4);
+  }
+  .site-header.over-hero .cv-button {
+    color: #ffc08a;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 190, 138, 0.55);
+  }
   .cv-button:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px -4px rgba(0,0,0,0.15);
+    background: rgba(192, 97, 26, 0.22);
+    border-color: rgba(192, 97, 26, 0.6);
+    color: #9a4a10;
+    box-shadow: 0 6px 16px -6px rgba(192, 97, 26, 0.35);
+  }
+  :global(.dark) .cv-button:hover {
+    background: rgba(217, 119, 87, 0.2);
+    border-color: rgba(232, 162, 140, 0.6);
+    color: #f0b9a6;
+    box-shadow: 0 6px 16px -6px rgba(217, 119, 87, 0.4);
+  }
+  .site-header.over-hero .cv-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 211, 173, 0.8);
+    color: #ffd3ad;
+    box-shadow: 0 6px 16px -6px rgba(255, 190, 138, 0.4);
   }
 
   /* ── Responsive ── */
   @media (max-width: 720px) {
-    .hero-col-left  { padding: 1.25rem; }
-    .hero-col-right { padding: 1.25rem; }
-    .hero-subtitle  { font-size: 1rem; }
+    /* Libera il centro (viso del ritratto): location in alto a sinistra,
+       titolo in basso a destra sopra il marquee */
+    .hero-col-left  { padding: 1.25rem; justify-content: flex-start; padding-top: 5.5rem; }
+    .hero-col-right { padding: 1.25rem; justify-content: flex-end; padding-bottom: 6.5rem; }
+    .hero-subtitle  { font-size: 1.15rem; }
     .hero-img {
       /* Rimuovo filter (grayscale+contrast) e mask laterale soft: troppo costoso sul mobile */
       filter: none;
@@ -716,15 +934,25 @@ const isCvDownload = !import.meta.env.DEV;
   const marquee: { api: MarqueeApi | null } = { api: null };
   (window as unknown as { __zakkaMarquee: typeof marquee }).__zakkaMarquee = marquee;
 
+  const heroSection = document.getElementById('hero');
+
   let scrollScheduled = false;
   let lastScrollY = window.scrollY;
   let marqueeDir: 1 | -1 = 1;
+  function updateOverHero(y: number) {
+    if (!header || !heroSection) return;
+    const overHero = y < heroSection.offsetHeight - header.offsetHeight;
+    header.classList.toggle('over-hero', overHero);
+    header.classList.toggle('shadow-md', !overHero && y > 8);
+  }
+  updateOverHero(window.scrollY);
+
   function onScroll() {
     if (scrollScheduled) return;
     scrollScheduled = true;
     requestAnimationFrame(() => {
       const y = window.scrollY;
-      header?.classList.toggle('shadow-md', y > 8);
+      updateOverHero(y);
       if (parallaxEnabled && heroBg) heroBg.style.transform = `translateY(${y * 0.35}px)`;
       const newDir: 1 | -1 = y > lastScrollY ? 1 : -1;
       if (newDir !== marqueeDir) {
@@ -752,23 +980,61 @@ const isCvDownload = !import.meta.env.DEV;
       })
       .filter((x): x is { tab: HTMLAnchorElement; el: HTMLElement } => x !== null);
 
-    const setActive = (tab: HTMLAnchorElement) => {
+    const setActive = (tab: HTMLAnchorElement | null) => {
       tabs.forEach((t) => t.classList.toggle('is-active', t === tab));
     };
 
+    // Tiene traccia delle sezioni nella banda di osservazione: se nessuna
+    // è visibile (es. hero) nessuna tab resta evidenziata
+    const visibleSections = new Set<Element>();
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!visible) return;
-        const match = sections.find((s) => s.el === visible.target);
-        if (match) setActive(match.tab);
+        entries.forEach((e) => {
+          if (e.isIntersecting) visibleSections.add(e.target);
+          else visibleSections.delete(e.target);
+        });
+        if (visibleSections.size === 0) {
+          setActive(null);
+          return;
+        }
+        const firstVisible = sections.find((s) => visibleSections.has(s.el));
+        if (firstVisible) setActive(firstVisible.tab);
       },
       { rootMargin: '-35% 0px -55% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] }
     );
 
     sections.forEach(({ el }) => observer.observe(el));
+  })();
+
+  /* ── Mobile menu ── */
+  (function initMobileMenu() {
+    const toggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    if (!toggle || !menu) return;
+
+    const labelOpen = toggle.getAttribute('aria-label') ?? 'Menu';
+    const labelClose = toggle.dataset.labelClose ?? labelOpen;
+
+    function setOpen(open: boolean) {
+      if (!toggle || !menu) return;
+      menu.classList.toggle('is-open', open);
+      toggle.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? labelClose : labelOpen);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+
+    toggle.addEventListener('click', () => {
+      setOpen(!menu.classList.contains('is-open'));
+    });
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setOpen(false));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.classList.contains('is-open')) setOpen(false);
+    });
   })();
 
   /* ── Marquee rolling (WAAPI) — direzione gestita dallo scroll listener unificato ── */

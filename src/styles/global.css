@@ -44,7 +44,14 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  /* clip (non hidden): evita lo scroll orizzontale senza creare uno
+     scroll container, che disattiverebbe position: sticky nei discendenti */
+  overflow-x: clip;
+}
+
+/* L'header è fixed: gli anchor delle sezioni devono fermarsi sotto di esso */
+section[id] {
+  scroll-margin-top: 4.5rem;
 }
 
 body {
@@ -53,7 +60,7 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
   background-color: var(--color-paper);
   color: var(--color-ink-900);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .dark body {
@@ -82,7 +89,7 @@ body {
   color: var(--color-ink-500);
   margin-bottom: 1rem;
 }
-.dark .section-eyebrow { color: rgba(255,255,255,0.42); }
+.dark .section-eyebrow { color: rgba(255,255,255,0.6); }
 
 .section-eyebrow .eyebrow-num {
   color: var(--color-accent-600);
@@ -141,7 +148,7 @@ body {
   text-transform: uppercase;
   color: var(--color-ink-500);
 }
-.dark .meta-label { color: rgba(255,255,255,0.4); }
+.dark .meta-label { color: rgba(255,255,255,0.58); }
 
 .meta-mono {
   font-family: var(--font-mono);

@@ -1,8 +1,8 @@
 ---
-const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい', 'Hallå', 'Guten Tag', 'Hallo'];
+const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こんにちは', 'Hallå', 'Guten Tag', 'Hallo'];
 ---
 
-<div class="loading-container">
+<div class="loading-container" aria-hidden="true">
   <div class="loading-screen">
 
     <!-- Blobs di sfondo animati -->
@@ -13,17 +13,18 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
     <!-- Griglia di punti sottile -->
     <div class="ls-grid"></div>
 
-    <!-- Parole al centro -->
+    <!-- Parole al centro (decorative: niente heading) -->
     <div class="loading-words">
       {words.map((word, i) => (
-        <h2 class:list={[
+        <div class:list={[
+          'loading-word',
           'home-active',
           { 'home-active-first': i === 0 },
           { 'home-active-last': i === words.length - 1 },
-          { 'jap': word === 'おい' }
+          { 'jap': word === 'こんにちは' }
         ]}>
           {word}<div class="dot"></div>
-        </h2>
+        </div>
       ))}
     </div>
 
@@ -60,7 +61,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
     position: relative;
     width: 100%;
     height: 100%;
-    background: #0a0f1e;
+    background: #141517; /* --color-surface-alt: coerente col resto del sito */
     will-change: top;
     overflow: hidden;
   }
@@ -78,7 +79,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
   .ls-blob-1 {
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, #455ce9 0%, transparent 70%);
+    background: radial-gradient(circle, #d97757 0%, transparent 70%);
     top: -10%;
     left: -8%;
     animation-delay: 0s;
@@ -88,7 +89,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
   .ls-blob-2 {
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
+    background: radial-gradient(circle, #455ce9 0%, transparent 70%);
     bottom: -5%;
     right: -5%;
     animation-delay: 1.5s;
@@ -98,7 +99,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
   .ls-blob-3 {
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
+    background: radial-gradient(circle, #e8a28c 0%, transparent 70%);
     top: 40%;
     right: 15%;
     animation-delay: 0.8s;
@@ -136,7 +137,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
     will-change: opacity;
   }
 
-  .loading-words h2 {
+  .loading-word {
     margin: 0;
     padding: 0 0.4em 0 0.6em;
     color: #fff;
@@ -150,24 +151,24 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
     font-weight: 700;
     letter-spacing: -0.03em;
     will-change: opacity;
-    text-shadow: 0 0 60px rgba(69, 92, 233, 0.5);
+    text-shadow: 0 0 60px rgba(217, 119, 87, 0.45);
   }
 
-  .loading-words h2.jap {
-    font-size: calc(clamp(3.25em, 5vw, 4.5em) * 0.65);
-    transform: translate(-50%, 10%);
+  .loading-word.jap {
+    font-size: calc(clamp(3.25em, 5vw, 4.5em) * 0.55);
+    transform: translate(-50%, 25%);
   }
 
   .dot {
     display: block;
     position: absolute;
     border-radius: 50%;
-    background: #455ce9;
+    background: #d97757;
     left: 0;
     top: 47%;
     width: calc(clamp(16px, 1.2vw, 19px) / 1.65);
     height: calc(clamp(16px, 1.2vw, 19px) / 1.65);
-    box-shadow: 0 0 8px #455ce9;
+    box-shadow: 0 0 8px #d97757;
   }
 
   @media screen and (max-width: 540px) {
@@ -222,10 +223,10 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
   .ls-progress-bar {
     height: 100%;
     width: 100%;
-    background: linear-gradient(90deg, #455ce9, #7c3aed);
+    background: linear-gradient(90deg, #d97757, #455ce9);
     transform-origin: left center;
     transform: scaleX(0);
-    box-shadow: 0 0 12px rgba(69, 92, 233, 0.8);
+    box-shadow: 0 0 12px rgba(217, 119, 87, 0.8);
   }
 
   /* ── Curva in basso ── */
@@ -247,7 +248,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
   .rounded-div-wrap .rounded-div {
     width: 100%;
     height: 745%;
-    background: #0a0f1e;
+    background: #141517;
     border-radius: 50%;
   }
 </style>
@@ -271,7 +272,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
     const screen = document.querySelector<HTMLElement>('.loading-screen');
     const container = document.querySelector<HTMLElement>('.loading-container');
     const wordsEl = document.querySelector<HTMLElement>('.loading-words');
-    const words = Array.from(document.querySelectorAll<HTMLElement>('.loading-words h2'));
+    const words = Array.from(document.querySelectorAll<HTMLElement>('.loading-words .loading-word'));
     const bar = document.getElementById('ls-bar');
     const count = document.getElementById('ls-count');
     const curve = document.querySelector<HTMLElement>('.loading-screen .rounded-div-wrap.bottom');
@@ -290,8 +291,8 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
     if (first) first.style.opacity = '1';
 
     // Durata totale del caricamento visibile (ms)
-    const LOAD_MS = 2200;
-    const DELAY_MS = 500;
+    const LOAD_MS = 1100;
+    const DELAY_MS = 250;
 
     // Contatore 0 → 100 + barra progresso
     const startCounter = performance.now() + DELAY_MS;
@@ -307,12 +308,12 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
     // Fade-in contenitore parole
     wordsEl.animate(
       [{ opacity: 0 }, { opacity: 1 }],
-      { duration: 800, delay: DELAY_MS, fill: 'forwards', easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+      { duration: 500, delay: DELAY_MS, fill: 'forwards', easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
     );
 
-    // Ciclo parole: ogni parola resta visibile 150ms poi fade out quando parte la successiva
-    const cycleStart = DELAY_MS + 400;
-    const step = 150;
+    // Ciclo parole: ogni parola resta visibile ~100ms poi fade out quando parte la successiva
+    const cycleStart = DELAY_MS + 250;
+    const step = 100;
     words.forEach((w, i) => {
       if (i === 0) {
         w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 1, delay: cycleStart + step, fill: 'forwards' });
@@ -333,9 +334,9 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
     const slideOutAt = cycleStart + step * words.length + 200;
 
     setTimeout(() => {
-      screen.style.transition = 'top 850ms cubic-bezier(0.76, 0, 0.24, 1)';
+      screen.style.transition = 'top 700ms cubic-bezier(0.76, 0, 0.24, 1)';
       screen.style.top = '-100%';
-      curve.style.transition = 'height 1000ms cubic-bezier(0.76, 0, 0.24, 1)';
+      curve.style.transition = 'height 850ms cubic-bezier(0.76, 0, 0.24, 1)';
       curve.style.height = '0vh';
       wordsEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards', easing: 'linear' });
 
@@ -347,7 +348,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
 
       setTimeout(() => {
         document.documentElement.style.cursor = 'auto';
-      }, 650);
+      }, 550);
 
       setTimeout(() => {
         document.body.style.overflow = '';
@@ -357,7 +358,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'おい
           el.style.transform = '';
         });
         sessionStorage.setItem('zakka:intro-seen', '1');
-      }, 1500);
+      }, 1200);
     }, slideOutAt);
   })();
 </script>

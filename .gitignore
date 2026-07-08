@@ -27,3 +27,7 @@ pnpm-debug.log*
 /test-results/
 /playwright-report/
 /playwright/.cache/
+/.playwright-mcp/
+
+# generated at build time
+/public/cv.pdf

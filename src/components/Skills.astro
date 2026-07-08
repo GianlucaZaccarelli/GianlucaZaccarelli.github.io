@@ -14,77 +14,37 @@ const labels = locale === 'en'
 
 const BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons';
 
+// Icona solo per prodotti/tecnologie reali: associare il logo di un prodotto
+// a una competenza concettuale (es. OAuth2 → Vault, Team Leadership → Slack)
+// è fuorviante. Le voci concettuali restano chip di solo testo.
 const iconMap: Record<string, string> = {
   'C#':                   `${BASE}/csharp/csharp-original.svg`,
   '.NET':                 `${BASE}/dotnetcore/dotnetcore-original.svg`,
   'Node.js':              `${BASE}/nodejs/nodejs-original.svg`,
   'OpenAPI/Swagger':      `${BASE}/swagger/swagger-original.svg`,
-  'API Versioning':       `${BASE}/postman/postman-original.svg`,
-  'Backward Compatibility': `${BASE}/git/git-original.svg`,
-  'OAuth2':               `${BASE}/vault/vault-original.svg`,
-  'OpenID Connect':       `${BASE}/vault/vault-original.svg`,
   'RabbitMQ':             `${BASE}/rabbitmq/rabbitmq-original.svg`,
   'Kafka':                `${BASE}/apachekafka/apachekafka-original.svg`,
-  'Event-Driven Architecture': `${BASE}/apachekafka/apachekafka-original.svg`,
-  'Microservizi':         `${BASE}/kubernetes/kubernetes-plain.svg`,
-  'Microservices':        `${BASE}/kubernetes/kubernetes-plain.svg`,
   'Microsoft SQL Server': `${BASE}/microsoftsqlserver/microsoftsqlserver-plain.svg`,
   'Docker':               `${BASE}/docker/docker-original.svg`,
   'Kubernetes':           `${BASE}/kubernetes/kubernetes-plain.svg`,
   'Git':                  `${BASE}/git/git-original.svg`,
   'GitHub':               `${BASE}/github/github-original.svg`,
   'NuGet':                `${BASE}/nuget/nuget-original.svg`,
-  'CI/CD':                `${BASE}/githubactions/githubactions-original.svg`,
   'GitHub Actions':       `${BASE}/githubactions/githubactions-original.svg`,
-  'Quality Gates':        `${BASE}/sonarqube/sonarqube-original.svg`,
-  'Staging/Production Pipelines': `${BASE}/githubactions/githubactions-original.svg`,
   'Azure':                `${BASE}/azure/azure-original.svg`,
   'AWS':                  `${BASE}/amazonwebservices/amazonwebservices-original-wordmark.svg`,
   'Grafana':              `${BASE}/grafana/grafana-original.svg`,
-  'Logging & Monitoring': `${BASE}/grafana/grafana-original.svg`,
-  'MainFrame':            `${BASE}/linux/linux-original.svg`,
-  'Crystal Reports':      `${BASE}/oracle/oracle-original.svg`,
   'JavaScript':           `${BASE}/javascript/javascript-original.svg`,
   'TypeScript':           `${BASE}/typescript/typescript-original.svg`,
   'HTML5':                `${BASE}/html5/html5-original.svg`,
   'CSS3':                 `${BASE}/css3/css3-original.svg`,
   'Dart':                 `${BASE}/dart/dart-original.svg`,
   'Flutter':              `${BASE}/flutter/flutter-original.svg`,
-  'Responsive Design':    `${BASE}/bootstrap/bootstrap-original.svg`,
-  'Accessibilita (WCAG)': `${BASE}/chrome/chrome-original.svg`,
-  'Accessibility (WCAG)': `${BASE}/chrome/chrome-original.svg`,
-  'State Management':     `${BASE}/redux/redux-original.svg`,
-  'UI Performance (Core Web Vitals)': `${BASE}/vitejs/vitejs-original.svg`,
-  'Design Systems':       `${BASE}/storybook/storybook-original.svg`,
-  'Form Validation':      `${BASE}/eslint/eslint-original.svg`,
   'Astro':                `${BASE}/astro/astro-original.svg`,
-  'Project Management':   `${BASE}/trello/trello-plain.svg`,
-  'Team Leadership':      `${BASE}/slack/slack-original.svg`,
-  'Analisi dei requisiti': `${BASE}/confluence/confluence-original.svg`,
-  'Requirements analysis': `${BASE}/confluence/confluence-original.svg`,
-  'GDPR compliance':      `${BASE}/vault/vault-original.svg`,
   'Visual Studio':        `${BASE}/visualstudio/visualstudio-original.svg`,
   'Visual Studio Code':   `${BASE}/vscode/vscode-original.svg`,
-  'Office Suite':         `${BASE}/windows8/windows8-original.svg`,
   'Playwright':           `${BASE}/playwright/playwright-original.svg`,
-  'Unit Testing':         `${BASE}/playwright/playwright-original.svg`,
-  'Integration Testing':  `${BASE}/postman/postman-original.svg`,
-  'API Testing':          `${BASE}/postman/postman-original.svg`,
-  'E2E Testing':          `${BASE}/playwright/playwright-original.svg`,
-  'Coverage Analysis':    `${BASE}/sonarqube/sonarqube-original.svg`,
-  'Performance Profiling': `${BASE}/grafana/grafana-original.svg`,
-  'Query Optimization':   `${BASE}/microsoftsqlserver/microsoftsqlserver-plain.svg`,
-  'OWASP':                `${BASE}/vault/vault-original.svg`,
 };
-
-const toChips = (categories: string[]) =>
-  skills
-    .filter(s => categories.includes(s.category))
-    .flatMap(s => s.items)
-    .map(name => ({ name, icon: iconMap[name] ?? null }));
-
-const row1 = toChips(['Backend', 'DevOps']);
-const row2 = toChips(['Frontend', 'Soft Skills & Tools']);
 
 // Cluster view: each category on its own
 const clusters = skills.map(s => ({
@@ -106,8 +66,8 @@ const clusters = skills.map(s => ({
       {labels.title} <em>{labels.em}</em>
     </h2>
 
-    <!-- Cluster view (desktop focus) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-12 mb-20">
+    <!-- Cluster view -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-12">
       {clusters.map((cluster, idx) => (
         <div class="group">
           <div class="flex items-baseline gap-3 mb-5 pb-3 border-b border-ink-300/40 dark:border-white/10">
@@ -118,7 +78,7 @@ const clusters = skills.map(s => ({
               {cluster.category}
             </h3>
             <span class="flex-1 h-px bg-ink-300/30 dark:bg-white/8"></span>
-            <span class="meta-mono text-[0.65rem] text-ink-500 dark:text-white/40">
+            <span class="meta-mono text-[0.65rem] text-ink-500 dark:text-white/55">
               {cluster.items.length}
             </span>
           </div>
@@ -136,70 +96,10 @@ const clusters = skills.map(s => ({
       ))}
     </div>
 
-    <!-- Marquee (atmosphere) -->
-    <div class="space-y-3 opacity-70">
-      <div class="marquee-wrapper">
-        <div class="marquee-track marquee-left">
-          {[...row1, ...row1, ...row1].map(item => (
-            <div class="skill-chip skill-chip-ghost">
-              {item.icon && (
-                <img src={item.icon} alt={item.name} width="18" height="18" loading="lazy" decoding="async" class="skill-icon" />
-              )}
-              <span>{item.name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div class="marquee-wrapper">
-        <div class="marquee-track marquee-right">
-          {[...row2, ...row2, ...row2].map(item => (
-            <div class="skill-chip skill-chip-ghost">
-              {item.icon && (
-                <img src={item.icon} alt={item.name} width="18" height="18" loading="lazy" decoding="async" class="skill-icon" />
-              )}
-              <span>{item.name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-
   </div>
 </section>
 
 <style>
-  .marquee-wrapper {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
-  }
-
-  .marquee-track {
-    display: flex;
-    gap: 0.6rem;
-    width: max-content;
-    padding: 0.4rem 0;
-  }
-
-  .marquee-left  { animation: scrollLeft  40s linear infinite; }
-  .marquee-right { animation: scrollRight 40s linear infinite; }
-
-  .marquee-wrapper:hover .marquee-left,
-  .marquee-wrapper:hover .marquee-right {
-    animation-play-state: paused;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .marquee-left,
-    .marquee-right { animation: none; }
-  }
-
-  @keyframes scrollLeft  { from { transform: translateX(0); } to { transform: translateX(-33.333%); } }
-  @keyframes scrollRight { from { transform: translateX(-33.333%); } to { transform: translateX(0); } }
-
   .skill-chip {
     display: inline-flex;
     align-items: center;
@@ -235,23 +135,10 @@ const clusters = skills.map(s => ({
     color: var(--color-accent-400);
   }
 
-  .skill-chip-ghost {
-    border-color: rgba(0, 0, 0, 0.08);
-    font-size: 0.75rem;
-  }
-  :global(.dark) .skill-chip-ghost {
-    border-color: rgba(255,255,255,0.08);
-  }
-
   .skill-icon {
     width: 16px;
     height: 16px;
     object-fit: contain;
     flex-shrink: 0;
-  }
-
-  .skill-chip-ghost .skill-icon {
-    width: 18px;
-    height: 18px;
   }
 </style>

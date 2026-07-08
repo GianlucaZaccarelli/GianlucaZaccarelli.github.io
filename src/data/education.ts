@@ -1,5 +1,5 @@
 import type { Education, Locale } from './types';
-import uniprLogo from '../assets/logos/unipr.jpg';
+import uniprLogo from '../assets/logos/unipr.webp';
 import itisLogo from '../assets/logos/itis.webp';
 
 const educationIt: Education[] = [

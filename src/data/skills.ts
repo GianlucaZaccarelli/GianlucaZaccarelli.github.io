@@ -27,7 +27,7 @@ const skillsIt: Skill[] = [
       'Dart',
       'Flutter',
       'Responsive Design',
-      'Accessibilita (WCAG)',
+      'Accessibilità (WCAG)',
       'State Management',
       'UI Performance (Core Web Vitals)',
       'Design Systems',

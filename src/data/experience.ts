@@ -1,7 +1,7 @@
 import type { Experience, Locale } from './types';
-import codeitLogo from '../assets/logos/codeit.jpg';
-import carusoLogo from '../assets/logos/caruso.jpg';
-import sigradeLogo from '../assets/logos/sigrade.jpg';
+import codeitLogo from '../assets/logos/codeit.webp';
+import carusoLogo from '../assets/logos/caruso.webp';
+import sigradeLogo from '../assets/logos/sigrade.webp';
 
 const experienceIt: Experience[] = [
   {

@@ -63,12 +63,28 @@ server.listen(PORT, async () => {
   try {
     const page = await browser.newPage();
     await page.goto(`http://localhost:${PORT}/cv-print`, { waitUntil: 'networkidle0' });
+    // I font variable (Fraunces/Inter) devono essere renderizzati prima della stampa
+    await page.evaluateHandle('document.fonts.ready');
+
+    const updatedAt = new Intl.DateTimeFormat('it-IT', {
+      month: 'long',
+      year: 'numeric',
+    }).format(new Date());
+
+    const footerTemplate = `
+      <div style="width:100%; padding:0 16mm; font-family:Helvetica,Arial,sans-serif; font-size:6.5px; color:#9a9a9a; display:flex; justify-content:space-between; align-items:center;">
+        <span>Gianluca Zaccarelli — Curriculum Vitae · aggiornato a ${updatedAt}</span>
+        <span>pagina <span class="pageNumber"></span> di <span class="totalPages"></span></span>
+      </div>`;
 
     await page.pdf({
       path: OUT,
       format: 'A4',
       printBackground: true,
-      margin: { top: '0', right: '0', bottom: '0', left: '0' },
+      displayHeaderFooter: true,
+      headerTemplate: '<span></span>',
+      footerTemplate,
+      margin: { top: '13mm', right: '0', bottom: '16mm', left: '0' },
     });
 
     console.log(`✅  PDF generato: ${OUT}`);

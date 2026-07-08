@@ -163,7 +163,7 @@ npm run test:e2e:ui      # Playwright in modalità UI interattiva
 2. **About** — bio, posizione, lingue, MBTI, disponibilità
 3. **Experience** — timeline con logo, ruolo, azienda, periodo, bullet point
 4. **Education** — card con logo, titolo, istituto, anno, descrizione
-5. **Skills** — marquee bidirezionale con chip icone devicons
+5. **Skills** — cluster per categoria con chip; icone devicons solo per prodotti/tecnologie reali
 6. **Projects** — griglia card con stack badge e link opzionali
 7. **Contact** — CTA email + social
 

@@ -1,6 +1,7 @@
 ---
 import { getProfile } from '../data/profile';
 import type { Locale } from '../data/types';
+import FlagIcon from './FlagIcon.astro';
 
 interface Props {
   locale?: Locale;
@@ -29,11 +30,11 @@ const labels = locale === 'en'
       availability: 'Disponibilità',
     };
 
-const flagMap: Record<string, string> = {
-  Italiano: '🇮🇹',
-  Inglese: '🇬🇧',
-  Italian: '🇮🇹',
-  English: '🇬🇧',
+const flagMap: Record<string, 'it' | 'gb'> = {
+  Italiano: 'it',
+  Inglese: 'gb',
+  Italian: 'it',
+  English: 'gb',
 };
 
 const [bioLead, bioBody, bioTail] = profile.bioParagraphs;
@@ -93,10 +94,10 @@ const titleBase = labels.sectionTitle.replace(labels.sectionTitleEm, '').trim();
               <ul class="space-y-1.5">
                 {profile.languages.map(lang => {
                   const key = lang.split(' ')[0];
-                  const flag = flagMap[key] ?? '';
+                  const country = flagMap[key];
                   return (
-                    <li class="flex items-baseline gap-2 text-ink-900 dark:text-white/90 text-sm md:text-base">
-                      <span class="text-base leading-none">{flag}</span>
+                    <li class="flex items-center gap-2 text-ink-900 dark:text-white/90 text-sm md:text-base">
+                      {country && <FlagIcon country={country} />}
                       <span>{lang}</span>
                     </li>
                   );
