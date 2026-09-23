@@ -1,7 +1,8 @@
-// Icone devicons (v2.16.0) copiate in public/icons/: niente richieste a CDN terze.
-// Icona solo per prodotti/tecnologie reali: associare il logo di un prodotto
-// a una competenza concettuale (es. OAuth2 → Vault) è fuorviante.
-// Le voci concettuali restano chip di solo testo.
+// Icone copiate in public/icons/: niente richieste a CDN terze.
+// - Prodotti/tecnologie reali → logo devicons (v2.16.0)
+// - Competenze concettuali → icona generica Lucide (lucide-static v1.47.0, ISC),
+//   ricolorata in accent-500 (#d97757) perché dentro <img> currentColor non funziona.
+//   Mai il logo di un prodotto su un concetto (es. OAuth2 → Vault): è fuorviante.
 const files: Record<string, string> = {
   'C#': 'csharp-original',
   '.NET': 'dotnetcore-original',
@@ -32,6 +33,38 @@ const files: Record<string, string> = {
   'Visual Studio': 'visualstudio-original',
   'Visual Studio Code': 'vscode-original',
   Playwright: 'playwright-original',
+
+  // Concetti (Lucide)
+  'API Versioning': 'lucide-git-branch',
+  'Backward Compatibility': 'lucide-history',
+  OAuth2: 'lucide-key-round',
+  'OpenID Connect': 'lucide-fingerprint',
+  'Event-Driven Architecture': 'lucide-workflow',
+  'Responsive Design': 'lucide-monitor-smartphone',
+  'Accessibilità (WCAG)': 'lucide-accessibility',
+  'Accessibility (WCAG)': 'lucide-accessibility',
+  'State Management': 'lucide-layers',
+  'UI Performance (Core Web Vitals)': 'lucide-gauge',
+  'Design Systems': 'lucide-component',
+  'Form Validation': 'lucide-clipboard-check',
+  'CI/CD': 'lucide-infinity',
+  'Quality Gates': 'lucide-shield-check',
+  'Staging/Production Pipelines': 'lucide-rocket',
+  'Logging & Monitoring': 'lucide-activity',
+  'Unit Testing': 'lucide-flask-conical',
+  'Integration Testing': 'lucide-puzzle',
+  'API Testing': 'lucide-plug',
+  'E2E Testing': 'lucide-route',
+  'Coverage Analysis': 'lucide-chart-pie',
+  'Performance Profiling': 'lucide-timer',
+  'Query Optimization': 'lucide-database-zap',
+  OWASP: 'lucide-shield-alert',
+  'Project Management': 'lucide-kanban',
+  'Team Leadership': 'lucide-users',
+  'Analisi dei requisiti': 'lucide-clipboard-list',
+  'Requirements analysis': 'lucide-clipboard-list',
+  'GDPR compliance': 'lucide-lock',
+  'Office Suite': 'lucide-briefcase',
 };
 
 export function techIcon(name: string): string | null {

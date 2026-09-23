@@ -13,8 +13,6 @@ const profile = getProfile(locale);
 const labels = locale === 'en'
   ? {
       sectionTitle: 'Who I am',
-      sectionTitleEm: 'am',
-      eyebrow: 'About',
       position: 'Location',
       languages: 'Languages',
       personality: 'Personality',
@@ -23,8 +21,6 @@ const labels = locale === 'en'
     }
   : {
       sectionTitle: 'Chi sono',
-      sectionTitleEm: 'sono',
-      eyebrow: 'Chi sono',
       position: 'Posizione',
       languages: 'Lingue',
       personality: 'Personalità',
@@ -40,21 +36,13 @@ const flagMap: Record<string, 'it' | 'gb'> = {
 };
 
 const [bioLead, bioBody, bioTail] = profile.bioParagraphs;
-const titleBase = labels.sectionTitle.replace(labels.sectionTitleEm, '').trim();
 ---
 
 <section id="about" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-hidden">
   <div class="max-w-6xl mx-auto px-6">
 
-    <!-- Editorial header -->
-    <div class="section-eyebrow">
-      <span class="eyebrow-num">·01</span>
-      <span class="eyebrow-line"></span>
-      <span>{labels.eyebrow}</span>
-    </div>
-
     <h2 class="section-title">
-      {titleBase} <em>{labels.sectionTitleEm}</em>
+      <span class="section-num" aria-hidden="true">01</span>{labels.sectionTitle}
     </h2>
 
     <!-- Magazine layout: 12 cols -->
@@ -63,8 +51,6 @@ const titleBase = labels.sectionTitle.replace(labels.sectionTitleEm, '').trim();
       <!-- Pull-quote lead: takes 8 cols, offset 1 -->
       <div class="col-span-12 md:col-span-8 md:col-start-1 relative">
         <div class="relative">
-          <span class="absolute -top-6 -left-2 md:-left-8 font-serif text-[8rem] leading-none text-accent-500/25 dark:text-accent-400/20 select-none pointer-events-none" aria-hidden="true" style="font-variation-settings: 'opsz' 144;">"</span>
-
           <p class="editorial-lead relative z-10 mb-8">
             {bioLead}
           </p>
@@ -86,12 +72,12 @@ const titleBase = labels.sectionTitle.replace(labels.sectionTitleEm, '').trim();
       <aside class="col-span-12 md:col-span-4 md:col-start-9 md:pl-6 md:border-l md:border-ink-300/40 md:dark:border-white/10 md:sticky md:top-28 self-start">
         <dl class="space-y-7">
           <div>
-            <dt class="meta-label mb-1.5">/ {labels.position}</dt>
+            <dt class="meta-label mb-1.5">{labels.position}</dt>
             <dd class="text-ink-900 dark:text-white text-sm md:text-base leading-snug">{profile.location}</dd>
           </div>
 
           <div>
-            <dt class="meta-label mb-1.5">/ {labels.languages}</dt>
+            <dt class="meta-label mb-1.5">{labels.languages}</dt>
             <dd>
               <ul class="space-y-1.5">
                 {profile.languages.map(lang => {
@@ -109,7 +95,7 @@ const titleBase = labels.sectionTitle.replace(labels.sectionTitleEm, '').trim();
           </div>
 
           <div>
-            <dt class="meta-label mb-1.5">/ {labels.personality}</dt>
+            <dt class="meta-label mb-1.5">{labels.personality}</dt>
             <dd class="text-ink-900 dark:text-white text-sm md:text-base">
               <span class="meta-mono text-accent-600 dark:text-accent-400 font-medium">{profile.mbti}</span>
               <span class="text-ink-500 dark:text-white/50 text-xs ml-1">— MBTI</span>
@@ -117,7 +103,7 @@ const titleBase = labels.sectionTitle.replace(labels.sectionTitleEm, '').trim();
           </div>
 
           <div>
-            <dt class="meta-label mb-1.5">/ {labels.availability}</dt>
+            <dt class="meta-label mb-1.5">{labels.availability}</dt>
             <dd class="flex items-center gap-2 text-ink-900 dark:text-white text-sm md:text-base">
               <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent-500 status-pulse"></span>
               <span>{profile.availability}</span>

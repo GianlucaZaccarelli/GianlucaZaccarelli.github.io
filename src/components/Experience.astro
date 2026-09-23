@@ -11,8 +11,8 @@ interface Props {
 const { locale = 'it' } = Astro.props;
 const experience = getExperience(locale);
 const labels = locale === 'en'
-  ? { title: 'Career', em: 'path', eyebrow: 'Experience' }
-  : { title: 'Percorso', em: 'professionale', eyebrow: 'Esperienza' };
+  ? { title: 'Career path' }
+  : { title: 'Percorso professionale' };
 
 /**
  * Estrae l'anno di inizio dal periodo (es. "Set 2024 – Presente" → "2024").
@@ -26,14 +26,8 @@ function extractStartYear(period: string): string {
 <section id="experience" class="relative py-24 md:py-32 bg-white dark:bg-surface overflow-hidden">
   <div class="max-w-6xl mx-auto px-6">
 
-    <div class="section-eyebrow">
-      <span class="eyebrow-num">·02</span>
-      <span class="eyebrow-line"></span>
-      <span>{labels.eyebrow}</span>
-    </div>
-
     <h2 class="section-title">
-      {labels.title} <em>{labels.em}</em>
+      <span class="section-num" aria-hidden="true">02</span>{labels.title}
     </h2>
 
     <ol class="space-y-16 md:space-y-24">
@@ -54,7 +48,7 @@ function extractStartYear(period: string): string {
                     <p class="font-serif text-6xl md:text-7xl font-light leading-none text-ink-900 dark:text-white tracking-tight italic" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">
                       {year}
                     </p>
-                    <p class="meta-mono text-xs text-ink-500 dark:text-white/50 mt-3 uppercase tracking-widest">
+                    <p class="meta-mono text-xs text-ink-500 dark:text-white/50 mt-3">
                       {job.period}
                     </p>
                     <p class="text-xs text-ink-500 dark:text-white/55 mt-1">
@@ -86,12 +80,12 @@ function extractStartYear(period: string): string {
                     {job.role}
                   </h3>
                   {job.url ? (
-                    <a href={job.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 meta-mono text-xs text-accent-600 dark:text-accent-400 mt-1.5 uppercase tracking-wider hover:text-accent-700 dark:hover:text-accent-500 transition-colors">
-                      → {job.company}
+                    <a href={job.url} target="_blank" rel="noopener noreferrer" class="inline-block text-sm font-medium text-accent-600 dark:text-accent-400 mt-1.5 underline-offset-4 decoration-1 hover:underline">
+                      {job.company}
                     </a>
                   ) : (
-                    <p class="meta-mono text-xs text-accent-600 dark:text-accent-400 mt-1.5 uppercase tracking-wider">
-                      — {job.company}
+                    <p class="text-sm font-medium text-accent-600 dark:text-accent-400 mt-1.5">
+                      {job.company}
                     </p>
                   )}
                 </div>

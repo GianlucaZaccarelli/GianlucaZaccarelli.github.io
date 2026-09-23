@@ -14,7 +14,6 @@ const labels = locale === 'en'
   ? {
       title: 'Say',
       em: 'hello',
-      eyebrow: 'Contact',
       intro: 'I am available for new opportunities, collaborations, or simply a technical chat.',
       cta: 'Write me at',
       elsewhere: 'Elsewhere',
@@ -22,7 +21,6 @@ const labels = locale === 'en'
   : {
       title: 'Scrivimi',
       em: 'pure',
-      eyebrow: 'Contatti',
       intro: 'Sono disponibile per nuove opportunità, collaborazioni o semplicemente per una chiacchierata tecnica.',
       cta: 'Scrivimi su',
       elsewhere: 'Altrove',
@@ -32,14 +30,8 @@ const labels = locale === 'en'
 <section id="contact" class="relative py-24 md:py-36 bg-white dark:bg-surface overflow-hidden">
   <div class="max-w-6xl mx-auto px-6">
 
-    <div class="section-eyebrow">
-      <span class="eyebrow-num">·06</span>
-      <span class="eyebrow-line"></span>
-      <span>{labels.eyebrow}</span>
-    </div>
-
     <h2 class="section-title mb-8">
-      {labels.title} <em>{labels.em}</em>.
+      <span class="section-num" aria-hidden="true">06</span>{labels.title} <em>{labels.em}</em>.
     </h2>
 
     <div class="grid grid-cols-12 gap-y-10">
@@ -53,16 +45,13 @@ const labels = locale === 'en'
           class="email-cta group inline-flex items-baseline gap-3 font-serif text-ink-900 dark:text-white leading-tight transition-colors hover:text-accent-600 dark:hover:text-accent-400"
           style="font-variation-settings: 'opsz' 96, 'SOFT' 100;"
         >
-          <span class="meta-mono text-[0.65rem] uppercase tracking-[0.2em] text-ink-500 dark:text-white/60 translate-y-0">
-            →
-          </span>
           <span class="email-text relative">{profile.email}</span>
         </a>
       </div>
 
       <!-- Social column -->
       <aside class="col-span-12 md:col-span-4 md:pl-6 md:border-l md:border-ink-300/40 md:dark:border-white/10">
-        <p class="meta-label mb-5">/ {labels.elsewhere}</p>
+        <p class="meta-label mb-5">{labels.elsewhere}</p>
         <ul class="space-y-4">
           {socialLinks.filter(l => l.icon !== 'mail').map(link => (
             <li>

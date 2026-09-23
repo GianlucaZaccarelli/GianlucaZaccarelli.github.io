@@ -10,8 +10,8 @@ interface Props {
 const { locale = 'it' } = Astro.props;
 const skills = getSkills(locale);
 const labels = locale === 'en'
-  ? { title: 'Tech', em: 'stack', eyebrow: 'Skills' }
-  : { title: 'Competenze', em: 'tecniche', eyebrow: 'Competenze' };
+  ? { title: 'Tech stack' }
+  : { title: 'Competenze tecniche' };
 
 // Cluster view: each category on its own
 const clusters = skills.map(s => ({
@@ -23,25 +23,16 @@ const clusters = skills.map(s => ({
 <section id="skills" class="relative py-24 md:py-32 bg-white dark:bg-surface overflow-hidden">
   <div class="max-w-6xl mx-auto px-6">
 
-    <div class="section-eyebrow">
-      <span class="eyebrow-num">·04</span>
-      <span class="eyebrow-line"></span>
-      <span>{labels.eyebrow}</span>
-    </div>
-
     <h2 class="section-title">
-      {labels.title} <em>{labels.em}</em>
+      <span class="section-num" aria-hidden="true">04</span>{labels.title}
     </h2>
 
     <!-- Cluster view -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-12">
-      {clusters.map((cluster, idx) => (
+      {clusters.map(cluster => (
         <div class="group">
           <div class="flex items-baseline gap-3 mb-5 pb-3 border-b border-ink-300/40 dark:border-white/10">
-            <span class="meta-mono text-xs text-accent-600 dark:text-accent-400">
-              ·{String(idx + 1).padStart(2, '0')}
-            </span>
-            <h3 class="meta-label !text-[0.78rem] !tracking-[0.2em] text-ink-900 dark:text-white">
+            <h3 class="text-base font-semibold leading-none text-ink-900 dark:text-white">
               {cluster.category}
             </h3>
             <span class="flex-1 h-px bg-ink-300/30 dark:bg-white/8"></span>

@@ -40,7 +40,7 @@ const year = new Date().getFullYear();
       <span class="font-serif italic text-2xl tracking-tight text-ink-900 dark:text-white" style="font-variation-settings: 'opsz' 96, 'SOFT' 100;">
         {profile.nickname}
       </span>
-      <p class="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-ink-500 dark:text-white/60 leading-relaxed">
+      <p class="text-xs text-ink-500 dark:text-white/60 leading-relaxed">
         {profile.title}
       </p>
       <p class="font-mono text-[0.7rem] text-ink-500 dark:text-white/60 flex items-center gap-1.5 mt-1 tabular-nums">
@@ -57,8 +57,8 @@ const year = new Date().getFullYear();
 
     <!-- Col 2: Social -->
     <div class="flex flex-col gap-3 items-center">
-      <span class="font-mono text-[0.65rem] font-medium uppercase tracking-[0.18em] text-ink-500 dark:text-white/60">
-        / {labels.contacts}
+      <span class="text-xs font-medium text-ink-500 dark:text-white/60">
+        {labels.contacts}
       </span>
       <div class="flex items-center gap-3">
         {socialLinks.map(link => (
@@ -81,7 +81,7 @@ const year = new Date().getFullYear();
 
     <!-- Col 3: Credits + back to top -->
     <div class="flex flex-1 items-center justify-end gap-6">
-      <p class="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-500 dark:text-white/60 text-right leading-relaxed">
+      <p class="text-xs text-ink-500 dark:text-white/60 text-right leading-relaxed">
         © {year} {profile.name}<br/>{labels.rights}
       </p>
       <button

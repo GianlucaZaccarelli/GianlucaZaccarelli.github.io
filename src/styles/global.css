@@ -78,36 +78,29 @@ body {
   }
 }
 
-/* ── Editorial section header ─────────────────────────── */
-.section-eyebrow {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-ink-500);
-  margin-bottom: 1rem;
-}
-.dark .section-eyebrow { color: rgba(255,255,255,0.6); }
-
-.section-eyebrow .eyebrow-num {
-  color: var(--color-accent-600);
-  font-weight: 600;
-}
-.dark .section-eyebrow .eyebrow-num {
-  color: var(--color-accent-400);
-}
-
-.section-eyebrow .eyebrow-line {
+/* ── Section header ────────────────────────────────────── */
+/* Numero di sezione (ordine della nav) come esponente del titolo */
+.section-num {
   display: inline-block;
-  width: 2.5rem;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.4;
-  transform: translateY(-4px);
+  vertical-align: top;
+  margin-top: 0.9rem;
+  margin-right: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent-600);
+}
+.dark .section-num { color: var(--color-accent-400); }
+/* Da tablet in su il numero sporge nel margine: il titolo resta allineato al testo */
+@media (min-width: 768px) {
+  .section-title { position: relative; }
+  .section-num {
+    position: absolute;
+    right: 100%;
+    top: 0;
+  }
 }
 
 .section-title {
@@ -143,11 +136,8 @@ body {
 
 /* Meta / metadata labels */
 .meta-label {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--color-ink-500);
 }
 .dark .meta-label { color: rgba(255,255,255,0.58); }
@@ -176,6 +166,14 @@ body {
 .dark .logo-tile { border-color: rgba(255, 255, 255, 0.1); }
 @media (min-width: 768px) {
   .logo-tile { width: 7rem; height: 7rem; padding: 1rem; border-radius: 1rem; }
+}
+
+/* Loghi monocromatici neri (devicons): nel tema scuro vanno invertiti.
+   hue-rotate riporta i colori (es. il sorriso arancione di AWS) alla tinta originale */
+.dark img[src$="/github-original.svg"],
+.dark img[src$="/apachekafka-original.svg"],
+.dark img[src$="/amazonwebservices-original-wordmark.svg"] {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 /* ── Nav underline sliding animation ──────────────────── */

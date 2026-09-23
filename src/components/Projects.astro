@@ -12,23 +12,17 @@ const projects = getProjects(locale);
 
 const labels = locale === 'en'
   ? {
-      title: 'Selected',
-      em: 'work',
-      eyebrow: 'Projects',
+      title: 'Selected work',
       github: 'Source',
       demo: 'Live',
       privateProject: 'Internal project — not public',
-      project: 'Project',
       featured: 'Featured',
     }
   : {
-      title: 'Progetti',
-      em: 'selezionati',
-      eyebrow: 'Progetti',
+      title: 'Progetti selezionati',
       github: 'Codice',
       demo: 'Demo',
       privateProject: 'Progetto interno — non pubblico',
-      project: 'Progetto',
       featured: 'In evidenza',
     };
 
@@ -57,43 +51,23 @@ const projectsWithLayout = projects.map((p, i) => ({
 <section id="projects" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-hidden">
   <div class="max-w-6xl mx-auto px-6">
 
-    <div class="section-eyebrow">
-      <span class="eyebrow-num">·05</span>
-      <span class="eyebrow-line"></span>
-      <span>{labels.eyebrow}</span>
-    </div>
-
     <h2 class="section-title">
-      {labels.title} <em>{labels.em}</em>
+      <span class="section-num" aria-hidden="true">05</span>{labels.title}
     </h2>
 
     <div class="bento-grid grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 md:auto-rows-fr">
-      {projectsWithLayout.map((project, idx) => (
+      {projectsWithLayout.map(project => (
         <article class:list={[
           'project-card group relative overflow-hidden rounded-2xl border border-ink-300/40 dark:border-white/10 bg-white dark:bg-surface-card px-6 md:px-8 pt-6 md:pt-8 pb-7 md:pb-10 flex flex-col transition-all duration-500',
           getSizeClass(project.size),
           { 'is-feature': project.size === 'feature' },
         ]}>
 
-          <!-- Noise texture backdrop on hover -->
-          <div class="grain-overlay opacity-0 group-hover:opacity-[0.06] transition-opacity duration-700"></div>
-
-          <!-- Decorative background number -->
-          <span class="absolute -top-4 -right-2 font-serif text-[8rem] md:text-[10rem] leading-none text-ink-900/[0.03] dark:text-white/[0.04] select-none pointer-events-none font-light italic" style="font-variation-settings: 'opsz' 144;" aria-hidden="true">
-            {String(idx + 1).padStart(2, '0')}
-          </span>
-
-          <!-- Index + year -->
-          <div class="flex items-center justify-between mb-4 relative z-10">
-            <span class="meta-mono text-[0.65rem] uppercase tracking-[0.18em] text-accent-600 dark:text-accent-400">
-              {labels.project} / {String(idx + 1).padStart(2, '0')}
+          {project.size === 'feature' && (
+            <span class="self-start mb-4 text-xs font-medium text-accent-700 dark:text-accent-400 px-2.5 py-0.5 border border-accent-500/40 rounded-full">
+              {labels.featured}
             </span>
-            {project.size === 'feature' && (
-              <span class="meta-mono text-[0.6rem] uppercase tracking-[0.2em] text-ink-500 dark:text-white/55 px-2 py-0.5 border border-ink-300/60 dark:border-white/15 rounded-full">
-                {labels.featured}
-              </span>
-            )}
-          </div>
+          )}
 
           <!-- Title -->
           <h3 class={`font-serif font-medium text-ink-900 dark:text-white leading-[1.08] relative z-10 ${project.size === 'feature' ? 'text-2xl md:text-3xl mb-4' : 'text-xl md:text-2xl mb-3'}`} style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
@@ -117,7 +91,7 @@ const projectsWithLayout = projects.map((p, i) => ({
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="meta-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-900 dark:text-white hover:text-accent-600 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
+                  class="text-sm font-medium text-ink-900 dark:text-white hover:text-accent-600 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
                 >
                   {labels.github} <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span>
                 </a>
@@ -127,13 +101,13 @@ const projectsWithLayout = projects.map((p, i) => ({
                   href={project.demo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="meta-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-900 dark:text-white hover:text-accent-600 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
+                  class="text-sm font-medium text-ink-900 dark:text-white hover:text-accent-600 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
                 >
                   {labels.demo} <span class="inline-block transition-transform group-hover:translate-x-0.5">↗</span>
                 </a>
               )}
               {!project.github && !project.demo && (
-                <span class="meta-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-500 dark:text-white/55 italic">
+                <span class="text-sm text-ink-500 dark:text-white/55 italic">
                   {labels.privateProject}
                 </span>
               )}

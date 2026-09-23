@@ -134,7 +134,7 @@ GianlucaZaccarelli.github.io/
 - Foto e loghi vivono in `src/assets/` e si rendono con `<Image>` di Astro (ottimizzazione + srcset)
 - Asset serviti da `public/` (icone) restano `<img>` HTML standard
 - Indicare sempre `width`/`height` e attributi `loading`/`decoding` per prevenire CLS
-- Icone tecnologiche: SVG devicons v2.16.0 copiati in `public/icons/` e mappati in `src/data/icons.ts`. Icona decorativa accanto al nome → `alt=""`
+- Icone: SVG copiati in `public/icons/` e mappati in `src/data/icons.ts` — devicons v2.16.0 per prodotti reali, Lucide v1.47.0 (`lucide-*.svg`, stroke ricolorato `#d97757`) per i concetti. Mai il logo di un prodotto su un concetto. Icona decorativa accanto al nome → `alt=""`
 
 ### Performance
 - Target Lighthouse: Performance ≥ 95, Accessibility ≥ 95, Best Practices = 100, SEO = 100
@@ -173,7 +173,7 @@ npm run test:e2e:ui      # Playwright in modalità UI interattiva
 2. **About** — bio, posizione, lingue, MBTI, disponibilità
 3. **Experience** — timeline con logo, ruolo, azienda, periodo, bullet point
 4. **Education** — card con logo, titolo, istituto, anno, descrizione
-5. **Skills** — cluster per categoria con chip; icone devicons solo per prodotti/tecnologie reali
+5. **Skills** — cluster per categoria con chip; logo devicons per prodotti/tecnologie reali, icona generica Lucide per le competenze concettuali
 6. **Projects** — griglia card con stack badge e link opzionali
 7. **Contact** — CTA email + social
 

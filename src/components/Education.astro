@@ -10,8 +10,8 @@ interface Props {
 const { locale = 'it' } = Astro.props;
 const education = getEducation(locale);
 const labels = locale === 'en'
-  ? { title: 'Formal', em: 'studies', eyebrow: 'Education' }
-  : { title: 'Studi', em: 'accademici', eyebrow: 'Formazione' };
+  ? { title: 'Formal studies' }
+  : { title: 'Studi accademici' };
 
 /** Anno di inizio, come in Experience (es. "Sett. 2025 – In corso" → "2025"). */
 function extractStartYear(yearLabel: string): string {
@@ -22,14 +22,8 @@ function extractStartYear(yearLabel: string): string {
 <section id="education" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-hidden">
   <div class="max-w-6xl mx-auto px-6">
 
-    <div class="section-eyebrow">
-      <span class="eyebrow-num">·03</span>
-      <span class="eyebrow-line"></span>
-      <span>{labels.eyebrow}</span>
-    </div>
-
     <h2 class="section-title">
-      {labels.title} <em>{labels.em}</em>
+      <span class="section-num" aria-hidden="true">03</span>{labels.title}
     </h2>
 
     <ol class="space-y-16 md:space-y-24">
@@ -50,7 +44,7 @@ function extractStartYear(yearLabel: string): string {
                   <p class="font-serif text-6xl md:text-7xl font-light leading-none text-ink-900 dark:text-white tracking-tight italic" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">
                     {year}
                   </p>
-                  <p class="meta-mono text-xs uppercase tracking-widest text-ink-500 dark:text-white/50 mt-3">
+                  <p class="meta-mono text-xs text-ink-500 dark:text-white/50 mt-3">
                     {edu.year}
                   </p>
                 </div>
@@ -79,16 +73,16 @@ function extractStartYear(yearLabel: string): string {
                   {edu.degree}
                 </h3>
                 {edu.url ? (
-                  <a href={edu.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 meta-mono text-xs text-accent-600 dark:text-accent-400 mt-1.5 uppercase tracking-wider hover:text-accent-700 dark:hover:text-accent-500 transition-colors">
-                    → {edu.institution}
+                  <a href={edu.url} target="_blank" rel="noopener noreferrer" class="inline-block text-sm font-medium text-accent-600 dark:text-accent-400 mt-1.5 underline-offset-4 decoration-1 hover:underline">
+                    {edu.institution}
                   </a>
                 ) : (
-                  <p class="meta-mono text-xs text-accent-600 dark:text-accent-400 mt-1.5 uppercase tracking-wider">
-                    — {edu.institution}
+                  <p class="text-sm font-medium text-accent-600 dark:text-accent-400 mt-1.5">
+                    {edu.institution}
                   </p>
                 )}
 
-                <p class="meta-mono text-xs text-ink-500 dark:text-white/50 mt-2 uppercase tracking-widest">
+                <p class="text-sm text-ink-500 dark:text-white/55 mt-1">
                   {edu.field}
                 </p>
 
