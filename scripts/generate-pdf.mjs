@@ -1,6 +1,6 @@
 /**
  * generate-pdf.mjs
- * Genera public/cv.pdf dalla pagina /cv-print usando Puppeteer.
+ * Genera public/cv.pdf (/cv-print) e public/cv-en.pdf (/cv-print-en) usando Puppeteer.
  * Uso: node scripts/generate-pdf.mjs
  * Prerequisito: npm run build deve essere già stato eseguito.
  */
@@ -14,8 +14,26 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const DIST = resolve(__dirname, '../dist');
-const OUT  = resolve(__dirname, '../public/cv.pdf');
 const PORT = 4399;
+
+const TARGETS = [
+  {
+    path: '/cv-print',
+    out: resolve(__dirname, '../public/cv.pdf'),
+    dateLocale: 'it-IT',
+    footer: (date) => `Gianluca Zaccarelli — Curriculum Vitae · aggiornato a ${date}`,
+    page: 'pagina',
+    of: 'di',
+  },
+  {
+    path: '/cv-print-en',
+    out: resolve(__dirname, '../public/cv-en.pdf'),
+    dateLocale: 'en-GB',
+    footer: (date) => `Gianluca Zaccarelli — Curriculum Vitae · updated ${date}`,
+    page: 'page',
+    of: 'of',
+  },
+];
 
 const MIME = {
   '.html': 'text/html',
@@ -62,32 +80,35 @@ server.listen(PORT, async () => {
 
   try {
     const page = await browser.newPage();
-    await page.goto(`http://localhost:${PORT}/cv-print`, { waitUntil: 'networkidle0' });
-    // I font variable (Fraunces/Inter) devono essere renderizzati prima della stampa
-    await page.evaluateHandle('document.fonts.ready');
 
-    const updatedAt = new Intl.DateTimeFormat('it-IT', {
-      month: 'long',
-      year: 'numeric',
-    }).format(new Date());
+    for (const target of TARGETS) {
+      await page.goto(`http://localhost:${PORT}${target.path}`, { waitUntil: 'networkidle0' });
+      // I font variable (Fraunces/Inter) devono essere renderizzati prima della stampa
+      await page.evaluateHandle('document.fonts.ready');
 
-    const footerTemplate = `
-      <div style="width:100%; padding:0 16mm; font-family:Helvetica,Arial,sans-serif; font-size:6.5px; color:#9a9a9a; display:flex; justify-content:space-between; align-items:center;">
-        <span>Gianluca Zaccarelli — Curriculum Vitae · aggiornato a ${updatedAt}</span>
-        <span>pagina <span class="pageNumber"></span> di <span class="totalPages"></span></span>
-      </div>`;
+      const updatedAt = new Intl.DateTimeFormat(target.dateLocale, {
+        month: 'long',
+        year: 'numeric',
+      }).format(new Date());
 
-    await page.pdf({
-      path: OUT,
-      format: 'A4',
-      printBackground: true,
-      displayHeaderFooter: true,
-      headerTemplate: '<span></span>',
-      footerTemplate,
-      margin: { top: '13mm', right: '0', bottom: '16mm', left: '0' },
-    });
+      const footerTemplate = `
+        <div style="width:100%; padding:0 16mm; font-family:Helvetica,Arial,sans-serif; font-size:6.5px; color:#9a9a9a; display:flex; justify-content:space-between; align-items:center;">
+          <span>${target.footer(updatedAt)}</span>
+          <span>${target.page} <span class="pageNumber"></span> ${target.of} <span class="totalPages"></span></span>
+        </div>`;
 
-    console.log(`✅  PDF generato: ${OUT}`);
+      await page.pdf({
+        path: target.out,
+        format: 'A4',
+        printBackground: true,
+        displayHeaderFooter: true,
+        headerTemplate: '<span></span>',
+        footerTemplate,
+        margin: { top: '13mm', right: '0', bottom: '16mm', left: '0' },
+      });
+
+      console.log(`✅  PDF generato: ${target.out}`);
+    }
   } finally {
     await browser.close();
     server.close();

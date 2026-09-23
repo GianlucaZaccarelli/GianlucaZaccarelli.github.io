@@ -1,5 +1,6 @@
 ---
 import { getSkills } from '../data/skills';
+import { techIcon } from '../data/icons';
 import type { Locale } from '../data/types';
 
 interface Props {
@@ -12,44 +13,10 @@ const labels = locale === 'en'
   ? { title: 'Tech', em: 'stack', eyebrow: 'Skills' }
   : { title: 'Competenze', em: 'tecniche', eyebrow: 'Competenze' };
 
-const BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons';
-
-// Icona solo per prodotti/tecnologie reali: associare il logo di un prodotto
-// a una competenza concettuale (es. OAuth2 → Vault, Team Leadership → Slack)
-// è fuorviante. Le voci concettuali restano chip di solo testo.
-const iconMap: Record<string, string> = {
-  'C#':                   `${BASE}/csharp/csharp-original.svg`,
-  '.NET':                 `${BASE}/dotnetcore/dotnetcore-original.svg`,
-  'Node.js':              `${BASE}/nodejs/nodejs-original.svg`,
-  'OpenAPI/Swagger':      `${BASE}/swagger/swagger-original.svg`,
-  'RabbitMQ':             `${BASE}/rabbitmq/rabbitmq-original.svg`,
-  'Kafka':                `${BASE}/apachekafka/apachekafka-original.svg`,
-  'Microsoft SQL Server': `${BASE}/microsoftsqlserver/microsoftsqlserver-plain.svg`,
-  'Docker':               `${BASE}/docker/docker-original.svg`,
-  'Kubernetes':           `${BASE}/kubernetes/kubernetes-plain.svg`,
-  'Git':                  `${BASE}/git/git-original.svg`,
-  'GitHub':               `${BASE}/github/github-original.svg`,
-  'NuGet':                `${BASE}/nuget/nuget-original.svg`,
-  'GitHub Actions':       `${BASE}/githubactions/githubactions-original.svg`,
-  'Azure':                `${BASE}/azure/azure-original.svg`,
-  'AWS':                  `${BASE}/amazonwebservices/amazonwebservices-original-wordmark.svg`,
-  'Grafana':              `${BASE}/grafana/grafana-original.svg`,
-  'JavaScript':           `${BASE}/javascript/javascript-original.svg`,
-  'TypeScript':           `${BASE}/typescript/typescript-original.svg`,
-  'HTML5':                `${BASE}/html5/html5-original.svg`,
-  'CSS3':                 `${BASE}/css3/css3-original.svg`,
-  'Dart':                 `${BASE}/dart/dart-original.svg`,
-  'Flutter':              `${BASE}/flutter/flutter-original.svg`,
-  'Astro':                `${BASE}/astro/astro-original.svg`,
-  'Visual Studio':        `${BASE}/visualstudio/visualstudio-original.svg`,
-  'Visual Studio Code':   `${BASE}/vscode/vscode-original.svg`,
-  'Playwright':           `${BASE}/playwright/playwright-original.svg`,
-};
-
 // Cluster view: each category on its own
 const clusters = skills.map(s => ({
   ...s,
-  items: s.items.map(name => ({ name, icon: iconMap[name] ?? null })),
+  items: s.items.map(name => ({ name, icon: techIcon(name) })),
 }));
 ---
 
@@ -86,7 +53,7 @@ const clusters = skills.map(s => ({
             {cluster.items.map(item => (
               <div class="skill-chip">
                 {item.icon && (
-                  <img src={item.icon} alt={item.name} width="16" height="16" loading="lazy" decoding="async" class="skill-icon" />
+                  <img src={item.icon} alt="" width="16" height="16" loading="lazy" decoding="async" class="skill-icon" />
                 )}
                 <span>{item.name}</span>
               </div>

@@ -13,11 +13,12 @@ const { locale = 'it' } = Astro.props;
 const profile = getProfile(locale);
 
 const itHref = import.meta.env.BASE_URL || '/';
-const enHref = `${itHref.replace(/\/$/, '')}/en`;
+const enHref = `${itHref.replace(/\/$/, '')}/en/`;
 
 const labels = locale === 'en'
   ? {
       about: 'About',
+      skills: 'Skills',
       experience: 'Experience',
       education: 'Education',
       projects: 'Projects',
@@ -29,13 +30,14 @@ const labels = locale === 'en'
       openPrintableCv: 'Open printable CV',
       downloadCvAria: 'Download CV in PDF',
       openPrintableCvAria: 'Open printable CV',
-      located: 'Located',
+      located: 'Based',
       openMenu: 'Open menu',
       closeMenu: 'Close menu',
       sections: 'Sections',
     }
   : {
-      about: 'About',
+      about: 'Chi sono',
+      skills: 'Competenze',
       experience: 'Esperienza',
       education: 'Formazione',
       projects: 'Progetti',
@@ -47,7 +49,7 @@ const labels = locale === 'en'
       openPrintableCv: 'Apri CV stampabile',
       downloadCvAria: 'Scarica CV in PDF',
       openPrintableCvAria: 'Apri CV stampabile',
-      located: 'Situato',
+      located: 'Vivo',
       openMenu: 'Apri il menu',
       closeMenu: 'Chiudi il menu',
       sections: 'Sezioni',
@@ -57,13 +59,26 @@ const navItems = [
   { href: '#about',      label: labels.about      },
   { href: '#experience', label: labels.experience },
   { href: '#education',  label: labels.education  },
-  { href: '#skills',     label: 'Skills'          },
+  { href: '#skills',     label: labels.skills     },
   { href: '#projects',   label: labels.projects   },
   { href: '#contact',    label: labels.contacts   },
 ];
 
-const cvHref = import.meta.env.DEV ? '/cv-print' : profile.cvPath;
+const cvHref = import.meta.env.DEV ? (locale === 'en' ? '/cv-print-en' : '/cv-print') : profile.cvPath;
 const isCvDownload = !import.meta.env.DEV;
+
+function toRoman(n: number): string {
+  const numerals: Array<[number, string]> = [
+    [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'],
+    [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+  ];
+  let out = '';
+  for (const [value, symbol] of numerals) {
+    while (n >= value) { out += symbol; n -= value; }
+  }
+  return out;
+}
+const yearRoman = toRoman(new Date().getFullYear());
 ---
 
 <header
@@ -80,14 +95,14 @@ const isCvDownload = !import.meta.env.DEV;
       <span class="brand-word font-serif text-xl tracking-tight text-ink-900 dark:text-white italic select-none leading-none" style="font-variation-settings: 'opsz' 96, 'SOFT' 100;">
         {profile.nickname}
       </span>
-      <span class="hidden lg:inline-flex h-4 w-px bg-ink-300/60 dark:bg-white/15"></span>
-      <span class="hidden lg:inline font-mono text-[0.6rem] uppercase tracking-[0.16em] text-ink-500 dark:text-white/60 font-medium leading-none">
+      <span class="hidden xl:inline-flex h-4 w-px bg-ink-300/60 dark:bg-white/15"></span>
+      <span class="hidden xl:inline font-mono text-[0.6rem] uppercase tracking-[0.16em] text-ink-500 dark:text-white/60 font-medium leading-none">
         Full-Stack Dev
       </span>
     </a>
 
     <!-- Tab bar -->
-    <div class="hidden md:flex justify-center">
+    <div class="hidden lg:flex justify-center">
       <ul
         class="tab-bar inline-flex items-center gap-1 p-1 rounded-full border border-ink-300/60 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-sm"
       >
@@ -137,6 +152,7 @@ const isCvDownload = !import.meta.env.DEV;
       <button
         id="theme-toggle"
         aria-label={labels.themeToggle}
+        aria-pressed="false"
         data-tooltip={labels.darkTheme}
         data-label-dark={labels.darkTheme}
         data-label-light={labels.lightTheme}
@@ -183,7 +199,7 @@ const isCvDownload = !import.meta.env.DEV;
         data-label-close={labels.closeMenu}
         aria-expanded="false"
         aria-controls="mobile-menu"
-        class="menu-toggle md:hidden cursor-pointer relative w-9 h-9 flex items-center justify-center rounded-full"
+        class="menu-toggle lg:hidden cursor-pointer relative w-9 h-9 flex items-center justify-center rounded-full"
       >
         <span class="menu-bar menu-bar-top"></span>
         <span class="menu-bar menu-bar-bottom"></span>
@@ -192,7 +208,7 @@ const isCvDownload = !import.meta.env.DEV;
   </nav>
 
   <!-- Mobile menu overlay -->
-  <div id="mobile-menu" class="mobile-menu md:hidden">
+  <div id="mobile-menu" class="mobile-menu lg:hidden">
     <nav aria-label={labels.sections}>
       <ul class="mobile-menu-list">
         {navItems.map(({ href, label }, i) => (
@@ -247,7 +263,7 @@ const isCvDownload = !import.meta.env.DEV;
   <!-- Colonna destra -->
   <div class="hero-col hero-col-right">
     <div class="hero-right-top">
-      <span class="hero-mbti">{profile.mbti} · MMXXVI</span>
+      <span class="hero-mbti">{profile.mbti} · {yearRoman}</span>
     </div>
     <div class="hero-right-center">
       <h1 class="hero-subtitle">
@@ -333,9 +349,12 @@ const isCvDownload = !import.meta.env.DEV;
   }
   .hero-img {
     width: auto;
+    max-width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
+    /* Su viewport strette il ritratto sborda: il crop segue il viso,
+       che nella foto sta a destra del centro */
+    object-position: 80% top;
     display: block;
     pointer-events: none;
     user-select: none;
@@ -426,6 +445,9 @@ const isCvDownload = !import.meta.env.DEV;
     50%  { transform: scaleY(1); transform-origin: top; }
     51%  { transform: scaleY(1); transform-origin: bottom; }
     100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-scroll-line { animation: none; }
   }
 
   /* Right: top MBTI (l'offset extra evita la barra fixed dell'header) */
@@ -906,13 +928,18 @@ const isCvDownload = !import.meta.env.DEV;
 
   function updateTooltip(isDark: boolean) {
     btn?.setAttribute('data-tooltip', isDark ? labelLight : labelDark);
+    btn?.setAttribute('aria-pressed', String(isDark));
   }
 
   updateTooltip(document.documentElement.classList.contains('dark'));
 
   btn?.addEventListener('click', () => {
     const isDark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    try {
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    } catch {
+      /* storage non disponibile: il tema vale solo per questa pagina */
+    }
     updateTooltip(isDark);
   });
 
@@ -929,10 +956,8 @@ const isCvDownload = !import.meta.env.DEV;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const parallaxEnabled = !reduceMotion && window.innerWidth > 720;
 
-  // Hook globale per il marquee, popolato da initMarquee
-  type MarqueeApi = { setDirection: (dir: 1 | -1) => void };
-  const marquee: { api: MarqueeApi | null } = { api: null };
-  (window as unknown as { __zakkaMarquee: typeof marquee }).__zakkaMarquee = marquee;
+  // Animazione del marquee, creata da initMarquee
+  let marqueeAnimation: Animation | null = null;
 
   const heroSection = document.getElementById('hero');
 
@@ -957,7 +982,7 @@ const isCvDownload = !import.meta.env.DEV;
       const newDir: 1 | -1 = y > lastScrollY ? 1 : -1;
       if (newDir !== marqueeDir) {
         marqueeDir = newDir;
-        marquee.api?.setDirection(newDir);
+        if (marqueeAnimation) marqueeAnimation.playbackRate = newDir;
       }
       lastScrollY = y;
       scrollScheduled = false;
@@ -1041,9 +1066,8 @@ const isCvDownload = !import.meta.env.DEV;
   (function initMarquee() {
     const inner   = document.getElementById('hero-marquee-inner');
     const textEl  = inner?.querySelector('.hero-marquee-text') as HTMLElement | null;
-    if (!inner || !textEl) return;
-
-    let animation: Animation | null = null;
+    // Con movimento ridotto il nome resta fermo
+    if (!inner || !textEl || reduceMotion) return;
     let lastWidth = window.innerWidth;
     let rebuildScheduled = false;
 
@@ -1060,8 +1084,8 @@ const isCvDownload = !import.meta.env.DEV;
 
       const totalChildren = inner.children.length;
       const distancePct = 100 / totalChildren;
-      animation?.cancel();
-      animation = inner.animate(
+      marqueeAnimation?.cancel();
+      marqueeAnimation = inner.animate(
         [{ transform: 'translateX(0)' }, { transform: `translateX(-${distancePct}%)` }],
         { duration: 22000, iterations: Infinity, easing: 'linear' }
       );
@@ -1083,15 +1107,5 @@ const isCvDownload = !import.meta.env.DEV;
       });
     };
     window.addEventListener('resize', scheduleRebuild, { passive: true });
-
-    // API esposta allo scroll listener unificato sopra
-    const apiHolder = (window as unknown as { __zakkaMarquee?: { api: { setDirection: (dir: 1 | -1) => void } | null } }).__zakkaMarquee;
-    if (apiHolder) {
-      apiHolder.api = {
-        setDirection: (dir) => {
-          if (animation) animation.playbackRate = dir;
-        },
-      };
-    }
   })();
 </script>

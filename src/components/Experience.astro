@@ -13,9 +13,6 @@ const labels = locale === 'en'
   ? { title: 'Career', em: 'path', eyebrow: 'Experience' }
   : { title: 'Percorso', em: 'professionale', eyebrow: 'Esperienza' };
 
-const titleBase = labels.title;
-const emPart = labels.em;
-
 /**
  * Estrae l'anno di inizio dal periodo (es. "Set 2024 – Presente" → "2024").
  */
@@ -35,7 +32,7 @@ function extractStartYear(period: string): string {
     </div>
 
     <h2 class="section-title">
-      {titleBase} <em>{emPart}</em>
+      {labels.title} <em>{labels.em}</em>
     </h2>
 
     <ol class="space-y-24 md:space-y-32">

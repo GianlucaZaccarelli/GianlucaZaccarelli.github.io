@@ -1,11 +1,11 @@
 ---
 import '../styles/global.css';
-import { getImage } from 'astro:assets';
 import LoadingScreen from '../components/LoadingScreen.astro';
 import { getProfile, socialLinks } from '../data/profile';
+import { getKnowsAbout } from '../data/skills';
 import type { Locale } from '../data/types';
-import mainImage from '../assets/MainImage.jpg';
-import frauncesLatinWght from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
+import ogImageAsset from '../assets/og-image.jpg';
+import frauncesLatin from '@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2?url';
 import interLatinWght from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 
 interface Props {
@@ -37,10 +37,8 @@ const profile = getProfile(locale);
 
 const siteUrl = (Astro.site ?? new URL('https://gianlucazaccarelli.github.io')).toString().replace(/\/$/, '');
 const canonical = new URL(Astro.url.pathname, siteUrl).toString();
-const ogImageAsset = await getImage({ src: mainImage, width: 1200, format: 'jpg' });
+// Immagine social dedicata 1200×630 (1.91:1, formato di summary_large_image)
 const ogImage = new URL(ogImageAsset.src, siteUrl).toString();
-const ogImageWidth = ogImageAsset.attributes?.width ?? 1200;
-const ogImageHeight = ogImageAsset.attributes?.height;
 const ogLocale = locale === 'en' ? 'en_US' : 'it_IT';
 const ogLocaleAlternate = locale === 'en' ? 'it_IT' : 'en_US';
 const skipLabel = locale === 'en' ? 'Skip to content' : 'Salta al contenuto';
@@ -48,21 +46,7 @@ const skipLabel = locale === 'en' ? 'Skip to content' : 'Salta al contenuto';
 const itHref = new URL('/', siteUrl).toString();
 const enHref = new URL('/en/', siteUrl).toString();
 
-const knowsAbout = [
-  'C#',
-  '.NET',
-  'Microservices',
-  'Docker',
-  'Kubernetes',
-  'TypeScript',
-  'JavaScript',
-  'OAuth2',
-  'OpenID Connect',
-  'Event-Driven Architecture',
-  'CI/CD',
-  'Azure',
-  'AWS',
-];
+const knowsAbout = getKnowsAbout(locale);
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -83,7 +67,8 @@ const personSchema = {
   sameAs: socialLinks.filter((l) => l.icon !== 'mail').map((l) => l.href),
   subjectOf: {
     '@type': 'DigitalDocument',
-    name: locale === 'en' ? 'Curriculum Vitae (PDF)' : 'Curriculum Vitae (PDF)',
+    name: locale === 'en' ? 'Curriculum Vitae (PDF, English)' : 'Curriculum Vitae (PDF, italiano)',
+    inLanguage: locale,
     url: new URL(profile.cvPath, siteUrl).toString(),
     encodingFormat: 'application/pdf',
   },
@@ -107,8 +92,8 @@ const personSchema = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content={String(ogImageWidth)} />
-    {ogImageHeight && <meta property="og:image:height" content={String(ogImageHeight)} />}
+    <meta property="og:image:width" content={String(ogImageAsset.width)} />
+    <meta property="og:image:height" content={String(ogImageAsset.height)} />
     <meta property="og:image:alt" content={profile.name} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
@@ -127,7 +112,7 @@ const personSchema = {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- Preload font primari per LCP (hero usa Fraunces; body usa Inter) -->
-    <link rel="preload" as="font" type="font/woff2" href={frauncesLatinWght} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={frauncesLatin} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={interLatinWght} crossorigin />
 
     <!-- Theme color (browser chrome) -->
@@ -150,14 +135,22 @@ const personSchema = {
 
     <title>{title}</title>
 
-    <!-- Apply dark class before paint to avoid flash -->
+    <!-- Before paint: dark class (no flash) + intro skip (no overlay flash) -->
     <script is:inline>
       (function () {
-        const saved = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (saved === 'dark' || (!saved && prefersDark)) {
-          document.documentElement.classList.add('dark');
+        const root = document.documentElement;
+        let saved = null;
+        let introSeen = false;
+        try {
+          saved = localStorage.getItem('theme');
+          introSeen = sessionStorage.getItem('zakka:intro-seen') === '1';
+        } catch {
+          introSeen = true;
         }
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && prefersDark)) root.classList.add('dark');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (introSeen || reduceMotion) root.classList.add('no-intro');
       })();
     </script>
   </head>

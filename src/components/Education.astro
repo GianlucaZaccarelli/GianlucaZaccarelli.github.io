@@ -13,20 +13,9 @@ const labels = locale === 'en'
   ? { title: 'Formal', em: 'studies', eyebrow: 'Education' }
   : { title: 'Studi', em: 'accademici', eyebrow: 'Formazione' };
 
-function splitYearLabel(yearLabel: string): { main: string; detail: string } {
-  const parts = yearLabel
-    .split(/\s*[–—-]\s*/)
-    .map(part => part.trim())
-    .filter(Boolean);
-
-  if (parts.length <= 1) {
-    return { main: yearLabel, detail: '' };
-  }
-
-  return {
-    main: parts[0],
-    detail: parts.slice(1).join(' – '),
-  };
+/** Anno di inizio, come in Experience (es. "Sett. 2025 – In corso" → "2025"). */
+function extractStartYear(yearLabel: string): string {
+  return yearLabel.match(/\d{4}/)?.[0] ?? '—';
 }
 ---
 
@@ -45,7 +34,7 @@ function splitYearLabel(yearLabel: string): { main: string; detail: string } {
 
     <ol class="space-y-24 md:space-y-32">
       {education.map((edu, idx) => {
-        const { main, detail } = splitYearLabel(edu.year);
+        const year = extractStartYear(edu.year);
 
         return (
         <li class="grid grid-cols-12 gap-x-6 gap-y-6 group relative">
@@ -59,13 +48,11 @@ function splitYearLabel(yearLabel: string): { main: string; detail: string } {
                 </span>
                 <div>
                   <p class="font-serif text-6xl md:text-7xl font-light leading-none text-ink-900 dark:text-white tracking-tight italic" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">
-                    {main}
+                    {year}
                   </p>
-                  {detail && (
-                    <p class="meta-mono text-xs uppercase tracking-widest text-ink-500 dark:text-white/50 mt-3">
-                      {detail}
-                    </p>
-                  )}
+                  <p class="meta-mono text-xs uppercase tracking-widest text-ink-500 dark:text-white/50 mt-3">
+                    {edu.year}
+                  </p>
                 </div>
               </div>
             </div>

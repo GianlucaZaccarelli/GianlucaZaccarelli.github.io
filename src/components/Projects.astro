@@ -1,5 +1,6 @@
 ---
 import { getProjects } from '../data/projects';
+import { techIcon } from '../data/icons';
 import type { Locale } from '../data/types';
 
 interface Props {
@@ -17,6 +18,8 @@ const labels = locale === 'en'
       github: 'Source',
       demo: 'Live',
       privateProject: 'Internal project — not public',
+      project: 'Project',
+      featured: 'Featured',
     }
   : {
       title: 'Progetti',
@@ -25,26 +28,9 @@ const labels = locale === 'en'
       github: 'Codice',
       demo: 'Demo',
       privateProject: 'Progetto interno — non pubblico',
+      project: 'Progetto',
+      featured: 'In evidenza',
     };
-
-const BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons';
-
-const iconMap: Record<string, string> = {
-  'Astro':           `${BASE}/astro/astro-original.svg`,
-  'TypeScript':      `${BASE}/typescript/typescript-original.svg`,
-  'JavaScript':      `${BASE}/javascript/javascript-original.svg`,
-  'Tailwind CSS':    `${BASE}/tailwindcss/tailwindcss-original.svg`,
-  'GitHub Actions':  `${BASE}/github/github-original.svg`,
-  'C#':              `${BASE}/csharp/csharp-original.svg`,
-  '.NET':            `${BASE}/dotnetcore/dotnetcore-original.svg`,
-  'Docker':          `${BASE}/docker/docker-original.svg`,
-  'Kubernetes':      `${BASE}/kubernetes/kubernetes-plain.svg`,
-  'SQL':             `${BASE}/microsoftsqlserver/microsoftsqlserver-plain.svg`,
-  'Node.js':         `${BASE}/nodejs/nodejs-original.svg`,
-  'Git':             `${BASE}/git/git-original.svg`,
-  'HTML5':           `${BASE}/html5/html5-original.svg`,
-  'CSS3':            `${BASE}/css3/css3-original.svg`,
-};
 
 // Layout recipe for bento: alternate sizes. Supports up to ~8 projects.
 // feature = wide card with emphasized type. Rest flow naturally.
@@ -100,11 +86,11 @@ const projectsWithLayout = projects.map((p, i) => ({
           <!-- Index + year -->
           <div class="flex items-center justify-between mb-4 relative z-10">
             <span class="meta-mono text-[0.65rem] uppercase tracking-[0.18em] text-accent-600 dark:text-accent-400">
-              Project / {String(idx + 1).padStart(2, '0')}
+              {labels.project} / {String(idx + 1).padStart(2, '0')}
             </span>
             {project.size === 'feature' && (
               <span class="meta-mono text-[0.6rem] uppercase tracking-[0.2em] text-ink-500 dark:text-white/55 px-2 py-0.5 border border-ink-300/60 dark:border-white/15 rounded-full">
-                Featured
+                {labels.featured}
               </span>
             )}
           </div>
@@ -123,11 +109,11 @@ const projectsWithLayout = projects.map((p, i) => ({
           <div class="mt-auto pt-6 relative z-10">
             <div class="flex flex-wrap gap-1.5 mb-4">
               {project.stack.map(tech => {
-                const icon = iconMap[tech];
+                const icon = techIcon(tech);
                 return (
                   <span class:list={['tech-badge', { 'has-icon': !!icon }]}>
                     {icon && (
-                      <img src={icon} alt={tech} width="12" height="12" loading="lazy" decoding="async" class="tech-icon" />
+                      <img src={icon} alt="" width="12" height="12" loading="lazy" decoding="async" class="tech-icon" />
                     )}
                     {tech}
                   </span>

@@ -17,6 +17,7 @@ const labels = locale === 'en'
       eyebrow: 'Contact',
       intro: 'I am available for new opportunities, collaborations, or simply a technical chat.',
       cta: 'Write me at',
+      elsewhere: 'Elsewhere',
     }
   : {
       title: 'Scrivimi',
@@ -24,6 +25,7 @@ const labels = locale === 'en'
       eyebrow: 'Contatti',
       intro: 'Sono disponibile per nuove opportunità, collaborazioni o semplicemente per una chiacchierata tecnica.',
       cta: 'Scrivimi su',
+      elsewhere: 'Altrove',
     };
 ---
 
@@ -60,7 +62,7 @@ const labels = locale === 'en'
 
       <!-- Social column -->
       <aside class="col-span-12 md:col-span-4 md:pl-6 md:border-l md:border-ink-300/40 md:dark:border-white/10">
-        <p class="meta-label mb-5">/ Elsewhere</p>
+        <p class="meta-label mb-5">/ {labels.elsewhere}</p>
         <ul class="space-y-4">
           {socialLinks.filter(l => l.icon !== 'mail').map(link => (
             <li>

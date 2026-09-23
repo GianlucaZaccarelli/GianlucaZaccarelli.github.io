@@ -1,0 +1,48 @@
+---
+// Pagina standalone (niente BaseLayout: non serve l'intro né lo SEO multilingua)
+import '../styles/global.css';
+import { getProfile } from '../data/profile';
+
+const profile = getProfile('it');
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>404 — {profile.name}</title>
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch {
+        /* storage non disponibile: tema chiaro */
+      }
+    </script>
+  </head>
+  <body class="min-h-screen antialiased flex items-center">
+    <main class="max-w-3xl mx-auto px-6 py-24">
+      <p class="section-eyebrow">
+        <span class="eyebrow-num">·404</span>
+        <span class="eyebrow-line"></span>
+        <span>Not found</span>
+      </p>
+      <h1 class="section-title">
+        Pagina <em>non trovata</em>
+      </h1>
+      <p class="editorial-lead mb-2">La pagina che cerchi non esiste o è stata spostata.</p>
+      <p class="text-ink-500 dark:text-white/60 mb-10" lang="en">
+        The page you are looking for does not exist or has been moved.
+      </p>
+      <div class="flex flex-wrap gap-6 meta-mono text-xs uppercase tracking-[0.14em]">
+        <a href="/" class="text-accent-600 dark:text-accent-400 hover:underline">→ Torna alla home</a>
+        <a href="/en/" class="text-accent-600 dark:text-accent-400 hover:underline" lang="en">→ Back to home</a>
+      </div>
+    </main>
+  </body>
+</html>

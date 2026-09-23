@@ -1,8 +1,17 @@
 import type { Locale, Skill } from './types';
+import { tr, type Localized } from './localize';
 
-const skillsIt: Skill[] = [
+interface SkillEntry {
+  category: Localized<string>;
+  /** Competenze tecniche: finiscono anche nel `knowsAbout` del JSON-LD */
+  technical: boolean;
+  items: Localized<string>[];
+}
+
+const entries: SkillEntry[] = [
   {
     category: 'Backend',
+    technical: true,
     items: [
       'C#',
       '.NET',
@@ -19,6 +28,7 @@ const skillsIt: Skill[] = [
   },
   {
     category: 'Frontend',
+    technical: true,
     items: [
       'JavaScript',
       'TypeScript',
@@ -27,7 +37,7 @@ const skillsIt: Skill[] = [
       'Dart',
       'Flutter',
       'Responsive Design',
-      'Accessibilità (WCAG)',
+      { it: 'Accessibilità (WCAG)', en: 'Accessibility (WCAG)' },
       'State Management',
       'UI Performance (Core Web Vitals)',
       'Design Systems',
@@ -36,6 +46,7 @@ const skillsIt: Skill[] = [
   },
   {
     category: 'DevOps',
+    technical: true,
     items: [
       'Docker',
       'Kubernetes',
@@ -53,15 +64,9 @@ const skillsIt: Skill[] = [
     ],
   },
   {
-    category: 'Soft Skills & Tools',
+    category: { it: 'Testing & Qualità', en: 'Testing & Quality' },
+    technical: true,
     items: [
-      'Project Management',
-      'Team Leadership',
-      'Analisi dei requisiti',
-      'GDPR compliance',
-      'Visual Studio',
-      'Visual Studio Code',
-      'Office Suite',
       'Playwright',
       'Unit Testing',
       'Integration Testing',
@@ -73,80 +78,28 @@ const skillsIt: Skill[] = [
       'OWASP',
     ],
   },
-];
-
-const skillsEnItems: ReadonlyArray<ReadonlyArray<string>> = [
-  [
-    'C#',
-    '.NET',
-    'OpenAPI/Swagger',
-    'API Versioning',
-    'Backward Compatibility',
-    'OAuth2',
-    'OpenID Connect',
-    'RabbitMQ',
-    'Kafka',
-    'Event-Driven Architecture',
-    'Microsoft SQL Server',
-  ],
-  [
-    'JavaScript',
-    'TypeScript',
-    'HTML5',
-    'CSS3',
-    'Dart',
-    'Flutter',
-    'Responsive Design',
-    'Accessibility (WCAG)',
-    'State Management',
-    'UI Performance (Core Web Vitals)',
-    'Design Systems',
-    'Form Validation',
-  ],
-  [
-    'Docker',
-    'Kubernetes',
-    'Git',
-    'GitHub',
-    'NuGet',
-    'CI/CD',
-    'GitHub Actions',
-    'Quality Gates',
-    'Staging/Production Pipelines',
-    'Azure',
-    'AWS',
-    'Grafana',
-    'Logging & Monitoring',
-  ],
-  [
-    'Project Management',
-    'Team Leadership',
-    'Requirements analysis',
-    'GDPR compliance',
-    'Visual Studio',
-    'Visual Studio Code',
-    'Office Suite',
-    'Playwright',
-    'Unit Testing',
-    'Integration Testing',
-    'API Testing',
-    'E2E Testing',
-    'Coverage Analysis',
-    'Performance Profiling',
-    'Query Optimization',
-    'OWASP',
-  ],
+  {
+    category: 'Soft Skills & Tools',
+    technical: false,
+    items: [
+      'Project Management',
+      'Team Leadership',
+      { it: 'Analisi dei requisiti', en: 'Requirements analysis' },
+      'GDPR compliance',
+      'Visual Studio',
+      'Visual Studio Code',
+      'Office Suite',
+    ],
+  },
 ];
 
 export function getSkills(locale: Locale = 'it'): Skill[] {
-  if (locale === 'it') {
-    return skillsIt;
-  }
-
-  return skillsIt.map((skill, index) => ({
-    ...skill,
-    items: [...(skillsEnItems[index] ?? skill.items)],
+  return entries.map((s) => ({
+    category: tr(s.category, locale),
+    items: s.items.map((item) => tr(item, locale)),
   }));
 }
 
-export const skills = getSkills('it');
+export function getKnowsAbout(locale: Locale = 'it'): string[] {
+  return entries.filter((s) => s.technical).flatMap((s) => s.items.map((item) => tr(item, locale)));
+}

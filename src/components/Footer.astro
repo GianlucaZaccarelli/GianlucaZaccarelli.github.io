@@ -116,11 +116,10 @@ const year = new Date().getFullYear();
       timeZone: 'Europe/Rome',
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
     });
     el.textContent = `${cityLabel} - ${time}`;
   }
 
   updateTime();
-  setInterval(updateTime, 1000);
+  setInterval(updateTime, 30_000);
 </script>

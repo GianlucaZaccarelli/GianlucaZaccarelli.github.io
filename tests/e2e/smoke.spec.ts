@@ -11,12 +11,12 @@ test.describe('ZakkaSite smoke', () => {
     }
   });
 
-  test('skip link is focusable and points to #about', async ({ page }) => {
+  test('skip link is focusable and points to #main', async ({ page }) => {
     await page.goto('/');
     await page.keyboard.press('Tab');
     const skip = page.locator('a.skip-to-content');
     await expect(skip).toBeFocused();
-    await expect(skip).toHaveAttribute('href', '#about');
+    await expect(skip).toHaveAttribute('href', '#main');
   });
 
   test('dark mode toggle updates html class', async ({ page }) => {

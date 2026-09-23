@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "@fontsource-variable/inter/index.css";
-@import "@fontsource-variable/fraunces/index.css";
+/* full = assi wght + opsz + SOFT (usati da font-variation-settings); italic reale per <em> */
+@import "@fontsource-variable/fraunces/full.css";
+@import "@fontsource-variable/fraunces/full-italic.css";
 @import "@fontsource-variable/jetbrains-mono/index.css";
 
 /* Class-based dark mode: applies when .dark is on <html> or any ancestor */

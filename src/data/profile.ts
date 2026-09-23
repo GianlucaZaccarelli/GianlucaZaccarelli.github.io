@@ -25,7 +25,7 @@ const profileIt: Profile = {
   city: 'San Secondo Parmense (PR)',
   country: 'Italia',
   languages: ['Italiano — madrelingua', 'Inglese — professionale'],
-  availability: 'Open to opportunities',
+  availability: 'Aperto a nuove opportunità',
   email: 'gianluca.zaccarelli.work@gmail.com',
   cvPath: '/cv.pdf',
 } as const;
@@ -33,7 +33,9 @@ const profileIt: Profile = {
 const profileEnOverride: Partial<Profile> = {
   location: 'San Secondo Parmense (PR), Italy',
   country: 'Italy',
-  languages: ['Italian - native', 'English - professional'],
+  languages: ['Italian — native', 'English — professional'],
+  availability: 'Open to opportunities',
+  cvPath: '/cv-en.pdf',
 };
 
 export function getProfile(locale: Locale = 'it'): Profile {
@@ -41,17 +43,13 @@ export function getProfile(locale: Locale = 'it'): Profile {
     return profileIt;
   }
 
-  const paragraphs = bioParagraphsEn.length ? bioParagraphsEn : profileIt.bioParagraphs;
-
   return {
     ...profileIt,
     ...profileEnOverride,
-    bioParagraphs: paragraphs,
-    bio: paragraphs.join(' '),
+    bioParagraphs: bioParagraphsEn,
+    bio: bioParagraphsEn.join(' '),
   };
 }
-
-export const profile = getProfile('it');
 
 export const socialLinks: SocialLink[] = [
   {

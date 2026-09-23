@@ -19,6 +19,7 @@ const labels = locale === 'en'
       languages: 'Languages',
       personality: 'Personality',
       availability: 'Availability',
+      postscript: 'Postscript',
     }
   : {
       sectionTitle: 'Chi sono',
@@ -28,6 +29,7 @@ const labels = locale === 'en'
       languages: 'Lingue',
       personality: 'Personalità',
       availability: 'Disponibilità',
+      postscript: 'Postilla',
     };
 
 const flagMap: Record<string, 'it' | 'gb'> = {
@@ -72,7 +74,7 @@ const titleBase = labels.sectionTitle.replace(labels.sectionTitleEm, '').trim();
           </p>
 
           <div class="mt-10 pt-6 border-t border-ink-300/40 dark:border-white/10 max-w-2xl">
-            <p class="meta-label mb-2">Postilla</p>
+            <p class="meta-label mb-2">{labels.postscript}</p>
             <p class="text-ink-500 dark:text-white/55 text-sm md:text-base leading-relaxed italic font-serif">
               {bioTail}
             </p>

@@ -30,4 +30,7 @@ pnpm-debug.log*
 /.playwright-mcp/
 
 # generated at build time
-/public/cv.pdf
+/public/cv*.pdf
+
+# local Claude Code settings
+.claude/settings.local.json

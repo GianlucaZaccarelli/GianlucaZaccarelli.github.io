@@ -2,6 +2,9 @@
 const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こんにちは', 'Hallå', 'Guten Tag', 'Hallo'];
 ---
 
+<!-- Senza JS l'overlay non verrebbe mai rimosso -->
+<noscript><style>.loading-container { display: none !important; }</style></noscript>
+
 <div class="loading-container" aria-hidden="true">
   <div class="loading-screen">
 
@@ -49,6 +52,11 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
 
 <style>
   /* ── Container ── */
+  /* .no-intro viene messa su <html> da BaseLayout prima del paint
+     (intro già vista, movimento ridotto o storage non disponibile) */
+  :global(.no-intro) .loading-container {
+    display: none;
+  }
   .loading-container {
     position: fixed;
     inset: 0;
@@ -255,18 +263,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
 
 <script>
   (function () {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const alreadySeen = sessionStorage.getItem('zakka:intro-seen') === '1';
-
-    // Skip intro se l'utente l'ha già vista o preferisce ridotto movimento
-    if (alreadySeen || reduceMotion) {
-      const c = document.querySelector<HTMLElement>('.loading-container');
-      if (c) c.style.display = 'none';
-      document.querySelectorAll<HTMLElement>('main .once-in').forEach((el) => {
-        el.style.transform = 'none';
-      });
-      return;
-    }
+    if (document.documentElement.classList.contains('no-intro')) return;
 
     const isMobile = window.innerWidth <= 540;
     const screen = document.querySelector<HTMLElement>('.loading-screen');
@@ -291,8 +288,8 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
     if (first) first.style.opacity = '1';
 
     // Durata totale del caricamento visibile (ms)
-    const LOAD_MS = 1100;
-    const DELAY_MS = 250;
+    const LOAD_MS = 900;
+    const DELAY_MS = 150;
 
     // Contatore 0 → 100 + barra progresso
     const startCounter = performance.now() + DELAY_MS;
@@ -311,9 +308,9 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
       { duration: 500, delay: DELAY_MS, fill: 'forwards', easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
     );
 
-    // Ciclo parole: ogni parola resta visibile ~100ms poi fade out quando parte la successiva
-    const cycleStart = DELAY_MS + 250;
-    const step = 100;
+    // Ciclo parole: ogni parola resta visibile ~80ms poi fade out quando parte la successiva
+    const cycleStart = DELAY_MS + 150;
+    const step = 80;
     words.forEach((w, i) => {
       if (i === 0) {
         w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 1, delay: cycleStart + step, fill: 'forwards' });
@@ -357,7 +354,11 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
           el.style.transition = '';
           el.style.transform = '';
         });
-        sessionStorage.setItem('zakka:intro-seen', '1');
+        try {
+          sessionStorage.setItem('zakka:intro-seen', '1');
+        } catch {
+          /* storage non disponibile: l'intro si ripeterà */
+        }
       }, 1200);
     }, slideOutAt);
   })();
