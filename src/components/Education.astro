@@ -32,7 +32,7 @@ function extractStartYear(yearLabel: string): string {
       {labels.title} <em>{labels.em}</em>
     </h2>
 
-    <ol class="space-y-24 md:space-y-32">
+    <ol class="space-y-16 md:space-y-24">
       {education.map((edu, idx) => {
         const year = extractStartYear(edu.year);
 
@@ -41,8 +41,8 @@ function extractStartYear(yearLabel: string): string {
 
           <!-- Left: giant year + index -->
           <div class="col-span-12 md:col-span-3 md:sticky md:top-28 self-start">
-            <div class="flex flex-col items-center md:items-center gap-5 text-center">
-              <div class="flex items-start justify-center gap-3 text-left">
+            <div class="flex flex-col items-start md:items-center gap-5">
+              <div class="flex items-start gap-3">
                 <span class="meta-mono text-xs text-ink-500 dark:text-white/55 mt-3 shrink-0">
                   {String(idx + 1).padStart(2, '0')}
                 </span>
@@ -60,9 +60,9 @@ function extractStartYear(yearLabel: string): string {
 
           <!-- Right: content -->
           <div class="col-span-12 md:col-span-9 md:pl-8 md:border-l md:border-ink-300/40 md:dark:border-white/10">
-            <div class="mb-6 flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
+            <div class="mb-6 flex items-start gap-4 md:gap-6">
               {edu.logo && (
-                <div class="w-24 h-24 md:w-28 md:h-28 shrink-0 rounded-2xl border border-ink-300/60 dark:border-white/10 bg-white/30 dark:bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden p-4">
+                <div class="logo-tile">
                   <Image
                     src={edu.logo}
                     alt={`Logo ${edu.institution}`}
@@ -75,7 +75,7 @@ function extractStartYear(yearLabel: string): string {
               )}
 
               <div class="min-w-0">
-                <h3 class="font-serif text-2xl md:text-3xl text-ink-900 dark:text-white leading-tight" style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
+                <h3 class="font-serif font-medium text-2xl md:text-3xl text-ink-900 dark:text-white leading-tight" style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
                   {edu.degree}
                 </h3>
                 {edu.url ? (

@@ -5,7 +5,7 @@ import '@fontsource-variable/jetbrains-mono/index.css';
 import { getImage } from 'astro:assets';
 import cvImage from '../assets/cv_image.jpg';
 import { getProfile, socialLinks } from '../data/profile';
-import { getExperience } from '../data/experience';
+import { getExperience, splitStack } from '../data/experience';
 import { getEducation } from '../data/education';
 import { getSkills } from '../data/skills';
 import type { Locale } from '../data/types';
@@ -53,16 +53,6 @@ const professionalLinks = socialLinks.filter(l => l.icon === 'linkedin' || l.ico
 
 // Foto profilo: ~24mm di lato, 400px ≈ 420 dpi in stampa
 const photo = await getImage({ src: cvImage, width: 400, height: 400, format: 'jpg' });
-
-// L'ultima voce "Stack: ..." di ogni esperienza viene resa come riga
-// tecnologie dedicata, separata dai bullet descrittivi
-function splitStack(description: string[]): { bullets: string[]; stack: string | null } {
-  const stackItem = description.find(d => d.startsWith('Stack:'));
-  return {
-    bullets: description.filter(d => !d.startsWith('Stack:')),
-    stack: stackItem ? stackItem.replace(/^Stack:\s*/, '').replace(/\.$/, '') : null,
-  };
-}
 ---
 
 <!DOCTYPE html>
@@ -422,8 +412,8 @@ function splitStack(description: string[]): { bullets: string[]; stack: string |
               <ul class="entry-bullets">
                 {bullets.map(d => <li>{d}</li>)}
               </ul>
-              {stack && (
-                <p class="entry-stack"><strong>Stack</strong> · {stack}</p>
+              {stack.length > 0 && (
+                <p class="entry-stack"><strong>Stack</strong> · {stack.join(' · ')}</p>
               )}
             </article>
           );

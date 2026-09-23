@@ -77,6 +77,22 @@ const entries: ExperienceEntry[] = [
   },
 ];
 
+/**
+ * Separa la voce finale "Stack: A · B · C." dai bullet descrittivi.
+ */
+export function splitStack(description: string[]): { bullets: string[]; stack: string[] } {
+  const stackItem = description.find((d) => d.startsWith('Stack:'));
+  return {
+    bullets: description.filter((d) => !d.startsWith('Stack:')),
+    stack: stackItem
+      ? stackItem
+          .replace(/^Stack:\s*/, '')
+          .replace(/\.$/, '')
+          .split(/\s*·\s*/)
+      : [],
+  };
+}
+
 export function getExperience(locale: Locale = 'it'): Experience[] {
   return entries.map((e) => ({
     ...e,

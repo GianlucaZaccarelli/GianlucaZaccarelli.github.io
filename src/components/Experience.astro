@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import { getExperience } from '../data/experience';
+import { getExperience, splitStack } from '../data/experience';
+import TechBadge from './TechBadge.astro';
 import type { Locale } from '../data/types';
 
 interface Props {
@@ -35,16 +36,17 @@ function extractStartYear(period: string): string {
       {labels.title} <em>{labels.em}</em>
     </h2>
 
-    <ol class="space-y-24 md:space-y-32">
+    <ol class="space-y-16 md:space-y-24">
       {experience.map((job, idx) => {
         const year = extractStartYear(job.period);
+        const { bullets, stack } = splitStack(job.description);
         return (
           <li class="grid grid-cols-12 gap-x-6 gap-y-6 group relative">
 
             <!-- Left: giant year + index -->
             <div class="col-span-12 md:col-span-3 md:sticky md:top-28 self-start">
-              <div class="flex flex-col items-center md:items-center gap-5 text-center">
-                <div class="flex items-start justify-center gap-3 text-left">
+              <div class="flex flex-col items-start md:items-center gap-5">
+                <div class="flex items-start gap-3">
                   <span class="meta-mono text-xs text-ink-500 dark:text-white/55 mt-3 shrink-0">
                     {String(idx + 1).padStart(2, '0')}
                   </span>
@@ -65,9 +67,9 @@ function extractStartYear(period: string): string {
 
             <!-- Right: content -->
             <div class="col-span-12 md:col-span-9 md:pl-8 md:border-l md:border-ink-300/40 md:dark:border-white/10">
-              <div class="mb-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+              <div class="mb-6 flex items-center gap-4 md:gap-6">
                 {job.logo && (
-                  <div class="w-24 h-24 md:w-28 md:h-28 shrink-0 rounded-2xl border border-ink-300/60 dark:border-white/10 bg-white shadow-[0_1px_0_rgba(255,255,255,0.04),0_12px_30px_rgba(0,0,0,0.08)] flex items-center justify-center overflow-hidden p-4">
+                  <div class="logo-tile">
                     <Image
                       src={job.logo}
                       alt={`Logo ${job.company}`}
@@ -80,7 +82,7 @@ function extractStartYear(period: string): string {
                 )}
 
                 <div class="min-w-0">
-                  <h3 class="font-serif text-2xl md:text-3xl text-ink-900 dark:text-white leading-tight" style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
+                  <h3 class="font-serif font-medium text-2xl md:text-3xl text-ink-900 dark:text-white leading-tight" style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
                     {job.role}
                   </h3>
                   {job.url ? (
@@ -96,12 +98,18 @@ function extractStartYear(period: string): string {
               </div>
 
               <ul class="space-y-2.5 text-ink-700 dark:text-white/75 text-[0.95rem] md:text-base leading-relaxed">
-                {job.description.map(item => (
+                {bullets.map(item => (
                   <li class="relative pl-6 before:content-['—'] before:absolute before:left-0 before:text-accent-500 before:font-serif">
                     {item}
                   </li>
                 ))}
               </ul>
+
+              {stack.length > 0 && (
+                <div class="flex flex-wrap gap-1.5 mt-5 md:pl-6">
+                  {stack.map(tech => <TechBadge name={tech} />)}
+                </div>
+              )}
             </div>
 
           </li>

@@ -1,6 +1,6 @@
 ---
 import { getProjects } from '../data/projects';
-import { techIcon } from '../data/icons';
+import TechBadge from './TechBadge.astro';
 import type { Locale } from '../data/types';
 
 interface Props {
@@ -67,7 +67,7 @@ const projectsWithLayout = projects.map((p, i) => ({
       {labels.title} <em>{labels.em}</em>
     </h2>
 
-    <div class="bento-grid grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 auto-rows-[320px] md:auto-rows-[300px]">
+    <div class="bento-grid grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 md:auto-rows-fr">
       {projectsWithLayout.map((project, idx) => (
         <article class:list={[
           'project-card group relative overflow-hidden rounded-2xl border border-ink-300/40 dark:border-white/10 bg-white dark:bg-surface-card px-6 md:px-8 pt-6 md:pt-8 pb-7 md:pb-10 flex flex-col transition-all duration-500',
@@ -96,7 +96,7 @@ const projectsWithLayout = projects.map((p, i) => ({
           </div>
 
           <!-- Title -->
-          <h3 class={`font-serif text-ink-900 dark:text-white leading-[1.08] relative z-10 ${project.size === 'feature' ? 'text-2xl md:text-3xl mb-4' : 'text-xl md:text-2xl mb-3'}`} style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
+          <h3 class={`font-serif font-medium text-ink-900 dark:text-white leading-[1.08] relative z-10 ${project.size === 'feature' ? 'text-2xl md:text-3xl mb-4' : 'text-xl md:text-2xl mb-3'}`} style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
             {project.title}
           </h3>
 
@@ -108,17 +108,7 @@ const projectsWithLayout = projects.map((p, i) => ({
           <!-- Stack + links (mt-auto pushes to bottom) -->
           <div class="mt-auto pt-6 relative z-10">
             <div class="flex flex-wrap gap-1.5 mb-4">
-              {project.stack.map(tech => {
-                const icon = techIcon(tech);
-                return (
-                  <span class:list={['tech-badge', { 'has-icon': !!icon }]}>
-                    {icon && (
-                      <img src={icon} alt="" width="12" height="12" loading="lazy" decoding="async" class="tech-icon" />
-                    )}
-                    {tech}
-                  </span>
-                );
-              })}
+              {project.stack.map(tech => <TechBadge name={tech} />)}
             </div>
 
             <div class="flex items-center gap-4 pt-3 pb-1 border-t border-ink-300/40 dark:border-white/10">
@@ -186,50 +176,5 @@ const projectsWithLayout = projects.map((p, i) => ({
     background-image:
       radial-gradient(circle at 90% 10%, rgba(217,119,87,0.12) 0%, transparent 55%),
       radial-gradient(circle at 10% 90%, rgba(69,92,233,0.08) 0%, transparent 55%);
-  }
-
-  .tech-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.18rem 0.55rem;
-    font-size: 0.65rem;
-    font-family: var(--font-mono);
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    border-radius: 999px;
-    background: transparent;
-    color: var(--color-ink-700);
-    border: 1px solid rgba(0,0,0,0.1);
-  }
-
-  :global(.dark) .tech-badge {
-    background: transparent;
-    color: rgba(255,255,255,0.7);
-    border-color: rgba(255,255,255,0.12);
-  }
-
-  .tech-badge.has-icon {
-    border-color: rgba(69, 92, 233, 0.3);
-    color: var(--color-brand-700);
-  }
-
-  :global(.dark) .tech-badge.has-icon {
-    border-color: rgba(165, 180, 252, 0.25);
-    color: #c7d2fe;
-  }
-
-  .tech-icon {
-    width: 12px;
-    height: 12px;
-    object-fit: contain;
-    flex-shrink: 0;
-  }
-
-  /* On small screens, disable auto-rows / row-spans to prevent awkward gaps */
-  @media (max-width: 767px) {
-    .bento-grid {
-      grid-auto-rows: auto !important;
-    }
   }
 </style>

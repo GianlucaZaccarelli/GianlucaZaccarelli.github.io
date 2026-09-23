@@ -157,6 +157,27 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* ── Logo azienda/istituto (Experience, Education) ──────── */
+/* Fondo sempre bianco: i loghi sono pensati per sfondi chiari */
+.logo-tile {
+  flex-shrink: 0;
+  width: 4rem;
+  height: 4rem;
+  padding: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 0.875rem;
+  border: 1px solid color-mix(in oklch, var(--color-ink-300) 60%, transparent);
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+.dark .logo-tile { border-color: rgba(255, 255, 255, 0.1); }
+@media (min-width: 768px) {
+  .logo-tile { width: 7rem; height: 7rem; padding: 1rem; border-radius: 1rem; }
+}
+
 /* ── Nav underline sliding animation ──────────────────── */
 .nav-link {
   position: relative;
