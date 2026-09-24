@@ -287,9 +287,11 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
     const last = words[words.length - 1];
     if (first) first.style.opacity = '1';
 
-    // Durata totale del caricamento visibile (ms)
-    const LOAD_MS = 900;
+    // Tempi (ms): ogni parola resta a schermo `step`, il contatore dura quanto il ciclo
     const DELAY_MS = 150;
+    const cycleStart = DELAY_MS + 150;
+    const step = 220;
+    const LOAD_MS = cycleStart - DELAY_MS + step * words.length;
 
     // Contatore 0 → 100 + barra progresso
     const startCounter = performance.now() + DELAY_MS;
@@ -308,9 +310,7 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
       { duration: 500, delay: DELAY_MS, fill: 'forwards', easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
     );
 
-    // Ciclo parole: ogni parola resta visibile ~80ms poi fade out quando parte la successiva
-    const cycleStart = DELAY_MS + 150;
-    const step = 80;
+    // Ciclo parole: fade rapido in/out, testo pieno per quasi tutto lo `step`
     words.forEach((w, i) => {
       if (i === 0) {
         w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 1, delay: cycleStart + step, fill: 'forwards' });
@@ -319,9 +319,9 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
       const isLast = w === last;
       const keyframes = isLast
         ? [{ opacity: 0 }, { opacity: 1 }]
-        : [{ opacity: 0 }, { opacity: 1, offset: 0.5 }, { opacity: 0 }];
+        : [{ opacity: 0 }, { opacity: 1, offset: 0.15 }, { opacity: 1, offset: 0.85 }, { opacity: 0 }];
       w.animate(keyframes, {
-        duration: isLast ? 1 : step * 2,
+        duration: isLast ? 1 : step,
         delay: cycleStart + step * i,
         fill: 'forwards',
       });
