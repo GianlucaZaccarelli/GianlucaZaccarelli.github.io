@@ -64,3 +64,27 @@ export interface SocialLink {
   href: string;
   icon: string;
 }
+
+export interface PersonalPhoto {
+  image: ImageMetadata;
+  /** Descrizione per chi non vede la foto */
+  alt: string;
+  /** Didascalia breve sotto la foto (facoltativa) */
+  caption?: string;
+}
+
+export interface PersonalChapter {
+  kicker: string;
+  body: string;
+}
+
+export interface Personal {
+  title: string;
+  titleEm: string;
+  /** Riga mono sotto il titolo (anno di nascita) */
+  since: string;
+  lead: string;
+  chapters: PersonalChapter[];
+  note: string;
+  photos: PersonalPhoto[];
+}

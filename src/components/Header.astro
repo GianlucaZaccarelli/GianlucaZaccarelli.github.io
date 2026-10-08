@@ -23,6 +23,7 @@ const labels = locale === 'en'
       experience: 'Experience',
       education: 'Education',
       projects: 'Projects',
+      personal: 'Off the clock',
       contacts: 'Contact',
       themeToggle: 'Toggle theme',
       darkTheme: 'Dark theme',
@@ -47,6 +48,7 @@ const labels = locale === 'en'
       experience: 'Esperienza',
       education: 'Formazione',
       projects: 'Progetti',
+      personal: 'Fuori orario',
       contacts: 'Contatti',
       themeToggle: 'Cambia tema',
       darkTheme: 'Tema scuro',
@@ -72,6 +74,7 @@ const navItems = [
   { href: '#education',  label: labels.education  },
   { href: '#skills',     label: labels.skills     },
   { href: '#projects',   label: labels.projects   },
+  { href: '#personal',   label: labels.personal   },
   { href: '#contact',    label: labels.contacts   },
 ];
 
@@ -122,7 +125,7 @@ const yearRoman = toRoman(new Date().getFullYear());
             <a
               href={href}
               data-target={href}
-              class="tab-link relative inline-flex items-center px-3.5 py-1.5 rounded-full text-[0.82rem] font-medium text-ink-500 dark:text-white/55 hover:text-ink-900 dark:hover:text-white transition-colors"
+              class="tab-link relative inline-flex items-center whitespace-nowrap px-2.5 xl:px-3.5 py-1.5 rounded-full text-[0.82rem] font-medium text-ink-500 dark:text-white/55 hover:text-ink-900 dark:hover:text-white transition-colors"
             >
               {label}
             </a>

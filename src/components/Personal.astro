@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+import { getPersonal } from '../data/personal';
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const personal = getPersonal(locale);
+const galleryLabel = locale === 'en' ? 'Photo gallery' : 'Galleria fotografica';
+---
+
+<section id="personal" class="relative py-24 md:py-32 bg-white dark:bg-surface overflow-clip">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <h2 class="section-title">
+      <span class="section-num" aria-hidden="true">06</span>{personal.title} <em>{personal.titleEm}</em>
+    </h2>
+    <p class="meta-mono -mt-8 mb-10 text-sm tracking-wide text-accent-700 dark:text-accent-400">{personal.since}</p>
+
+    <div class="grid grid-cols-12 gap-x-6 gap-y-10">
+      <p class="editorial-lead col-span-12 md:col-span-9">
+        {personal.lead}
+      </p>
+
+      {personal.chapters.map((c, i) => (
+        <div class:list={['col-span-12 md:col-span-5', { 'md:col-start-7': i % 2 === 1 }]}>
+          <p class="meta-label mb-3">
+            <span class="meta-mono text-accent-700 dark:text-accent-400">{String(i + 1).padStart(2, '0')}</span> — {c.kicker}
+          </p>
+          <p class="text-ink-700 dark:text-white/70 text-base md:text-lg leading-relaxed">{c.body}</p>
+        </div>
+      ))}
+
+      <p class="personal-note col-span-12 md:col-span-8">{personal.note}</p>
+    </div>
+
+    {personal.photos.length > 0 && (
+      <ul class="gallery mt-16 md:mt-24" aria-label={galleryLabel} style={`--cols: ${Math.min(personal.photos.length, 3)}`}>
+        {personal.photos.map((p, i) => (
+          <li>
+            <figure>
+              <Image
+                src={p.image}
+                alt={p.alt}
+                widths={[480, 800, 1200]}
+                sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+                loading="lazy"
+                decoding="async"
+                class="w-full h-auto"
+              />
+              <figcaption class="meta-mono">
+                <span class="text-accent-700 dark:text-accent-400">Fig. {String(i + 1).padStart(2, '0')}</span>
+                {p.caption && <> — {p.caption}</>}
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    )}
+
+  </div>
+</section>
+
+<style>
+  .personal-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+    line-height: 1.4;
+    color: var(--color-accent-700);
+    font-variation-settings: 'opsz' 48, 'SOFT' 100;
+  }
+  :global(.dark) .personal-note { color: var(--color-accent-400); }
+
+  /* Provini da rivista: tante colonne quante foto (fino a 3), allineate in alto,
+     ogni foto nel suo formato. Su mobile una colonna */
+  .gallery {
+    display: grid;
+    gap: 2.5rem 1.5rem;
+    align-items: start;
+  }
+  @media (min-width: 640px) {
+    .gallery { grid-template-columns: repeat(min(var(--cols), 2), minmax(0, 1fr)); }
+  }
+  @media (min-width: 1024px) {
+    .gallery { grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); }
+  }
+  /* Cornice: passe-partout carta e filetto terracotta, come una stampa in rivista */
+  .gallery :global(img) {
+    padding: 0.5rem;
+    background: var(--color-paper);
+    border: 2px solid var(--color-accent-600);
+  }
+  :global(.dark) .gallery :global(img) {
+    background: var(--color-surface-alt);
+    border-color: var(--color-accent-400);
+  }
+  .gallery figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--color-ink-500);
+  }
+  :global(.dark) .gallery figcaption { color: rgba(255, 255, 255, 0.55); }
+</style>

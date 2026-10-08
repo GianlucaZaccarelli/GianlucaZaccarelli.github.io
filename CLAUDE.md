@@ -71,10 +71,11 @@ GianlucaZaccarelli.github.io/
 │   │   ├── Education.astro
 │   │   ├── Skills.astro
 │   │   ├── Projects.astro
+│   │   ├── Personal.astro        # "Fuori orario": estetica, moto, galleria
 │   │   ├── Contact.astro
 │   │   ├── Footer.astro
 │   │   └── SocialIcon.astro      # SVG inline per linkedin/github/instagram/mail
-│   ├── assets/                   # foto/ (hero-ritratto-bn.jpg, cv-ritratto.jpg), og-image.jpg (1200×630), logos/*.webp
+│   ├── assets/                   # foto/ (hero-ritratto-bn.jpg, cv-ritratto.jpg, galleria/), og-image.jpg (1200×630), logos/*.webp
 │   ├── data/
 │   │   ├── types.ts              # Interfacce condivise
 │   │   ├── localize.ts           # Localized<T> + tr()
@@ -83,7 +84,8 @@ GianlucaZaccarelli.github.io/
 │   │   ├── experience.ts
 │   │   ├── education.ts
 │   │   ├── skills.ts
-│   │   └── projects.ts
+│   │   ├── projects.ts
+│   │   └── personal.ts           # Testi di "Fuori orario" + foto della galleria
 │   ├── layouts/
 │   │   └── BaseLayout.astro      # <head> SEO/OG + LoadingScreen + slot
 │   ├── pages/
@@ -180,7 +182,8 @@ npm run test:e2e:ui      # Playwright in modalità UI interattiva
 4. **Education** — card con logo, titolo, istituto, anno, descrizione
 5. **Skills** — cluster per categoria con chip; logo devicons per prodotti/tecnologie reali, icona generica Lucide per le competenze concettuali
 6. **Projects** — griglia card con stack badge e link opzionali
-7. **Contact** — CTA email + social
+7. **Fuori orario** (`#personal`) — lato personale: classe '98, estetica, moto; galleria a colonne (foto in `src/assets/foto/galleria/`, elencate in `personal.ts`, nascosta se vuota)
+8. **Contact** — CTA email + social
 
 ---
 
