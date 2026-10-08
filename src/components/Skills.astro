@@ -1,5 +1,5 @@
 ---
-import { getSkills } from '../data/skills';
+import { getCoreSkills, getSkills } from '../data/skills';
 import { techIcon } from '../data/icons';
 import type { Locale } from '../data/types';
 
@@ -9,55 +9,124 @@ interface Props {
 
 const { locale = 'it' } = Astro.props;
 const skills = getSkills(locale);
+const core = getCoreSkills().map(name => ({ name, icon: techIcon(name) }));
 const labels = locale === 'en'
-  ? { title: 'Tech stack' }
-  : { title: 'Competenze tecniche' };
+  ? { title: 'Tech stack', core: 'Every day', more: 'more', moreAria: 'more skills in', less: 'Show less' }
+  : { title: 'Competenze tecniche', core: 'Ogni giorno', more: 'altre', moreAria: 'altre competenze in', less: 'Mostra meno' };
 
-// Cluster view: each category on its own
+// Su mobile ogni cluster mostra i primi N chip; gli altri si aprono con "+N"
+const VISIBLE_ON_MOBILE = 6;
+
+// Gli strumenti core sono già in evidenza sopra: nei cluster non si ripetono
+const coreNames = new Set(core.map(c => c.name));
 const clusters = skills.map(s => ({
   ...s,
-  items: s.items.map(name => ({ name, icon: techIcon(name) })),
+  items: s.items.filter(name => !coreNames.has(name)).map(name => ({ name, icon: techIcon(name) })),
 }));
 ---
 
-<section id="skills" class="relative py-24 md:py-32 bg-white dark:bg-surface overflow-hidden">
+<section id="skills" class="relative py-20 md:py-32 bg-white dark:bg-surface overflow-clip">
   <div class="max-w-6xl mx-auto px-6">
 
     <h2 class="section-title">
       <span class="section-num" aria-hidden="true">04</span>{labels.title}
     </h2>
 
-    <!-- Cluster view -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-12">
-      {clusters.map(cluster => (
-        <div class="group">
-          <div class="flex items-baseline gap-3 mb-5 pb-3 border-b border-ink-300/40 dark:border-white/10">
-            <h3 class="text-base font-semibold leading-none text-ink-900 dark:text-white">
-              {cluster.category}
-            </h3>
-            <span class="flex-1 h-px bg-ink-300/30 dark:bg-white/8"></span>
-            <span class="meta-mono text-[0.65rem] text-ink-500 dark:text-white/55">
-              {cluster.items.length}
-            </span>
+    <!-- Core: gli strumenti di tutti i giorni -->
+    <div class="mb-14 md:mb-20">
+      <p class="meta-label mb-4">{labels.core}</p>
+      <ul class="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
+        {core.map(item => (
+          <li class="core-chip">
+            {item.icon && (
+              <img src={item.icon} alt="" width="22" height="22" loading="lazy" decoding="async" class="core-icon" />
+            )}
+            <span>{item.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10 md:gap-y-12">
+      {clusters.map(cluster => {
+        const hidden = cluster.items.length - VISIBLE_ON_MOBILE;
+        return (
+          <div class="skill-cluster">
+            <div class="flex items-baseline gap-3 mb-5 pb-3 border-b border-ink-300/40 dark:border-white/10">
+              <h3 class="text-base font-semibold leading-none text-ink-900 dark:text-white">
+                {cluster.category}
+              </h3>
+              <span class="flex-1"></span>
+              <span class="meta-mono text-xs text-ink-500 dark:text-white/55">
+                {cluster.items.length}
+              </span>
+            </div>
+            <ul class="flex flex-wrap gap-2">
+              {cluster.items.map((item, i) => (
+                <li class:list={['skill-chip', { 'is-extra': i >= VISIBLE_ON_MOBILE }]}>
+                  {item.icon && (
+                    <img src={item.icon} alt="" width="16" height="16" loading="lazy" decoding="async" class="skill-icon" />
+                  )}
+                  <span>{item.name}</span>
+                </li>
+              ))}
+              {hidden > 0 && (
+                <li class="md:hidden">
+                  <button
+                    type="button"
+                    class="skill-more"
+                    aria-expanded="false"
+                    aria-label={`+${hidden} ${labels.moreAria} ${cluster.category}`}
+                    data-more={`+${hidden} ${labels.more}`}
+                    data-less={labels.less}
+                  >
+                    +{hidden} {labels.more}
+                  </button>
+                </li>
+              )}
+            </ul>
           </div>
-          <div class="flex flex-wrap gap-2">
-            {cluster.items.map(item => (
-              <div class="skill-chip">
-                {item.icon && (
-                  <img src={item.icon} alt="" width="16" height="16" loading="lazy" decoding="async" class="skill-icon" />
-                )}
-                <span>{item.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
 
   </div>
 </section>
 
 <style>
+  .core-chip {
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.1rem 0.5rem 0.9rem;
+    border-radius: 999px;
+    background: var(--color-paper);
+    border: 1px solid color-mix(in oklch, var(--color-ink-300) 70%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-ink-900);
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  :global(.dark) .core-chip {
+    background: var(--color-surface-card);
+    border-color: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+  .core-chip:hover {
+    transform: translateY(-1px);
+    border-color: var(--color-accent-500);
+    box-shadow: 0 6px 16px -8px rgba(217, 119, 87, 0.35);
+  }
+  .core-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
   .skill-chip {
     display: inline-flex;
     align-items: center;
@@ -67,7 +136,7 @@ const clusters = skills.map(s => ({
     background: transparent;
     border: 1px solid rgba(0, 0, 0, 0.12);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.02em;
     color: var(--color-ink-700);
@@ -99,4 +168,54 @@ const clusters = skills.map(s => ({
     object-fit: contain;
     flex-shrink: 0;
   }
+
+  /* Mobile: i chip oltre i primi N restano chiusi finché non si apre il cluster */
+  @media (max-width: 767px) {
+    .skill-chip.is-extra { display: none; }
+    .skill-cluster.is-open .skill-chip.is-extra { display: inline-flex; }
+  }
+
+  .skill-more {
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    border-radius: 999px;
+    border: 1px dashed color-mix(in oklch, var(--color-accent-600) 55%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-accent-700);
+    cursor: pointer;
+  }
+  :global(.dark) .skill-more {
+    border-color: color-mix(in oklch, var(--color-accent-400) 50%, transparent);
+    color: var(--color-accent-400);
+  }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.skill-more').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cluster = btn.closest('.skill-cluster');
+      const open = !cluster?.classList.contains('is-open');
+      cluster?.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      btn.textContent = (open ? btn.dataset.less : btn.dataset.more) ?? '';
+      // I chip che compaiono entrano in breve sequenza (massimo ~210ms in tutto)
+      if (open && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        cluster?.querySelectorAll<HTMLElement>('.skill-chip.is-extra').forEach((chip, i) => {
+          chip.animate(
+            [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }],
+            { duration: 320, delay: Math.min(i * 35, 210), easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'backwards' }
+          );
+        });
+      }
+      // Da aperto il testo visibile basta come nome accessibile
+      if (open) {
+        btn.dataset.aria = btn.getAttribute('aria-label') ?? '';
+        btn.removeAttribute('aria-label');
+      } else if (btn.dataset.aria) {
+        btn.setAttribute('aria-label', btn.dataset.aria);
+      }
+    });
+  });
+</script>

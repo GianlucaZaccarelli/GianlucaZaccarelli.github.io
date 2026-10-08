@@ -17,17 +17,15 @@ const entries: EducationEntry[] = [
       it: 'Scienze e tecniche psicologiche per le sfide contemporanee',
       en: 'Psychological sciences and techniques for contemporary challenges',
     },
-    year: { it: 'Sett. 2025 – In corso', en: 'Sep 2025 – Ongoing' },
+    year: { it: 'Set 2025 – In corso', en: 'Sep 2025 – Ongoing' },
     description: {
       it: [
-        'Percorso universitario orientato allo sviluppo di competenze teoriche e pratiche.',
+        'Scelta per unire alla solidità tecnica una comprensione più profonda delle persone e dei team.',
         'Approfondimento di temi contemporanei con un approccio multidisciplinare.',
-        'Attenzione alla crescita personale e professionale all’interno del percorso di studi.',
       ],
       en: [
-        'A university path focused on building solid theoretical and practical skills.',
+        'Chosen to combine technical solidity with a deeper understanding of people and teams.',
         'Exploration of contemporary topics through a multidisciplinary approach.',
-        'Attention to both personal and professional growth throughout the program.',
       ],
     },
   },
@@ -42,12 +40,10 @@ const entries: EducationEntry[] = [
       it: [
         'Percorso scolastico a indirizzo tecnico-informatico.',
         'Consolidamento delle basi scientifiche e informatiche, con un approccio concreto alla risoluzione dei problemi.',
-        'Votazione finale: 70/100.',
       ],
       en: [
         'Technical school path focused on scientific and IT subjects.',
         'Solid foundation built through a practical and methodical approach to concrete problems.',
-        'Final grade: 70/100.',
       ],
     },
   },

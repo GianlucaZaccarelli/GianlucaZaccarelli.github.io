@@ -1,9 +1,35 @@
 @import "tailwindcss";
-@import "@fontsource-variable/inter/index.css";
-/* full = assi wght + opsz + SOFT (usati da font-variation-settings); italic reale per <em> */
-@import "@fontsource-variable/fraunces/full.css";
-@import "@fontsource-variable/fraunces/full-italic.css";
-@import "@fontsource-variable/jetbrains-mono/index.css";
+
+/* Font variabili ridotti ai caratteri latini e agli assi usati (scripts/subset-fonts.py,
+   sorgente @fontsource-variable). Fraunces tiene opsz e SOFT per l'inchiostro; italic reale per <em>. */
+@font-face {
+  font-family: 'Fraunces Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 600;
+  src: url('../fonts/fraunces-normal.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'Fraunces Variable';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 600;
+  src: url('../fonts/fraunces-italic.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 700;
+  src: url('../fonts/inter.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'JetBrains Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 600;
+  src: url('../fonts/jetbrains-mono.woff2') format('woff2-variations');
+}
 
 /* Class-based dark mode: applies when .dark is on <html> or any ancestor */
 @variant dark (&:where(.dark, .dark *));
@@ -29,6 +55,8 @@
   --color-accent-500: oklch(65% 0.16 45);   /* #D97757 area */
   --color-accent-600: oklch(58% 0.17 45);
   --color-accent-700: oklch(50% 0.15 45);
+  --color-accent-800: oklch(42% 0.13 42);   /* terracotta profondo: testo scuro d'accento */
+  --color-copertina: oklch(52% 0.08 45);    /* retro di copertina (Contatti): terracotta polvere, carta 5,4:1 */
 
   /* Editorial neutrals — slightly warm to avoid cold corporate feel */
   --color-ink-900: oklch(18% 0.01 264);
@@ -45,10 +73,14 @@
 }
 
 html {
-  scroll-behavior: smooth;
   /* clip (non hidden): evita lo scroll orizzontale senza creare uno
      scroll container, che disattiverebbe position: sticky nei discendenti */
   overflow-x: clip;
+}
+
+/* Scorrimento morbido solo se il movimento è gradito */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
 }
 
 /* L'header è fixed: gli anchor delle sezioni devono fermarsi sotto di esso */
@@ -68,6 +100,8 @@ body {
 .dark body {
   background-color: var(--color-surface);
   color: #E8E8EA;
+  /* Testo chiaro su fondo scuro: un filo di spaziatura in più compensa l'alone */
+  letter-spacing: 0.006em;
 }
 
 @layer base {
@@ -75,22 +109,36 @@ body {
     font-weight: 700;
     line-height: 1.05;
     letter-spacing: -0.02em;
+    /* Titoli su più righe: righe di lunghezza simile */
+    text-wrap: balance;
+  }
+  /* Niente parola orfana in fondo ai paragrafi */
+  p, li, dd {
+    text-wrap: pretty;
+  }
+  /* Colonne strette: l'italiano ha parole lunghe, la sillabazione (lang sull'html)
+     evita i vuoti irregolari */
+  @media (max-width: 639px) {
+    /* solo il testo corrente in Inter: titoli in serif e righe in mono non si sillabano */
+    :where(p, li, dd):not(.editorial-lead, .people-lead, .serif, .font-serif, .mono, .font-mono, .meta-mono) {
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
   }
 }
 
 /* ── Section header ────────────────────────────────────── */
-/* Numero di sezione (ordine della nav) come esponente del titolo */
+/* Numero di sezione (ordine della nav): su mobile sta sopra il titolo,
+   così un titolo su due righe resta allineato a sinistra */
 .section-num {
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 0.9rem;
-  margin-right: 0.9rem;
+  display: block;
+  margin-bottom: 0.75rem;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   font-weight: 500;
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
-  color: var(--color-accent-600);
+  color: var(--color-accent-700);
 }
 .dark .section-num { color: var(--color-accent-400); }
 /* Da tablet in su il numero sporge nel margine: il titolo resta allineato al testo */
@@ -100,6 +148,7 @@ body {
     position: absolute;
     right: 100%;
     top: 0;
+    margin: 0.9rem 0.9rem 0 0;
   }
 }
 
@@ -122,6 +171,56 @@ body {
 
 .dark .section-title { color: #fff; }
 .dark .section-title em { color: var(--color-accent-400); }
+
+/* ── Inchiostro a scorrimento ──────────────────────────── */
+/* La pagina "si stampa" mentre scorre: i titoli entrano sottili e taglienti
+   (Fraunces wght 100, SOFT 0, ottica da display) e si posano nel peso finale;
+   l'opacita' non cambia, cosi' il numero di sezione resta leggibile (contrasto AA);
+   gli anni della timeline si spandono come una goccia e poi asciugano.
+   Solo dove esistono le scroll-driven animations e il movimento è gradito:
+   altrove resta lo stato finale, identico al design statico. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .section-title {
+      animation: ink-title linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+    .section-title em {
+      animation: ink-stroke linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 45%;
+    }
+    .ink-year {
+      animation: ink-year linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+  }
+}
+
+@keyframes ink-title {
+  from {
+    letter-spacing: -0.005em;
+    font-variation-settings: 'opsz' 144, 'SOFT' 0, 'wght' 100;
+  }
+  to {
+    letter-spacing: -0.035em;
+    font-variation-settings: 'opsz' 96, 'SOFT' 100, 'wght' 400;
+  }
+}
+
+/* Il corsivo terracotta entra come un tratto di penna, da sinistra */
+@keyframes ink-stroke {
+  from { clip-path: inset(-0.2em 100% -0.3em 0); }
+  to   { clip-path: inset(-0.2em 0 -0.3em 0); }
+}
+
+@keyframes ink-year {
+  0%   { opacity: 0.6; font-variation-settings: 'opsz' 144, 'SOFT' 100, 'wght' 100; }
+  65%  { opacity: 1;   font-variation-settings: 'opsz' 144, 'SOFT' 100, 'wght' 560; }
+  100% { opacity: 1;   font-variation-settings: 'opsz' 144, 'SOFT' 100, 'wght' 300; }
+}
 
 /* Magazine-style running text */
 .editorial-lead {
@@ -237,6 +336,19 @@ body {
 [data-tooltip]:hover::after,
 [data-tooltip]:focus-visible::after {
   opacity: 1;
+}
+
+/* ── Cambio tema: la vista nuova si spande con un clip-path circolare (Header.astro) ── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ── Superfici del browser ─────────────────────────────── */
+::selection {
+  background: color-mix(in oklch, var(--color-accent-500) 28%, transparent);
+  color: inherit;
 }
 
 /* ── Accessibility: focus outline + skip link ─────────── */

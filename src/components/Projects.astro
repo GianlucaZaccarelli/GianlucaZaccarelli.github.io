@@ -48,7 +48,7 @@ const projectsWithLayout = projects.map((p, i) => ({
 }));
 ---
 
-<section id="projects" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-hidden">
+<section id="projects" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-clip">
   <div class="max-w-6xl mx-auto px-6">
 
     <h2 class="section-title">
@@ -70,12 +70,18 @@ const projectsWithLayout = projects.map((p, i) => ({
           )}
 
           <!-- Title -->
-          <h3 class={`font-serif font-medium text-ink-900 dark:text-white leading-[1.08] relative z-10 ${project.size === 'feature' ? 'text-2xl md:text-3xl mb-4' : 'text-xl md:text-2xl mb-3'}`} style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
+          <h3 class={`font-serif font-medium text-ink-900 dark:text-white leading-[1.08] relative z-10 ${project.size === 'feature' ? 'text-2xl md:text-3xl mb-2' : 'text-xl md:text-2xl mb-2'}`} style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
             {project.title}
           </h3>
 
+          {project.role && (
+            <p class="meta-mono text-xs text-accent-700 dark:text-accent-400 mb-4 relative z-10">
+              {project.role}
+            </p>
+          )}
+
           <!-- Description -->
-          <p class={`text-ink-700 dark:text-white/70 leading-relaxed relative z-10 ${project.size === 'feature' ? 'text-base max-w-lg' : 'text-sm'}`}>
+          <p class={`text-ink-700 dark:text-white/70 leading-relaxed relative z-10 ${project.size === 'feature' ? 'text-base max-w-lg' : 'text-[0.95rem]'}`}>
             {project.description}
           </p>
 
@@ -107,7 +113,7 @@ const projectsWithLayout = projects.map((p, i) => ({
                 </a>
               )}
               {!project.github && !project.demo && (
-                <span class="text-sm text-ink-500 dark:text-white/55 italic">
+                <span class="text-sm text-ink-700 dark:text-white/55 italic">
                   {labels.privateProject}
                 </span>
               )}
@@ -132,7 +138,6 @@ const projectsWithLayout = projects.map((p, i) => ({
   }
 
   .project-card:hover {
-    transform: translateY(-4px);
     border-color: var(--color-accent-500);
     box-shadow: 0 20px 40px -20px rgba(217, 119, 87, 0.15);
   }

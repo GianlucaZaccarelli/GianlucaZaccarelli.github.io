@@ -10,8 +10,8 @@ interface Props {
 const { locale = 'it' } = Astro.props;
 const education = getEducation(locale);
 const labels = locale === 'en'
-  ? { title: 'Formal studies' }
-  : { title: 'Studi accademici' };
+  ? { title: 'Education' }
+  : { title: 'Formazione' };
 
 /** Anno di inizio, come in Experience (es. "Sett. 2025 – In corso" → "2025"). */
 function extractStartYear(yearLabel: string): string {
@@ -19,42 +19,37 @@ function extractStartYear(yearLabel: string): string {
 }
 ---
 
-<section id="education" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-hidden">
+<section id="education" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-clip">
   <div class="max-w-6xl mx-auto px-6">
 
     <h2 class="section-title">
       <span class="section-num" aria-hidden="true">03</span>{labels.title}
     </h2>
 
-    <ol class="space-y-16 md:space-y-24">
-      {education.map((edu, idx) => {
+    <ol class="space-y-14 md:space-y-24">
+      {education.map((edu) => {
         const year = extractStartYear(edu.year);
 
         return (
-        <li class="grid grid-cols-12 gap-x-6 gap-y-6 group relative">
+        <li class="grid grid-cols-12 gap-x-6 gap-y-5 md:gap-y-6 group relative">
 
-          <!-- Left: giant year + index -->
-          <div class="col-span-12 md:col-span-3 md:sticky md:top-28 self-start">
-            <div class="flex flex-col items-start md:items-center gap-5">
-              <div class="flex items-start gap-3">
-                <span class="meta-mono text-xs text-ink-500 dark:text-white/55 mt-3 shrink-0">
-                  {String(idx + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <p class="font-serif text-6xl md:text-7xl font-light leading-none text-ink-900 dark:text-white tracking-tight italic" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">
-                    {year}
-                  </p>
-                  <p class="meta-mono text-xs text-ink-500 dark:text-white/50 mt-3">
-                    {edu.year}
-                  </p>
-                </div>
+          <!-- Left: anno + periodo (in riga su mobile, colonna sticky da md) -->
+          <div class="col-span-12 md:col-span-3 md:sticky md:top-28 self-start md:flex md:justify-center">
+            <div class="flex items-baseline flex-wrap gap-x-4 gap-y-1 md:block">
+              <p class="ink-year font-serif text-5xl md:text-7xl font-light leading-none text-ink-900 dark:text-white tracking-tight italic" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">
+                {year}
+              </p>
+              <div class="md:mt-3">
+                <p class="meta-mono text-xs text-ink-500 dark:text-white/55">
+                  {edu.year}
+                </p>
               </div>
             </div>
           </div>
 
           <!-- Right: content -->
           <div class="col-span-12 md:col-span-9 md:pl-8 md:border-l md:border-ink-300/40 md:dark:border-white/10">
-            <div class="mb-6 flex items-start gap-4 md:gap-6">
+            <div class="mb-6 flex items-center gap-4 md:gap-6">
               {edu.logo && (
                 <div class="logo-tile">
                   <Image
@@ -73,11 +68,11 @@ function extractStartYear(yearLabel: string): string {
                   {edu.degree}
                 </h3>
                 {edu.url ? (
-                  <a href={edu.url} target="_blank" rel="noopener noreferrer" class="inline-block text-sm font-medium text-accent-600 dark:text-accent-400 mt-1.5 underline-offset-4 decoration-1 hover:underline">
+                  <a href={edu.url} target="_blank" rel="noopener noreferrer" class="inline-block py-1 -my-1 text-sm font-medium text-accent-700 dark:text-accent-400 mt-1.5 underline-offset-4 decoration-1 hover:underline">
                     {edu.institution}
                   </a>
                 ) : (
-                  <p class="text-sm font-medium text-accent-600 dark:text-accent-400 mt-1.5">
+                  <p class="text-sm font-medium text-accent-700 dark:text-accent-400 mt-1.5">
                     {edu.institution}
                   </p>
                 )}
@@ -85,18 +80,18 @@ function extractStartYear(yearLabel: string): string {
                 <p class="text-sm text-ink-500 dark:text-white/55 mt-1">
                   {edu.field}
                 </p>
-
-                {edu.description && (
-                  <ul class="mt-4 space-y-2.5 text-ink-700 dark:text-white/75 text-sm md:text-[0.95rem] leading-relaxed max-w-2xl">
-                    {edu.description.map(item => (
-                      <li class="relative pl-6 before:content-['—'] before:absolute before:left-0 before:text-accent-500 before:font-serif">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
             </div>
+
+            {edu.description && (
+              <ul class="space-y-2.5 text-ink-700 dark:text-white/75 text-base leading-relaxed max-w-[58ch]">
+                {edu.description.map(item => (
+                  <li class="relative pl-6 before:content-['—'] before:absolute before:left-0 before:text-accent-500 before:font-serif">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
         </li>

@@ -8,22 +8,35 @@ interface SkillEntry {
   items: Localized<string>[];
 }
 
+// In ogni cluster le voci sono in ordine di rilevanza: su mobile si vedono le prime
 const entries: SkillEntry[] = [
+  {
+    category: { it: 'Leadership & metodo', en: 'Leadership & method' },
+    technical: false,
+    items: [
+      'Team Leadership',
+      'Project Management',
+      { it: 'Analisi dei requisiti', en: 'Requirements analysis' },
+      { it: 'Stime di progetto', en: 'Project estimation' },
+      'GDPR compliance',
+    ],
+  },
   {
     category: 'Backend',
     technical: true,
     items: [
       'C#',
       '.NET',
+      'Microsoft SQL Server',
       'OpenAPI/Swagger',
-      'API Versioning',
-      'Backward Compatibility',
       'OAuth2',
       'OpenID Connect',
+      'Event-Driven Architecture',
       'RabbitMQ',
       'Kafka',
-      'Event-Driven Architecture',
-      'Microsoft SQL Server',
+      'API Versioning',
+      'Backward Compatibility',
+      'Visual Studio',
     ],
   },
   {
@@ -34,14 +47,15 @@ const entries: SkillEntry[] = [
       'TypeScript',
       'HTML5',
       'CSS3',
+      { it: 'Accessibilità (WCAG)', en: 'Accessibility (WCAG)' },
+      'Design Systems',
+      'Responsive Design',
+      'UI Performance (Core Web Vitals)',
+      'State Management',
+      'Form Validation',
       'Dart',
       'Flutter',
-      'Responsive Design',
-      { it: 'Accessibilità (WCAG)', en: 'Accessibility (WCAG)' },
-      'State Management',
-      'UI Performance (Core Web Vitals)',
-      'Design Systems',
-      'Form Validation',
+      'Visual Studio Code',
     ],
   },
   {
@@ -50,17 +64,17 @@ const entries: SkillEntry[] = [
     items: [
       'Docker',
       'Kubernetes',
-      'Git',
-      'GitHub',
-      'NuGet',
       'CI/CD',
       'GitHub Actions',
-      'Quality Gates',
-      'Staging/Production Pipelines',
+      'Git',
+      'GitHub',
       'Azure',
       'AWS',
       'Grafana',
       'Logging & Monitoring',
+      'Quality Gates',
+      'Staging/Production Pipelines',
+      'NuGet',
     ],
   },
   {
@@ -78,20 +92,14 @@ const entries: SkillEntry[] = [
       'OWASP',
     ],
   },
-  {
-    category: 'Soft Skills & Tools',
-    technical: false,
-    items: [
-      'Project Management',
-      'Team Leadership',
-      { it: 'Analisi dei requisiti', en: 'Requirements analysis' },
-      'GDPR compliance',
-      'Visual Studio',
-      'Visual Studio Code',
-      'Office Suite',
-    ],
-  },
 ];
+
+/** Gli strumenti di tutti i giorni, mostrati in evidenza sopra i cluster */
+const core: string[] = ['C#', '.NET', 'TypeScript', 'Microsoft SQL Server', 'Docker', 'Kubernetes', 'CI/CD', 'Git'];
+
+export function getCoreSkills(): string[] {
+  return core;
+}
 
 export function getSkills(locale: Locale = 'it'): Skill[] {
   return entries.map((s) => ({

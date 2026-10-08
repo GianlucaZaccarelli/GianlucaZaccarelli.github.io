@@ -3,12 +3,13 @@ import '@fontsource-variable/inter/index.css';
 import '@fontsource-variable/fraunces/full.css';
 import '@fontsource-variable/jetbrains-mono/index.css';
 import { getImage } from 'astro:assets';
-import cvImage from '../assets/cv_image.jpg';
+import cvImage from '../assets/foto/cv-ritratto.jpg';
 import { getProfile, socialLinks } from '../data/profile';
 import { getExperience, splitStack } from '../data/experience';
 import { getEducation } from '../data/education';
 import { getSkills } from '../data/skills';
 import type { Locale } from '../data/types';
+import LogoMark from './LogoMark.astro';
 
 interface Props {
   locale: Locale;
@@ -149,6 +150,16 @@ const photo = await getImage({ src: cvImage, width: 400, height: 400, format: 'j
       letter-spacing: 0.16em;
       color: var(--accent);
       margin-top: 2.2mm;
+    }
+
+    /* Marchio ZG.: corpo inchiostro, punto nel terracotta di stampa */
+    .contacts :global(.cv-logo) {
+      display: block;
+      height: 6mm;
+      width: auto;
+      margin: 0 0 2mm auto;
+      color: var(--ink);
+      --logo-punto: var(--accent);
     }
 
     .contacts {
@@ -362,6 +373,7 @@ const photo = await getImage({ src: cvImage, width: 400, height: 400, format: 'j
       </div>
     </div>
     <div class="contacts">
+      <LogoMark class="cv-logo" label={profile.name} />
       <div class="contact-line">
         <a href={`mailto:${profile.email}`}>{profile.email}</a>
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>

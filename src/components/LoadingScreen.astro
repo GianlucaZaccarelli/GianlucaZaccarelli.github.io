@@ -1,5 +1,15 @@
 ---
-const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こんにちは', 'Hallå', 'Guten Tag', 'Hallo'];
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'it' } = Astro.props;
+// Quattro saluti, il primo nella lingua della pagina: l'intro resta sotto 1,5 s
+// (prima visita: e' cio' che ritarda la comparsa dell'hero)
+const words = locale === 'en'
+  ? ['Hello', 'Ciao', 'Bonjour', 'こんにちは']
+  : ['Ciao', 'Hello', 'Bonjour', 'こんにちは'];
 ---
 
 <!-- Senza JS l'overlay non verrebbe mai rimosso -->
@@ -7,11 +17,6 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
 
 <div class="loading-container" aria-hidden="true">
   <div class="loading-screen">
-
-    <!-- Blobs di sfondo animati -->
-    <div class="ls-blob ls-blob-1"></div>
-    <div class="ls-blob ls-blob-2"></div>
-    <div class="ls-blob ls-blob-3"></div>
 
     <!-- Griglia di punti sottile -->
     <div class="ls-grid"></div>
@@ -69,55 +74,8 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
     position: relative;
     width: 100%;
     height: 100%;
-    background: #141517; /* --color-surface-alt: coerente col resto del sito */
-    will-change: top;
+    background: var(--color-surface-alt);
     overflow: hidden;
-  }
-
-  /* ── Blobs ── */
-  .ls-blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(90px);
-    opacity: 0;
-    animation: blobPulse 6s ease-in-out infinite;
-    will-change: transform, opacity;
-  }
-
-  .ls-blob-1 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, #d97757 0%, transparent 70%);
-    top: -10%;
-    left: -8%;
-    animation-delay: 0s;
-    animation-duration: 7s;
-  }
-
-  .ls-blob-2 {
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, #455ce9 0%, transparent 70%);
-    bottom: -5%;
-    right: -5%;
-    animation-delay: 1.5s;
-    animation-duration: 9s;
-  }
-
-  .ls-blob-3 {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, #e8a28c 0%, transparent 70%);
-    top: 40%;
-    right: 15%;
-    animation-delay: 0.8s;
-    animation-duration: 8s;
-  }
-
-  @keyframes blobPulse {
-    0%, 100% { transform: scale(1) translate(0, 0);   opacity: 0.18; }
-    33%       { transform: scale(1.08) translate(20px, -15px); opacity: 0.25; }
-    66%       { transform: scale(0.94) translate(-15px, 10px); opacity: 0.15; }
   }
 
   /* ── Griglia punti ── */
@@ -142,7 +100,6 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
     transform: translate(-50%, -50%);
     opacity: 0;
     pointer-events: none;
-    will-change: opacity;
   }
 
   .loading-word {
@@ -158,8 +115,6 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
     font-size: clamp(3.25em, 5vw, 4.5em);
     font-weight: 700;
     letter-spacing: -0.03em;
-    will-change: opacity;
-    text-shadow: 0 0 60px rgba(217, 119, 87, 0.45);
   }
 
   .loading-word.jap {
@@ -171,12 +126,11 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
     display: block;
     position: absolute;
     border-radius: 50%;
-    background: #d97757;
+    background: var(--color-accent-500);
     left: 0;
     top: 47%;
     width: calc(clamp(16px, 1.2vw, 19px) / 1.65);
     height: calc(clamp(16px, 1.2vw, 19px) / 1.65);
-    box-shadow: 0 0 8px #d97757;
   }
 
   @media screen and (max-width: 540px) {
@@ -231,10 +185,9 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
   .ls-progress-bar {
     height: 100%;
     width: 100%;
-    background: linear-gradient(90deg, #d97757, #455ce9);
+    background: var(--color-accent-500);
     transform-origin: left center;
     transform: scaleX(0);
-    box-shadow: 0 0 12px rgba(217, 119, 87, 0.8);
   }
 
   /* ── Curva in basso ── */
@@ -246,17 +199,21 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
     z-index: 2;
   }
 
+  /* Curva ad altezza fissa: si chiude con scaleY, niente animazione di height */
   .rounded-div-wrap.bottom {
     bottom: 0;
+    height: 10vh;
     transform: translateY(99%);
-    height: 0vh;
-    will-change: height;
+    transform-origin: top center;
+  }
+  @media screen and (max-width: 540px) {
+    .rounded-div-wrap.bottom { height: 5vh; }
   }
 
   .rounded-div-wrap .rounded-div {
     width: 100%;
     height: 745%;
-    background: #141517;
+    background: var(--color-surface-alt);
     border-radius: 50%;
   }
 </style>
@@ -277,11 +234,16 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
 
     if (!screen || !container || !wordsEl || !bar || !curve) return;
 
+    // Sotto l'intro la pagina non e' raggiungibile da tastiera (lo skip link resta sopra)
+    const sotto = Array.from(document.body.children).filter(
+      (el) => el !== container && !el.classList.contains('skip-to-content') && el.tagName !== 'SCRIPT'
+    ) as HTMLElement[];
+    sotto.forEach((el) => (el.inert = true));
+
     // Init
     document.documentElement.style.cursor = 'wait';
     document.body.style.overflow = 'hidden';
     onceIn.forEach((el) => (el.style.transform = `translateY(${isMobile ? '10vh' : '50vh'})`));
-    curve.style.height = isMobile ? '5vh' : '10vh';
     words.forEach((w) => ((w.style.display = 'block'), (w.style.opacity = '0')));
     const first = words[0];
     const last = words[words.length - 1];
@@ -290,13 +252,14 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
     // Tempi (ms): ogni parola resta a schermo `step`, il contatore dura quanto il ciclo
     const DELAY_MS = 150;
     const cycleStart = DELAY_MS + 150;
-    const step = 220;
+    const step = 200;
     const LOAD_MS = cycleStart - DELAY_MS + step * words.length;
 
     // Contatore 0 → 100 + barra progresso
     const startCounter = performance.now() + DELAY_MS;
+    let finito = false;
     function tickCounter(now: number) {
-      const t = Math.min(1, Math.max(0, (now - startCounter) / LOAD_MS));
+      const t = finito ? 1 : Math.min(1, Math.max(0, (now - startCounter) / LOAD_MS));
       const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
       if (count) count.textContent = String(Math.round(eased * 100));
       if (bar) bar.style.transform = `scaleX(${eased})`;
@@ -327,15 +290,22 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
       });
     });
 
-    // Slide-out curtain
-    const slideOutAt = cycleStart + step * words.length + 200;
+    // Uscita: la tendina sale con transform (niente top/height: nessuno spostamento di layout)
+    const EASE = 'cubic-bezier(0.76, 0, 0.24, 1)';
+    const SALTA = ['keydown', 'pointerdown', 'wheel', 'touchstart'];
+    function esci() {
+      if (finito) return;
+      finito = true;
+      window.clearTimeout(timer);
+      SALTA.forEach((t) => window.removeEventListener(t, esci));
 
-    setTimeout(() => {
-      screen.style.transition = 'top 700ms cubic-bezier(0.76, 0, 0.24, 1)';
-      screen.style.top = '-100%';
-      curve.style.transition = 'height 850ms cubic-bezier(0.76, 0, 0.24, 1)';
-      curve.style.height = '0vh';
-      wordsEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards', easing: 'linear' });
+      screen!.animate([{ transform: 'none' }, { transform: 'translateY(-100%)' }], { duration: 700, easing: EASE, fill: 'forwards' });
+      curve!.animate(
+        [{ transform: 'translateY(99%) scaleY(1)' }, { transform: 'translateY(99%) scaleY(0)' }],
+        { duration: 850, easing: EASE, fill: 'forwards' }
+      );
+      wordsEl!.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards', easing: 'linear' });
+      sotto.forEach((el) => (el.inert = false));
 
       // Animazione contenuto principale (stagger)
       onceIn.forEach((el, i) => {
@@ -343,13 +313,13 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
         el.style.transform = 'translateY(0)';
       });
 
-      setTimeout(() => {
+      window.setTimeout(() => {
         document.documentElement.style.cursor = 'auto';
       }, 550);
 
-      setTimeout(() => {
+      window.setTimeout(() => {
         document.body.style.overflow = '';
-        container.style.display = 'none';
+        container!.style.display = 'none';
         onceIn.forEach((el) => {
           el.style.transition = '';
           el.style.transform = '';
@@ -360,6 +330,10 @@ const words = ['Ciao', 'Bonjour', 'स्वागत', 'Hello', 'Olá', 'こん
           /* storage non disponibile: l'intro si ripeterà */
         }
       }, 1200);
-    }, slideOutAt);
+    }
+
+    // Finisce da sola dopo l'ultimo saluto; un tasto, un tocco o la rotella la saltano
+    const timer = window.setTimeout(esci, cycleStart + step * words.length + 200);
+    SALTA.forEach((t) => window.addEventListener(t, esci, { passive: true }));
   })();
 </script>

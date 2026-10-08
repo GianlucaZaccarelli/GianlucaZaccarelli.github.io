@@ -16,6 +16,10 @@ export interface Profile {
   country: string;
   languages: readonly string[];
   availability: string;
+  /** Riga per chi scorre in fretta: anni, stack, ruolo */
+  facts: string;
+  /** Frase-aggancio dell'hero */
+  hook: string;
   email: string;
   cvPath: string;
 }
@@ -47,6 +51,8 @@ export interface Skill {
 
 export interface Project {
   title: string;
+  /** Ruolo ricoperto nel progetto, mostrato in mono sotto il titolo */
+  role?: string;
   description: string;
   stack: string[];
   github?: string;

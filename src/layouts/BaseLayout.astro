@@ -5,8 +5,8 @@ import { getProfile, socialLinks } from '../data/profile';
 import { getKnowsAbout } from '../data/skills';
 import type { Locale } from '../data/types';
 import ogImageAsset from '../assets/og-image.jpg';
-import frauncesLatin from '@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2?url';
-import interLatinWght from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import frauncesLatin from '../fonts/fraunces-normal.woff2?url';
+import interLatinWght from '../fonts/inter.woff2?url';
 
 interface Props {
   title?: string;
@@ -108,8 +108,11 @@ const personSchema = {
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={profile.name} />
 
-    <!-- Favicon -->
+    <!-- Favicon e icone: marchio ZG. (kit in docs/design/logo-zg) -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Preload font primari per LCP (hero usa Fraunces; body usa Inter) -->
     <link rel="preload" as="font" type="font/woff2" href={frauncesLatin} crossorigin />
@@ -156,7 +159,7 @@ const personSchema = {
   </head>
   <body class="min-h-screen antialiased">
     <a href="#main" class="skip-to-content">{skipLabel}</a>
-    <LoadingScreen />
+    <LoadingScreen locale={locale} />
     <slot />
   </body>
 </html>

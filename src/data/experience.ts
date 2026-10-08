@@ -13,7 +13,7 @@ const entries: ExperienceEntry[] = [
     company: 'Code It Digital Solutions S.r.l.',
     url: 'https://www.linkedin.com/company/code-it-digital-solutions-s-r-l/',
     logo: codeitLogo,
-    role: 'Senior Full-Stack Developer',
+    role: 'Senior Full‑Stack Developer',
     period: { it: 'Set 2024 – Presente', en: 'Sep 2024 – Present' },
     location: 'Parma (PR) — Body Rental',
     description: {
@@ -35,7 +35,7 @@ const entries: ExperienceEntry[] = [
     company: 'Raffaele Caruso S.p.A.',
     url: 'https://carusomenswear.com/',
     logo: carusoLogo,
-    role: 'IT Management & Dev-Analyst',
+    role: 'IT Management & Dev‑Analyst',
     period: { it: 'Mar 2022 – Lug 2024', en: 'Mar 2022 – Jul 2024' },
     location: 'Soragna (PR)',
     description: {
@@ -57,7 +57,7 @@ const entries: ExperienceEntry[] = [
     company: 'SiGrade S.p.A.',
     url: 'https://www.sigrade.it',
     logo: sigradeLogo,
-    role: 'Full-Stack Developer (Junior → Senior)',
+    role: 'Full‑Stack Developer (Junior → Senior)',
     period: { it: 'Set 2017 – Mar 2022', en: 'Sep 2017 – Mar 2022' },
     location: 'Parma (PR)',
     description: {

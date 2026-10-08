@@ -13,7 +13,7 @@ Deve essere professionale, veloce, accessibile e moderno.
 - **Astro 6** — framework statico, zero JS di default
 - **TypeScript** — tipizzazione su tutti i file `.ts` e `.astro` (`astro/tsconfigs/strict`)
 - **Tailwind CSS v4** — utility-first, plugin Vite `@tailwindcss/vite`; configurazione tramite `@theme` in `src/styles/global.css` (nessun `tailwind.config.ts`)
-- **Font**: Fontsource variable (Inter, Fraunces, JetBrains Mono) importati in `global.css`
+- **Font**: Inter, Fraunces e JetBrains Mono variabili, ridotti ai caratteri latini e agli assi usati da `scripts/subset-fonts.py` (sorgente `@fontsource-variable`, output versionato in `src/fonts/`, `@font-face` in `global.css`). `CvDocument` usa ancora Fontsource per il PDF
 - **Animazioni native**: Web Animations API (WAAPI) per il marquee dell'hero, CSS keyframes / transition per il loading screen. Nessuna libreria di animazione (no GSAP, no Motion).
 - **Sitemap**: `@astrojs/sitemap` genera `sitemap-index.xml` in build (esclude `/cv-print`)
 
@@ -48,19 +48,24 @@ Deve essere professionale, veloce, accessibile e moderno.
 ```
 GianlucaZaccarelli.github.io/
 ├── .github/workflows/deploy.yml  # GitHub Actions → GitHub Pages
+├── docs/foto/                   # Scatti originali + ricetta di hero e og-image (README)
+├── docs/design/logo-zg/         # Marchio "ZG. punto in corsa": src/ (generatore) + kit/ (asset, linee guida)
 ├── public/
-│   ├── favicon.svg
+│   ├── favicon.svg, favicon.ico  # Dal kit (docs/design/logo-zg/kit/app)
+│   ├── apple-touch-icon.png, icon-*.png, site.webmanifest
 │   ├── robots.txt
 │   ├── icons/                    # SVG devicons v2.16.0 copiati in locale
 │   └── cv.pdf, cv-en.pdf         # Generati in build, non committati
 ├── scripts/
-│   └── generate-pdf.mjs          # Server statico + Puppeteer → public/cv*.pdf
+│   ├── generate-pdf.mjs          # Server statico + Puppeteer → public/cv*.pdf
+│   └── subset-fonts.py           # Font ridotti → src/fonts/ (fonttools + brotli)
 ├── src/
 │   ├── components/
 │   │   ├── Header.astro          # Navbar + hero fullscreen
 │   │   ├── LoadingScreen.astro   # Intro animata (CSS + WAAPI)
 │   │   ├── CvDocument.astro      # CV A4 stampabile, usato da cv-print(-en)
 │   │   ├── FlagIcon.astro        # Bandierine SVG per lingua
+│   │   ├── LogoMark.astro        # Marchio ZG. (generato da docs/design/logo-zg/src/web.mjs)
 │   │   ├── About.astro
 │   │   ├── Experience.astro
 │   │   ├── Education.astro
@@ -69,7 +74,7 @@ GianlucaZaccarelli.github.io/
 │   │   ├── Contact.astro
 │   │   ├── Footer.astro
 │   │   └── SocialIcon.astro      # SVG inline per linkedin/github/instagram/mail
-│   ├── assets/                   # MainImage.jpg (hero), og-image.jpg (1200×630), cv_image.jpg, logos/*.webp
+│   ├── assets/                   # foto/ (hero-ritratto-bn.jpg, cv-ritratto.jpg), og-image.jpg (1200×630), logos/*.webp
 │   ├── data/
 │   │   ├── types.ts              # Interfacce condivise
 │   │   ├── localize.ts           # Localized<T> + tr()
@@ -125,7 +130,7 @@ GianlucaZaccarelli.github.io/
 - `lang={locale}` sul tag `<html>`, `og:locale` coerente (`it_IT` / `en_US`)
 - `<link rel="alternate" hreflang="it|en|x-default">` per ogni pagina
 - JSON-LD `Person` schema con `knowsAbout`, `sameAs` (social), `subjectOf` (CV PDF)
-- Immagini con `loading="lazy" decoding="async"` (ad eccezione dell'immagine hero, che usa `loading="eager"` per LCP)
+- Immagini con `loading="lazy" decoding="async"` (ad eccezione dell'immagine hero, che usa `<Picture>` AVIF + WebP con `loading="eager"` e `fetchpriority="high"` per LCP)
 - Link a GitHub, LinkedIn, Instagram, email nella sezione Contact e nel footer (tramite `socialLinks` in `profile.ts`)
 - Immagine Open Graph dedicata `src/assets/og-image.jpg` (1200×630): se cambia la foto va rigenerata
 - `robots.txt` in `public/` con riferimento alla sitemap
@@ -139,7 +144,7 @@ GianlucaZaccarelli.github.io/
 ### Performance
 - Target Lighthouse: Performance ≥ 95, Accessibility ≥ 95, Best Practices = 100, SEO = 100
 - Ascolto scroll: usare un unico listener con `requestAnimationFrame` invece di più listener indipendenti
-- Font Fontsource con `font-display: swap`; Fraunces usa le varianti `full` (assi `opsz`/`SOFT`) + `full-italic`; Fraunces e Inter latin in `preload` in `BaseLayout.astro`
+- Font con `font-display: swap`; Fraunces tiene gli assi `opsz`/`SOFT` (wght 100–600, WONK fisso a 1) + italic; Fraunces e Inter in `preload` in `BaseLayout.astro`. Se servono nuovi caratteri o pesi: aggiornare `scripts/subset-fonts.py` e rigenerare
 
 ---
 

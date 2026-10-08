@@ -1,9 +1,10 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import { getProfile } from '../data/profile';
 import type { Locale } from '../data/types';
-import mainImage from '../assets/MainImage.jpg';
+import mainImage from '../assets/foto/hero-ritratto-bn.jpg';
 import FlagIcon from './FlagIcon.astro';
+import LogoMark from './LogoMark.astro';
 
 interface Props {
   locale?: Locale;
@@ -34,6 +35,11 @@ const labels = locale === 'en'
       openMenu: 'Open menu',
       closeMenu: 'Close menu',
       sections: 'Sections',
+      backToTop: 'back to top',
+      scroll: 'Scroll',
+      brandTag: 'Senior Full-Stack Dev',
+      language: 'Language',
+      writeMe: 'Email me',
     }
   : {
       about: 'Chi sono',
@@ -53,6 +59,11 @@ const labels = locale === 'en'
       openMenu: 'Apri il menu',
       closeMenu: 'Chiudi il menu',
       sections: 'Sezioni',
+      backToTop: "torna all'inizio",
+      scroll: 'Scorri',
+      brandTag: 'Senior Full-Stack Dev',
+      language: 'Lingua',
+      writeMe: 'Scrivimi',
     };
 
 const navItems = [
@@ -88,24 +99,24 @@ const yearRoman = toRoman(new Date().getFullYear());
   <!-- Bottom accent line -->
   <div class="header-accent absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-500/50 to-transparent"></div>
 
-  <nav class="max-w-6xl mx-auto px-6 py-3 grid grid-cols-[auto_1fr_auto] items-center gap-6">
+  <nav class="max-w-6xl mx-auto px-6 py-3 grid grid-cols-[auto_1fr] lg:grid-cols-[auto_1fr_auto] items-center gap-6">
 
     <!-- Logo / Name -->
-    <a href="#top" class="group brand-mark flex items-center gap-2.5 no-underline whitespace-nowrap">
-      <span class="brand-word font-serif text-xl tracking-tight text-ink-900 dark:text-white italic select-none leading-none" style="font-variation-settings: 'opsz' 96, 'SOFT' 100;">
-        {profile.nickname}
-      </span>
+    <a href="#top" class="group brand-mark flex items-center gap-2.5 no-underline whitespace-nowrap" aria-label={`${profile.name}, ${profile.title} — ${labels.backToTop}`}>
+      <LogoMark class="brand-logo" />
       <span class="hidden xl:inline-flex h-4 w-px bg-ink-300/60 dark:bg-white/15"></span>
       <span class="hidden xl:inline text-xs text-ink-500 dark:text-white/60 font-medium leading-none">
-        Full-Stack Dev
+        {labels.brandTag}
       </span>
     </a>
 
     <!-- Tab bar -->
     <div class="hidden lg:flex justify-center">
       <ul
-        class="tab-bar inline-flex items-center gap-1 p-1 rounded-full border border-ink-300/60 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-sm"
+        class="tab-bar relative inline-flex items-center gap-1 p-1 rounded-full border border-ink-300/60 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-sm"
       >
+        <!-- Segnaposto che scivola sotto la voce attiva (posizionato dallo scrollspy) -->
+        <li class="tab-indicator" aria-hidden="true"></li>
         {navItems.map(({ href, label }) => (
           <li>
             <a
@@ -125,8 +136,8 @@ const yearRoman = toRoman(new Date().getFullYear());
       <!-- Language toggle -->
       <div
         role="group"
-        aria-label="Language"
-        class="lang-toggle inline-flex items-center p-0.5 rounded-full border border-ink-300/60 dark:border-white/15 bg-white/60 dark:bg-white/5"
+        aria-label={labels.language}
+        class="lang-toggle hidden lg:inline-flex items-center p-0.5 rounded-full border border-ink-300/60 dark:border-white/15 bg-white/60 dark:bg-white/5"
       >
         <a
           href={itHref}
@@ -151,12 +162,13 @@ const yearRoman = toRoman(new Date().getFullYear());
       <!-- Theme toggle -->
       <button
         id="theme-toggle"
+        data-theme-toggle
         aria-label={labels.themeToggle}
         aria-pressed="false"
         data-tooltip={labels.darkTheme}
         data-label-dark={labels.darkTheme}
         data-label-light={labels.lightTheme}
-        class="theme-toggle cursor-pointer relative w-9 h-9 flex items-center justify-center rounded-full"
+        class="theme-toggle cursor-pointer relative w-9 h-9 hidden lg:flex items-center justify-center rounded-full"
       >
         <svg class="theme-toggle-icon icon-sun w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4"/>
@@ -199,7 +211,7 @@ const yearRoman = toRoman(new Date().getFullYear());
         data-label-close={labels.closeMenu}
         aria-expanded="false"
         aria-controls="mobile-menu"
-        class="menu-toggle lg:hidden cursor-pointer relative w-9 h-9 flex items-center justify-center rounded-full"
+        class="menu-toggle lg:hidden cursor-pointer relative w-11 h-11 flex items-center justify-center rounded-full"
       >
         <span class="menu-bar menu-bar-top"></span>
         <span class="menu-bar menu-bar-bottom"></span>
@@ -213,7 +225,7 @@ const yearRoman = toRoman(new Date().getFullYear());
       <ul class="mobile-menu-list">
         {navItems.map(({ href, label }, i) => (
           <li>
-            <a href={href} class="mobile-menu-link">
+            <a href={href} data-target={href} class="mobile-menu-link" style={`--i: ${i}`}>
               <span class="mobile-menu-num">{String(i + 1).padStart(2, '0')}</span>
               <span class="mobile-menu-label">{label}</span>
             </a>
@@ -221,19 +233,73 @@ const yearRoman = toRoman(new Date().getFullYear());
         ))}
       </ul>
     </nav>
+
+    <div class="mobile-menu-tools">
+      <div class="mobile-tools-row" role="group" aria-label={labels.language}>
+        <a
+          href={itHref}
+          class:list={['mobile-tool', { 'is-active': locale === 'it' }]}
+          aria-current={locale === 'it' ? 'page' : undefined}
+        >
+          <FlagIcon country="it" /> Italiano
+        </a>
+        <a
+          href={enHref}
+          class:list={['mobile-tool', { 'is-active': locale === 'en' }]}
+          aria-current={locale === 'en' ? 'page' : undefined}
+        >
+          <FlagIcon country="gb" /> English
+        </a>
+      </div>
+      <div class="mobile-tools-row">
+        <button
+          type="button"
+          data-theme-toggle
+          aria-pressed="false"
+          data-label-dark={labels.darkTheme}
+          data-label-light={labels.lightTheme}
+          class="mobile-tool cursor-pointer"
+        >
+          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/>
+          </svg>
+          <span data-theme-label>{labels.darkTheme}</span>
+        </button>
+        <a href={`mailto:${profile.email}`} class="mobile-tool">
+          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m22 7-10 6L2 7"/>
+          </svg>
+          {labels.writeMe}
+        </a>
+      </div>
+    </div>
   </div>
 </header>
 
+<!-- Folio da rivista: sezione corrente + avanzamento della lettura (decorativo, da md) -->
+<aside id="folio" class="folio" aria-hidden="true">
+  <span class="folio-bar"></span>
+  <span class="folio-text">
+    <span class="folio-num"></span>
+    <span class="folio-label"></span>
+  </span>
+</aside>
+
 <!-- ── HERO ──────────────────────────────────────────── -->
-<section id="hero" class="hero-section">
+<section id="hero" class="hero-section" aria-labelledby="hero-title">
 
   <!-- Immagine centrale con parallax -->
   <div class="hero-img-wrap" id="hero-bg">
-    <Image
+    <!-- AVIF (circa 40% piu' leggero) con WebP di riserva: e' l'elemento LCP -->
+    <Picture
       src={mainImage}
       alt={profile.name}
+      formats={['avif', 'webp']}
+      pictureAttributes={{ style: 'display: contents' }}
       widths={[640, 960, 1280, 1920]}
-      sizes="100vw"
+      sizes="(max-width: 720px) 100vw, 90vh"
       loading="eager"
       fetchpriority="high"
       class="hero-img"
@@ -256,7 +322,7 @@ const yearRoman = toRoman(new Date().getFullYear());
     </div>
     <div class="hero-scroll-hint">
       <div class="hero-scroll-line"></div>
-      <span>Scroll</span>
+      <span>{labels.scroll}</span>
     </div>
   </div>
 
@@ -266,11 +332,13 @@ const yearRoman = toRoman(new Date().getFullYear());
       <span class="hero-mbti">{profile.mbti} · {yearRoman}</span>
     </div>
     <div class="hero-right-center">
-      <h1 class="hero-subtitle">
-        <span class="sr-only">{profile.name} — </span>
+      <h1 id="hero-title" class="hero-subtitle">
+        <span class="hero-name">{profile.name}<span class="sr-only"> — </span></span>
         <span>{profile.titleLead}</span>
         <em>{profile.titleRest}</em>
       </h1>
+      <p class="hero-facts">{profile.facts}</p>
+      <p class="hero-hook">{profile.hook}</p>
       <p class="hero-availability">{profile.availability}</p>
     </div>
   </div>
@@ -329,10 +397,89 @@ const yearRoman = toRoman(new Date().getFullYear());
     :global(.dark) .site-header {
       background: rgba(28, 29, 32, 0.96);
     }
+    /* Nero pieno come la copertina: il testo dell'hero non passa in trasparenza */
     .site-header.over-hero,
     :global(.dark) .site-header.over-hero {
-      background: rgba(15, 16, 18, 0.45);
+      background: #0f1012;
     }
+  }
+
+  /* ── Folio ── */
+  /* Corre in verticale lungo il margine sinistro, come il dorso di una rivista:
+     da xl il margine è abbastanza largo da non toccare il testo */
+  .folio {
+    position: fixed;
+    left: 1.25rem;
+    bottom: 2rem;
+    z-index: 40;
+    display: none;
+    align-items: center;
+    gap: 0.9rem;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  @media (min-width: 1280px) {
+    .folio { display: flex; }
+  }
+  .folio.is-visible {
+    opacity: 1;
+  }
+  .folio-text {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-500);
+  }
+  .folio-num {
+    color: var(--color-accent-600);
+    font-variant-numeric: tabular-nums;
+  }
+  :global(.dark) .folio-text { color: rgba(255, 255, 255, 0.6); }
+  :global(.dark) .folio-num { color: var(--color-accent-400); }
+  /* Sopra il retro di copertina terracotta il folio passa al colore carta */
+  .folio.is-on-cover .folio-text,
+  .folio.is-on-cover .folio-num { color: var(--color-paper); }
+  .folio.is-on-cover .folio-bar { background: color-mix(in oklch, var(--color-paper) 30%, transparent); }
+  .folio.is-on-cover .folio-bar::after { background: var(--color-paper); }
+  /* Il filo è il primo figlio: ruotato di 180°, sta in basso e cresce verso l'alto */
+  .folio-bar {
+    position: relative;
+    width: 1px;
+    height: 7.5rem;
+    background: color-mix(in oklch, var(--color-ink-300) 60%, transparent);
+    overflow: hidden;
+  }
+  :global(.dark) .folio-bar { background: rgba(255, 255, 255, 0.14); }
+  .folio-bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-accent-500);
+    transform-origin: center top;
+    transform: scaleY(0);
+  }
+  /* Il filo si riempie con la lettura della pagina; senza scroll-timeline resta un filetto */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .folio-bar::after {
+        animation: folio-progress linear both;
+        animation-timeline: scroll(root);
+      }
+    }
+  }
+  @keyframes folio-progress {
+    to { transform: scaleY(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .folio { transition: none; }
   }
 
   /* ── Hero Section ── */
@@ -354,7 +501,6 @@ const yearRoman = toRoman(new Date().getFullYear());
     left: 0;
     width: 100%;
     height: 110%;
-    will-change: transform;
     display: flex;
     justify-content: center;
     overflow: hidden;
@@ -366,7 +512,7 @@ const yearRoman = toRoman(new Date().getFullYear());
     object-fit: cover;
     /* Su viewport strette il ritratto sborda: il crop segue il viso,
        che nella foto sta a destra del centro */
-    object-position: 80% top;
+    object-position: center top;
     display: block;
     pointer-events: none;
     user-select: none;
@@ -421,7 +567,7 @@ const yearRoman = toRoman(new Date().getFullYear());
   .hero-index {
     display: inline-block;
     font-family: var(--font-mono);
-    font-size: 0.62rem;
+    font-size: 0.72rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: rgba(255,255,255,0.75);
@@ -434,7 +580,7 @@ const yearRoman = toRoman(new Date().getFullYear());
   /* Left: scroll hint */
   .hero-scroll-hint {
     position: absolute;
-    bottom: clamp(1.5rem, 3vw, 3rem);
+    bottom: calc(max(3.25rem, 5.5vw) + 2rem);
     left: clamp(1.5rem, 3vw, 3rem);
     display: flex;
     flex-direction: column;
@@ -442,7 +588,7 @@ const yearRoman = toRoman(new Date().getFullYear());
     gap: 0.5rem;
     color: rgba(255,255,255,0.6);
     font-family: var(--font-mono);
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
   }
@@ -470,7 +616,7 @@ const yearRoman = toRoman(new Date().getFullYear());
   }
   .hero-mbti {
     font-family: var(--font-mono);
-    font-size: 0.62rem;
+    font-size: 0.72rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: rgba(255,255,255,0.75);
@@ -499,15 +645,45 @@ const yearRoman = toRoman(new Date().getFullYear());
     font-style: normal;
     font-weight: 500;
   }
+  .hero-subtitle .hero-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
   .hero-subtitle em {
     font-style: italic;
     font-weight: 400;
-    color: var(--color-accent-400, #e8a28c);
+    color: var(--color-accent-400);
+  }
+  .hero-facts {
+    max-width: 30ch;
+    text-wrap: balance;
+    margin: 0 0 1.1rem auto;
+    line-height: 1.6;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.88);
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-hook {
+    max-width: 24ch;
+    margin: 0 0 1.1rem auto;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
+    line-height: 1.35;
+    color: rgba(255,255,255,0.82);
+    font-variation-settings: 'opsz' 48, 'SOFT' 100;
   }
   .hero-availability {
     color: rgba(255,255,255,0.72);
     font-family: var(--font-mono);
-    font-size: 0.62rem;
+    font-size: 0.72rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     margin: 0;
@@ -544,7 +720,7 @@ const yearRoman = toRoman(new Date().getFullYear());
   }
   .hero-marquee-text em {
     font-style: italic;
-    color: var(--color-accent-400, #e8a28c);
+    color: var(--color-accent-400);
     padding: 0 0.15em;
   }
 
@@ -568,44 +744,50 @@ const yearRoman = toRoman(new Date().getFullYear());
   }
   .brand-mark:hover {
     transform: translateY(-1px);
-    border-color: rgba(192, 97, 26, 0.28);
+    border-color: color-mix(in oklch, var(--color-accent-600) 28%, transparent);
     box-shadow:
       0 1px 0 rgba(255,255,255,0.8) inset,
       0 10px 28px rgba(15,16,18,0.12);
   }
   :global(.dark) .brand-mark:hover {
-    border-color: rgba(232, 162, 140, 0.28);
+    border-color: color-mix(in oklch, var(--color-accent-400) 28%, transparent);
     box-shadow:
       0 1px 0 rgba(255,255,255,0.08) inset,
       0 12px 28px rgba(0,0,0,0.24);
   }
-  .brand-word {
-    font-size: 1.12rem;
-    letter-spacing: -0.07em;
-    /* Il corsivo sborda dall'inline box e background-clip: text lo
-       taglierebbe: il padding estende l'area dipinta, il margine compensa */
-    padding: 0.05em 0.14em 0.08em 0.05em;
-    margin: -0.05em -0.14em -0.08em -0.05em;
-    /* Gradiente arancione (chiaro → scuro) */
-    background-image: linear-gradient(
-      100deg,
-      #ffd3ad 0%,
-      #f0a060 25%,
-      #e8804a 50%,
-      #c0611a 75%,
-      #8a3f0a 100%
-    );
-    background-size: 200% 100%;
-    background-position: 0% 50%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    text-shadow: none;
-    transition: background-position 0.6s ease;
+  .site-header.over-hero .brand-mark {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: none;
   }
-  .brand-mark:hover .brand-word {
-    background-position: 100% 50%;
+  .site-header.over-hero .brand-mark span { color: rgba(255, 255, 255, 0.7); }
+  .site-header.over-hero .brand-mark :global(.brand-logo) {
+    color: var(--color-paper);
+    --logo-punto: var(--color-accent-400);
+  }
+
+  /* Marchio ZG.: 28 px di altezza (circa 48 di larghezza, la scia del punto resta leggibile) */
+  .brand-mark :global(.brand-logo) {
+    display: block;
+    height: 1.75rem;
+    width: auto;
+    color: var(--color-ink-900);
+    --logo-punto: var(--color-accent-600);
+  }
+  :global(.dark) .brand-mark :global(.brand-logo) {
+    color: var(--color-paper);
+    --logo-punto: var(--color-accent-400);
+  }
+  /* Al passaggio il punto rifà la sua corsa (come segno-animato.svg) */
+  @media (prefers-reduced-motion: no-preference) {
+    .brand-mark:hover :global(.logo-punto),
+    .brand-mark:focus-visible :global(.logo-punto) {
+      animation: punto-corsa 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  }
+  @keyframes punto-corsa {
+    from { transform: translateX(-28px); opacity: 0.2; }
+    to { transform: none; opacity: 1; }
   }
 
   /* ── Language toggle (segmented pill) ── */
@@ -636,7 +818,7 @@ const yearRoman = toRoman(new Date().getFullYear());
   }
   /* ── Mobile menu ── */
   .menu-toggle {
-    color: var(--color-ink-900, #1c1d20);
+    color: var(--color-ink-900);
     background: rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(28, 29, 32, 0.18);
     transition: border-color 0.3s ease, background-color 0.3s ease;
@@ -667,18 +849,25 @@ const yearRoman = toRoman(new Date().getFullYear());
     inset: 0;
     z-index: -1; /* sotto la barra dell'header, che resta cliccabile */
     display: flex;
-    align-items: center;
-    background: var(--color-paper, #fafaf7);
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    padding: 5rem 0 max(2rem, env(safe-area-inset-bottom));
+    overflow-y: auto;
+    background: var(--color-paper);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
   }
   :global(.dark) .mobile-menu {
-    background: var(--color-surface, #1c1d20);
+    background: var(--color-surface);
   }
+  /* In apertura la visibilità scatta subito, così il focus può entrare nel menu;
+     in chiusura resta visibile finché la dissolvenza non è finita */
   .mobile-menu.is-open {
     opacity: 1;
     visibility: visible;
+    transition: opacity 0.3s ease, visibility 0s;
   }
   .mobile-menu nav {
     width: 100%;
@@ -706,83 +895,135 @@ const yearRoman = toRoman(new Date().getFullYear());
   :global(.dark) .mobile-menu-link {
     border-bottom-color: rgba(255, 255, 255, 0.08);
   }
+  /* Le voci entrano in sequenza (40ms l'una); in chiusura escono insieme */
   .mobile-menu.is-open .mobile-menu-link {
     transform: translateY(0);
     opacity: 1;
+    transition-delay: calc(var(--i, 0) * 40ms);
   }
   .mobile-menu-num {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    color: var(--color-accent-600, #c0611a);
+    font-size: 0.72rem;
+    color: var(--color-accent-700);
   }
   :global(.dark) .mobile-menu-num {
-    color: var(--color-accent-400, #e8a28c);
+    color: var(--color-accent-400);
   }
   .mobile-menu-label {
     font-family: var(--font-serif);
     font-size: 2rem;
     letter-spacing: -0.02em;
-    color: var(--color-ink-900, #1c1d20);
+    color: var(--color-ink-900);
     font-variation-settings: 'opsz' 96, 'SOFT' 100;
   }
   :global(.dark) .mobile-menu-label {
     color: #fff;
   }
+  .mobile-menu-link.is-active .mobile-menu-label {
+    font-style: italic;
+    color: var(--color-accent-600);
+  }
+  :global(.dark) .mobile-menu-link.is-active .mobile-menu-label {
+    color: var(--color-accent-400);
+  }
+
+  .mobile-menu-tools {
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    opacity: 0;
+    transition: opacity 0.35s ease 0.1s;
+  }
+  .mobile-menu.is-open .mobile-menu-tools {
+    opacity: 1;
+    transition-delay: 0.26s;
+  }
+  .mobile-tools-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  .mobile-tool {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklch, var(--color-ink-300) 80%, transparent);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-ink-700);
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  }
+  .mobile-tool:hover {
+    border-color: var(--color-accent-500);
+    color: var(--color-ink-900);
+  }
+  .mobile-tool.is-active {
+    background: var(--color-ink-900);
+    border-color: var(--color-ink-900);
+    color: var(--color-paper);
+  }
+  :global(.dark) .mobile-tool {
+    border-color: rgba(255, 255, 255, 0.16);
+    color: rgba(255, 255, 255, 0.8);
+  }
+  :global(.dark) .mobile-tool:hover {
+    color: #fff;
+  }
+  :global(.dark) .mobile-tool.is-active {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: transparent;
+    color: var(--color-surface);
+  }
   @media (prefers-reduced-motion: reduce) {
     .mobile-menu,
-    .mobile-menu-link { transition: none; }
+    .mobile-menu-link,
+    .mobile-menu-tools { transition: none; }
   }
 
   /* ── Theme toggle (subtle animated) ── */
   .theme-toggle {
-    color: #b4531f;
-    background: rgba(192, 97, 26, 0.14);
-    border: 1px solid rgba(192, 97, 26, 0.45);
+    color: var(--color-accent-700);
+    background: color-mix(in oklch, var(--color-accent-600) 14%, transparent);
+    border: 1px solid color-mix(in oklch, var(--color-accent-600) 45%, transparent);
     transition: color 0.35s ease, background-color 0.3s ease,
                 border-color 0.3s ease, transform 0.2s ease,
                 box-shadow 0.3s ease;
   }
   :global(.dark) .theme-toggle {
-    color: #c7d2fe;
-    background: rgba(165, 180, 252, 0.14);
-    border-color: rgba(165, 180, 252, 0.4);
+    color: var(--color-brand-100);
+    background: color-mix(in oklch, var(--color-brand-200) 14%, transparent);
+    border-color: color-mix(in oklch, var(--color-brand-200) 40%, transparent);
   }
   /* Sopra la hero (sfondo scuro) serve una versione chiara e luminosa;
      in dark mode resta l'indigo, in light diventa arancio caldo */
   .site-header.over-hero .theme-toggle {
-    color: #ffc08a;
+    color: var(--color-accent-200);
     background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 190, 138, 0.55);
+    border-color: color-mix(in oklch, var(--color-accent-200) 55%, transparent);
   }
   :global(.dark) .site-header.over-hero .theme-toggle {
-    color: #c7d2fe;
-    background: rgba(165, 180, 252, 0.14);
-    border-color: rgba(165, 180, 252, 0.5);
+    color: var(--color-brand-100);
+    background: color-mix(in oklch, var(--color-brand-200) 14%, transparent);
+    border-color: color-mix(in oklch, var(--color-brand-200) 50%, transparent);
   }
   .theme-toggle:hover {
-    background: rgba(192, 97, 26, 0.16);
-    border-color: rgba(192, 97, 26, 0.4);
-    color: #9a4a10;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px -4px rgba(192, 97, 26, 0.35);
+    background: color-mix(in oklch, var(--color-accent-600) 20%, transparent);
+    box-shadow: 0 4px 12px -4px color-mix(in oklch, var(--color-accent-600) 35%, transparent);
   }
   :global(.dark) .theme-toggle:hover {
-    background: rgba(165, 180, 252, 0.16);
-    border-color: rgba(165, 180, 252, 0.4);
-    color: #c7d2fe;
-    box-shadow: 0 4px 12px -4px rgba(165, 180, 252, 0.35);
+    background: color-mix(in oklch, var(--color-brand-200) 20%, transparent);
+    box-shadow: 0 4px 12px -4px color-mix(in oklch, var(--color-brand-200) 35%, transparent);
   }
   .site-header.over-hero .theme-toggle:hover {
     background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 211, 173, 0.8);
-    color: #ffd3ad;
-    box-shadow: 0 4px 12px -4px rgba(255, 190, 138, 0.4);
-  }
-  :global(.dark) .site-header.over-hero .theme-toggle:hover {
-    background: rgba(165, 180, 252, 0.22);
-    border-color: rgba(199, 210, 254, 0.75);
-    color: #e0e7ff;
-    box-shadow: 0 4px 12px -4px rgba(165, 180, 252, 0.45);
+    color: var(--color-accent-50);
   }
   .theme-toggle:active {
     transform: scale(0.95);
@@ -850,10 +1091,36 @@ const yearRoman = toRoman(new Date().getFullYear());
   :global(.dark) .site-header.over-hero .tab-link:hover {
     color: #fff;
   }
+  .tab-indicator {
+    position: absolute;
+    top: 0.25rem;
+    bottom: 0.25rem;
+    left: 0;
+    width: 0;
+    border-radius: 999px;
+    background: var(--color-ink-900);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s ease;
+  }
+  :global(.dark) .tab-indicator { background: rgba(255, 255, 255, 0.92); }
+  .tab-indicator.is-visible { opacity: 1; }
+  /* Primo posizionamento: nessuna scivolata da sinistra */
+  .tab-indicator.no-anim { transition: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .tab-indicator { transition: opacity 0.2s ease; }
+  }
+  /* Con il segnaposto attivo la voce cambia solo colore: lo sfondo è il segnaposto */
+  .tab-bar.has-indicator .tab-link.is-active {
+    background: transparent;
+  }
+
   .tab-link.is-active,
   .site-header.over-hero .tab-link.is-active {
-    background: var(--color-ink-900, #1c1d20);
-    color: var(--color-paper, #fafaf7);
+    background: var(--color-ink-900);
+    color: var(--color-paper);
   }
   :global(.dark) .tab-link.is-active,
   :global(.dark) .site-header.over-hero .tab-link.is-active {
@@ -864,90 +1131,126 @@ const yearRoman = toRoman(new Date().getFullYear());
   /* ── CV button: stessa famiglia outline dei controlli accanto,
         in tinta terracotta per mantenere il ruolo di CTA ── */
   .cv-button {
-    color: #b4531f;
-    background: rgba(192, 97, 26, 0.14);
-    border: 1px solid rgba(192, 97, 26, 0.45);
+    color: var(--color-accent-700);
+    background: color-mix(in oklch, var(--color-accent-600) 14%, transparent);
+    border: 1px solid color-mix(in oklch, var(--color-accent-600) 45%, transparent);
     transition: color 0.3s ease, background-color 0.3s ease,
                 border-color 0.3s ease, transform 0.2s ease,
                 box-shadow 0.3s ease;
   }
   :global(.dark) .cv-button {
-    color: #e8a28c;
-    background: rgba(217, 119, 87, 0.12);
-    border-color: rgba(217, 119, 87, 0.4);
+    color: var(--color-accent-400);
+    background: color-mix(in oklch, var(--color-accent-500) 12%, transparent);
+    border-color: color-mix(in oklch, var(--color-accent-500) 40%, transparent);
   }
   .site-header.over-hero .cv-button {
-    color: #ffc08a;
+    color: var(--color-accent-200);
     background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 190, 138, 0.55);
+    border-color: color-mix(in oklch, var(--color-accent-200) 55%, transparent);
   }
   .cv-button:hover {
     transform: translateY(-1px);
-    background: rgba(192, 97, 26, 0.22);
-    border-color: rgba(192, 97, 26, 0.6);
-    color: #9a4a10;
-    box-shadow: 0 6px 16px -6px rgba(192, 97, 26, 0.35);
+    background: color-mix(in oklch, var(--color-accent-600) 22%, transparent);
+    border-color: color-mix(in oklch, var(--color-accent-600) 60%, transparent);
+    box-shadow: 0 6px 16px -6px color-mix(in oklch, var(--color-accent-600) 35%, transparent);
   }
   :global(.dark) .cv-button:hover {
-    background: rgba(217, 119, 87, 0.2);
-    border-color: rgba(232, 162, 140, 0.6);
-    color: #f0b9a6;
-    box-shadow: 0 6px 16px -6px rgba(217, 119, 87, 0.4);
+    background: color-mix(in oklch, var(--color-accent-500) 20%, transparent);
+    border-color: color-mix(in oklch, var(--color-accent-400) 60%, transparent);
+    color: var(--color-accent-200);
   }
   .site-header.over-hero .cv-button:hover {
     background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 211, 173, 0.8);
-    color: #ffd3ad;
-    box-shadow: 0 6px 16px -6px rgba(255, 190, 138, 0.4);
+    border-color: color-mix(in oklch, var(--color-accent-200) 80%, transparent);
+    color: var(--color-accent-50);
+  }
+  /* Sotto lg restano solo nome, CV e menu: target da 44px */
+  @media (max-width: 1023px) {
+    .cv-button { min-height: 2.75rem; padding-inline: 1.1rem; }
+    .brand-mark { min-height: 2.75rem; }
   }
 
   /* ── Responsive ── */
   @media (max-width: 720px) {
-    /* Libera il centro (viso del ritratto): location in alto a sinistra,
-       titolo in basso a destra sopra il marquee */
-    .hero-col-left  { padding: 1.25rem; justify-content: flex-start; padding-top: 5.5rem; }
-    .hero-col-right { padding: 1.25rem; justify-content: flex-end; padding-bottom: 6.5rem; }
-    .hero-subtitle  { font-size: 1.15rem; }
+    /* Header opaco: niente testo in trasparenza sotto la barra */
+    .site-header { background: #fff; }
+    :global(.dark) .site-header { background: var(--color-surface); }
+
+    /* Ritratto tra le righe in alto e la fascia scura in basso, dove nome e ruolo
+       si leggono bene */
+    .hero-img-wrap {
+      top: 15%;
+      height: 70%;
+    }
     .hero-img {
-      /* Rimuovo filter (grayscale+contrast) e mask laterale soft: troppo costoso sul mobile */
+      width: 100%;
+      object-fit: cover;
+      object-position: 50% 0;
+      /* filter rimosso: troppo costoso sul mobile */
       filter: none;
-      -webkit-mask-image: linear-gradient(
-        to right,
-        transparent 0%,
-        black 10%,
-        black 90%,
-        transparent 100%
-      );
-      mask-image: linear-gradient(
-        to right,
-        transparent 0%,
-        black 10%,
-        black 90%,
-        transparent 100%
-      );
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 14%, black 78%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 14%, black 78%, transparent 100%);
     }
-    .hero-mbti {
-      backdrop-filter: none;
+    .hero-vignette {
+      background:
+        linear-gradient(to bottom, rgba(15,16,18,0.85) 0%, rgba(15,16,18,0.6) 24%, transparent 42%),
+        linear-gradient(to bottom, transparent 64%, rgba(15,16,18,0.85) 76%, #0f1012 86%);
     }
+
+    /* Luogo in alto a sinistra, sopra la sfumatura scura */
+    .hero-col-left  { padding: 1.25rem; justify-content: flex-start; padding-top: 5.75rem; }
+    .hero-location-badge .hero-subtitle { font-size: 1.15rem; }
+
+    /* Nome, ruolo e disponibilità nella fascia scura in basso */
+    .hero-col-right {
+      left: 0;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 1.25rem 1.25rem max(2rem, env(safe-area-inset-bottom));
+    }
+    .hero-right-center { text-align: left; }
+    .hero-hook { margin-left: 0; }
+    .hero-facts { max-width: none; margin-left: 0; }
+    .hero-right-center .hero-subtitle { font-size: 1.6rem; line-height: 1.1; margin-bottom: 0.9rem; }
+    .hero-subtitle .hero-name {
+      position: static;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      clip-path: none;
+      white-space: normal;
+      margin-bottom: 0.75rem;
+      font-size: clamp(2.6rem, 13vw, 3.4rem);
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+      font-variation-settings: 'opsz' 144, 'SOFT' 100;
+    }
+    /* Il nome è già scritto per intero: marquee e invito a scorrere spariscono */
+    .hero-marquee-wrap,
+    .hero-scroll-hint { display: none; }
+    .hero-mbti { backdrop-filter: none; }
   }
 </style>
 
 <script>
-  /* ── Theme toggle + tooltip sync (header background is handled in CSS) ── */
-  const btn    = document.getElementById('theme-toggle');
+  /* ── Theme toggle: pulsante nell'header (da lg) e nel menu mobile ── */
+  const themeButtons = Array.from(document.querySelectorAll<HTMLElement>('[data-theme-toggle]'));
   const header = document.getElementById('top') as HTMLElement | null;
 
-  const labelDark = btn?.dataset.labelDark ?? 'Dark theme';
-  const labelLight = btn?.dataset.labelLight ?? 'Light theme';
-
   function updateTooltip(isDark: boolean) {
-    btn?.setAttribute('data-tooltip', isDark ? labelLight : labelDark);
-    btn?.setAttribute('aria-pressed', String(isDark));
+    themeButtons.forEach((b) => {
+      const next = isDark ? b.dataset.labelLight : b.dataset.labelDark;
+      if (b.hasAttribute('data-tooltip')) b.setAttribute('data-tooltip', next ?? '');
+      const label = b.querySelector('[data-theme-label]');
+      if (label) label.textContent = next ?? '';
+      b.setAttribute('aria-pressed', String(isDark));
+    });
   }
 
   updateTooltip(document.documentElement.classList.contains('dark'));
 
-  btn?.addEventListener('click', () => {
+  function applyTheme() {
     const isDark = document.documentElement.classList.toggle('dark');
     try {
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
@@ -955,7 +1258,28 @@ const yearRoman = toRoman(new Date().getFullYear());
       /* storage non disponibile: il tema vale solo per questa pagina */
     }
     updateTooltip(isDark);
-  });
+  }
+
+  // Il nuovo tema si spande dal pulsante come una macchia d'inchiostro
+  // (View Transitions); senza supporto o con movimento ridotto cambia subito
+  themeButtons.forEach((b) => b.addEventListener('click', () => {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || still) {
+      applyTheme();
+      return;
+    }
+    const r = b.getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    const transition = document.startViewTransition(applyTheme);
+    transition.ready.then(() => {
+      document.documentElement.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+        { duration: 600, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', pseudoElement: '::view-transition-new(root)' }
+      );
+    });
+  }));
 
   /* ── Sync tema tra tab aperti ── */
   window.addEventListener('storage', (e) => {
@@ -969,6 +1293,7 @@ const yearRoman = toRoman(new Date().getFullYear());
   const heroBg = document.getElementById('hero-bg') as HTMLElement | null;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const parallaxEnabled = !reduceMotion && window.innerWidth > 720;
+  if (parallaxEnabled && heroBg) heroBg.style.willChange = 'transform';
 
   // Animazione del marquee, creata da initMarquee
   let marqueeAnimation: Animation | null = null;
@@ -994,6 +1319,7 @@ const yearRoman = toRoman(new Date().getFullYear());
     requestAnimationFrame(() => {
       const y = window.scrollY;
       updateOverHero(y);
+      aggiornaFolio();
       if (parallaxEnabled && heroBg) heroBg.style.transform = `translateY(${y * 0.35}px)`;
       const newDir: 1 | -1 = y > lastScrollY ? 1 : -1;
       if (newDir !== marqueeDir) {
@@ -1005,6 +1331,17 @@ const yearRoman = toRoman(new Date().getFullYear());
     });
   }
   window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Il folio passa al colore carta quando il suo centro sta sopra il retro di copertina
+  const folioEl = document.getElementById('folio');
+  const copertina = document.getElementById('contact');
+  function aggiornaFolio() {
+    if (!folioEl || !copertina) return;
+    const r = copertina.getBoundingClientRect();
+    const yFolio = window.innerHeight - 32 - 110;
+    folioEl.classList.toggle('is-on-cover', r.top < yFolio && r.bottom > yFolio);
+  }
+  aggiornaFolio();
 
   /* ── Tab bar scrollspy ── */
   (function initTabSpy() {
@@ -1021,8 +1358,54 @@ const yearRoman = toRoman(new Date().getFullYear());
       })
       .filter((x): x is { tab: HTMLAnchorElement; el: HTMLElement } => x !== null);
 
+    // Stessa voce attiva nella tab bar e nel menu mobile
+    const links = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>('.tab-link[data-target], .mobile-menu-link[data-target]')
+    );
+    const folio = document.getElementById('folio');
+    const folioNum = folio?.querySelector('.folio-num');
+    const folioLabel = folio?.querySelector('.folio-label');
+    const updateFolio = (tab: HTMLAnchorElement | null) => {
+      if (!folio || !folioNum || !folioLabel) return;
+      folio.classList.toggle('is-visible', !!tab);
+      if (!tab) return;
+      const num = String(tabs.indexOf(tab) + 1).padStart(2, '0');
+      if (folioNum.textContent === num) return;
+      folioNum.textContent = num;
+      folioLabel.textContent = tab.textContent?.trim() ?? '';
+      if (!reduceMotion) {
+        folio.querySelector('.folio-text')?.animate(
+          [{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }],
+          { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
+        );
+      }
+    };
+
+    const tabBar = document.querySelector<HTMLElement>('.tab-bar');
+    const indicator = tabBar?.querySelector<HTMLElement>('.tab-indicator');
+    tabBar?.classList.add('has-indicator');
+    let indicatorPlaced = false;
+    const moveIndicator = (tab: HTMLAnchorElement | null) => {
+      if (!indicator) return;
+      indicator.classList.toggle('is-visible', !!tab);
+      if (!tab || tab.offsetWidth === 0) return; // tab bar nascosta sotto lg
+      // La prima volta compare già al suo posto, poi scivola
+      indicator.classList.toggle('no-anim', !indicatorPlaced);
+      indicator.style.width = `${tab.offsetWidth}px`;
+      indicator.style.transform = `translateX(${tab.parentElement?.offsetLeft ?? 0}px)`;
+      indicatorPlaced = true;
+    };
+
     const setActive = (tab: HTMLAnchorElement | null) => {
-      tabs.forEach((t) => t.classList.toggle('is-active', t === tab));
+      updateFolio(tab);
+      moveIndicator(tab);
+      const target = tab?.dataset.target;
+      links.forEach((l) => {
+        const on = !!target && l.dataset.target === target;
+        l.classList.toggle('is-active', on);
+        if (on) l.setAttribute('aria-current', 'location');
+        else l.removeAttribute('aria-current');
+      });
     };
 
     // Tiene traccia delle sezioni nella banda di osservazione: se nessuna
@@ -1060,11 +1443,16 @@ const yearRoman = toRoman(new Date().getFullYear());
       if (!toggle || !menu) return;
       menu.classList.toggle('is-open', open);
       toggle.classList.toggle('is-open', open);
+      // Dietro il menu la pagina e' inerte: il Tab resta nel menu e nella barra
+      document.querySelectorAll<HTMLElement>('main, #hero, footer, #folio').forEach((el) => (el.inert = open));
       toggle.setAttribute('aria-expanded', String(open));
       toggle.setAttribute('aria-label', open ? labelClose : labelOpen);
       document.body.style.overflow = open ? 'hidden' : '';
       menuOpen = open;
       updateOverHero(window.scrollY);
+      // Il focus entra nel menu all'apertura e torna al pulsante alla chiusura
+      if (open) menu.querySelector<HTMLElement>('.mobile-menu-link')?.focus({ preventScroll: true });
+      else if (menu.contains(document.activeElement)) toggle.focus({ preventScroll: true });
     }
 
     toggle.addEventListener('click', () => {

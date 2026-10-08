@@ -17,6 +17,8 @@ const labels = locale === 'en'
       intro: 'I am available for new opportunities, collaborations, or simply a technical chat.',
       cta: 'Write me at',
       elsewhere: 'Elsewhere',
+      copy: 'Copy address',
+      copied: 'Copied — talk soon',
     }
   : {
       title: 'Scrivimi',
@@ -24,10 +26,13 @@ const labels = locale === 'en'
       intro: 'Sono disponibile per nuove opportunità, collaborazioni o semplicemente per una chiacchierata tecnica.',
       cta: 'Scrivimi su',
       elsewhere: 'Altrove',
+      copy: 'Copia indirizzo',
+      copied: 'Copiato — a presto',
     };
 ---
 
-<section id="contact" class="relative py-24 md:py-36 bg-white dark:bg-surface overflow-hidden">
+<!-- Retro di copertina: l'unica regione in cui il terracotta riempie lo spazio -->
+<section id="contact" class="back-cover relative py-24 md:py-36 bg-copertina text-paper overflow-clip">
   <div class="max-w-6xl mx-auto px-6">
 
     <h2 class="section-title mb-8">
@@ -36,21 +41,41 @@ const labels = locale === 'en'
 
     <div class="grid grid-cols-12 gap-y-10">
       <div class="col-span-12 md:col-span-8">
-        <p class="editorial-lead text-ink-700 dark:text-white/75 max-w-2xl mb-12">
+        <p class="editorial-lead max-w-2xl mb-12">
           {labels.intro}
         </p>
 
         <a
           href={`mailto:${profile.email}`}
-          class="email-cta group inline-flex items-baseline gap-3 font-serif text-ink-900 dark:text-white leading-tight transition-colors hover:text-accent-600 dark:hover:text-accent-400"
+          class="email-cta group inline-flex items-baseline gap-3 py-2 font-serif text-paper leading-tight transition-colors hover:text-accent-200"
           style="font-variation-settings: 'opsz' 96, 'SOFT' 100;"
         >
           <span class="email-text relative">{profile.email}</span>
         </a>
+
+        <!-- Copia l'indirizzo: utile a chi non usa mailto; conferma con un timbro -->
+        <div class="mt-5">
+          <button
+            type="button"
+            id="copy-email"
+            class="copy-email"
+            hidden
+            data-email={profile.email}
+            data-label={labels.copy}
+            data-done={labels.copied}
+          >
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="12" height="12" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span class="copy-email-label">{labels.copy}</span>
+          </button>
+          <span id="copy-email-status" class="sr-only" aria-live="polite"></span>
+        </div>
       </div>
 
       <!-- Social column -->
-      <aside class="col-span-12 md:col-span-4 md:pl-6 md:border-l md:border-ink-300/40 md:dark:border-white/10">
+      <aside class="col-span-12 md:col-span-4 md:pl-6 md:border-l md:border-paper/25">
         <p class="meta-label mb-5">{labels.elsewhere}</p>
         <ul class="space-y-4">
           {socialLinks.filter(l => l.icon !== 'mail').map(link => (
@@ -59,13 +84,13 @@ const labels = locale === 'en'
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="group flex items-center justify-between gap-3 py-2 border-b border-ink-300/40 dark:border-white/10 hover:border-accent-500 dark:hover:border-accent-400 transition-colors"
+                class="group flex items-center justify-between gap-3 py-3 border-b border-paper/25 hover:border-accent-200 transition-colors"
               >
                 <span class="flex items-center gap-3">
-                  <SocialIcon icon={link.icon} class="w-4 h-4 text-ink-500 dark:text-white/50 group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors" />
-                  <span class="text-ink-900 dark:text-white text-base">{link.label}</span>
+                  <SocialIcon icon={link.icon} class="w-4 h-4 text-paper/90 group-hover:text-accent-200 transition-colors" />
+                  <span class="text-paper text-base">{link.label}</span>
                 </span>
-                <span class="meta-mono text-xs text-ink-500 dark:text-white/55 group-hover:text-accent-600 dark:group-hover:text-accent-400 group-hover:translate-x-1 transition-all">
+                <span class="meta-mono text-xs text-paper/90 group-hover:text-accent-200 group-hover:translate-x-1 transition-all">
                   ↗
                 </span>
               </a>
@@ -78,6 +103,43 @@ const labels = locale === 'en'
 </section>
 
 <style>
+  /* ── Retro di copertina: carta su terracotta, uguale nei due temi ── */
+  .back-cover :global(.section-title) { color: var(--color-paper); }
+  .back-cover :global(.section-title em) { color: var(--color-accent-200); }
+  .back-cover :global(.section-num) { color: var(--color-paper); }
+  .back-cover :global(.editorial-lead) { color: var(--color-paper); }
+  .back-cover :global(.meta-label) { color: color-mix(in oklch, var(--color-paper) 92%, transparent); }
+  .back-cover :global(:focus-visible) { outline-color: var(--color-paper); }
+  .back-cover ::selection { background: color-mix(in oklch, var(--color-paper) 30%, transparent); }
+
+  .copy-email {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0 1.1rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklch, var(--color-paper) 45%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--color-paper);
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+  }
+  .copy-email[hidden] { display: none; }
+  .copy-email:hover {
+    border-color: var(--color-paper);
+    transform: translateY(-1px);
+  }
+  /* Timbro: il pulsante si inverte in carta piena */
+  .copy-email.is-done {
+    border-color: var(--color-paper);
+    background: var(--color-paper);
+    color: var(--color-copertina);
+  }
+
   .email-cta {
     font-size: clamp(1rem, 2.2vw, 1.75rem);
     max-width: 100%;
@@ -96,3 +158,45 @@ const labels = locale === 'en'
     background-size: 0% 1px;
   }
 </style>
+
+<script>
+  const copyBtn = document.getElementById('copy-email') as HTMLButtonElement | null;
+  const copyStatus = document.getElementById('copy-email-status');
+  const copyLabel = copyBtn?.querySelector('.copy-email-label');
+
+  // Senza Clipboard API resta solo il link mailto
+  if (copyBtn && navigator.clipboard) {
+    copyBtn.hidden = false;
+    let resetTimer: number | undefined;
+
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(copyBtn.dataset.email ?? '');
+      } catch {
+        return; // permesso negato: il link mailto resta disponibile
+      }
+      const done = copyBtn.dataset.done ?? '';
+      if (copyLabel) copyLabel.textContent = done;
+      if (copyStatus) copyStatus.textContent = done;
+      copyBtn.classList.add('is-done');
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        copyBtn.animate(
+          [
+            { transform: 'scale(1.08) rotate(-2.5deg)' },
+            { transform: 'scale(0.98) rotate(0.6deg)', offset: 0.55 },
+            { transform: 'none' },
+          ],
+          { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
+        );
+      }
+
+      window.clearTimeout(resetTimer);
+      resetTimer = window.setTimeout(() => {
+        copyBtn.classList.remove('is-done');
+        if (copyLabel) copyLabel.textContent = copyBtn.dataset.label ?? '';
+        if (copyStatus) copyStatus.textContent = '';
+      }, 2400);
+    });
+  }
+</script>

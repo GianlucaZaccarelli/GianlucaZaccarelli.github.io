@@ -17,7 +17,6 @@ const labels = locale === 'en'
       languages: 'Languages',
       personality: 'Personality',
       availability: 'Availability',
-      postscript: 'Postscript',
     }
   : {
       sectionTitle: 'Chi sono',
@@ -25,7 +24,6 @@ const labels = locale === 'en'
       languages: 'Lingue',
       personality: 'Personalità',
       availability: 'Disponibilità',
-      postscript: 'Postilla',
     };
 
 const flagMap: Record<string, 'it' | 'gb'> = {
@@ -35,10 +33,10 @@ const flagMap: Record<string, 'it' | 'gb'> = {
   English: 'gb',
 };
 
-const [bioLead, bioBody, bioTail] = profile.bioParagraphs;
+const [bioLead, bioPeople, bioMethod] = profile.bioParagraphs;
 ---
 
-<section id="about" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-hidden">
+<section id="about" class="relative py-24 md:py-32 bg-paper dark:bg-surface-alt overflow-clip">
   <div class="max-w-6xl mx-auto px-6">
 
     <h2 class="section-title">
@@ -55,16 +53,14 @@ const [bioLead, bioBody, bioTail] = profile.bioParagraphs;
             {bioLead}
           </p>
 
-          <p class="text-ink-700 dark:text-white/70 text-base md:text-lg leading-relaxed max-w-2xl">
-            {bioBody}
+          <!-- La psicologia è l'aggancio del profilo: secondo standfirst, in corsivo -->
+          <p class="people-lead max-w-2xl mb-8">
+            {bioPeople}
           </p>
 
-          <div class="mt-10 pt-6 border-t border-ink-300/40 dark:border-white/10 max-w-2xl">
-            <p class="meta-label mb-2">{labels.postscript}</p>
-            <p class="text-ink-500 dark:text-white/55 text-sm md:text-base leading-relaxed italic font-serif">
-              {bioTail}
-            </p>
-          </div>
+          <p class="text-ink-700 dark:text-white/70 text-base md:text-lg leading-relaxed max-w-2xl">
+            {bioMethod}
+          </p>
         </div>
       </div>
 
@@ -117,6 +113,19 @@ const [bioLead, bioBody, bioTail] = profile.bioParagraphs;
 </section>
 
 <style>
+  .people-lead {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--color-accent-700);
+    font-variation-settings: 'opsz' 48, 'SOFT' 100;
+  }
+  :global(.dark) .people-lead {
+    color: var(--color-accent-400);
+  }
+
   .status-pulse {
     box-shadow: 0 0 0 0 rgba(217, 119, 87, 0.6);
     animation: statusPulse 2.2s ease-in-out infinite;

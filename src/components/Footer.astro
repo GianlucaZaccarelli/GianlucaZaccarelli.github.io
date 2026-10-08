@@ -2,6 +2,7 @@
 import { getProfile, socialLinks } from '../data/profile';
 import type { Locale } from '../data/types';
 import SocialIcon from './SocialIcon.astro';
+import LogoMark from './LogoMark.astro';
 
 interface Props {
   locale?: Locale;
@@ -15,14 +16,20 @@ const labels = locale === 'en'
       contacts: 'Contacts',
       rights: 'All rights reserved.',
       backToTop: 'Back to top',
-      city: 'Rome',
+      colophon: 'Colophon',
+      setIn: 'Set in Fraunces, Inter and JetBrains Mono',
+      builtWith: 'Built with Astro, published on GitHub Pages',
+      console: 'Reading the source? Then we speak the same language.',
       localeTag: 'en-GB',
     }
   : {
       contacts: 'Contatti',
       rights: 'Tutti i diritti riservati.',
       backToTop: "Torna all'inizio",
-      city: 'Roma',
+      colophon: 'Colophon',
+      setIn: 'Composto in Fraunces, Inter e JetBrains Mono',
+      builtWith: 'Costruito con Astro, pubblicato su GitHub Pages',
+      console: 'Stai leggendo il sorgente? Allora parliamo la stessa lingua.',
       localeTag: 'it-IT',
     };
 
@@ -33,34 +40,32 @@ const year = new Date().getFullYear();
   <!-- Top accent line -->
   <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-500/50 to-transparent"></div>
 
-  <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center gap-8 sm:gap-0">
+  <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center gap-8 sm:gap-0">
 
     <!-- Col 1: Brand -->
     <div class="flex flex-col gap-2 flex-1 items-center sm:items-start">
-      <span class="font-serif italic text-2xl tracking-tight text-ink-900 dark:text-white" style="font-variation-settings: 'opsz' 96, 'SOFT' 100;">
-        {profile.nickname}
-      </span>
+      <LogoMark label={profile.name} class="footer-logo h-9 w-auto text-ink-900 dark:text-paper" />
       <p class="text-xs text-ink-500 dark:text-white/60 leading-relaxed">
         {profile.title}
       </p>
-      <p class="font-mono text-[0.7rem] text-ink-500 dark:text-white/60 flex items-center gap-1.5 mt-1 tabular-nums">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <p class="font-mono text-xs text-ink-500 dark:text-white/60 flex items-center gap-1.5 mt-1 tabular-nums">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 shrink-0" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"/>
           <polyline points="12 6 12 12 16 14"/>
         </svg>
-        <span id="rome-time" data-locale={labels.localeTag} data-city={labels.city}></span>
+        <span id="rome-time" data-locale={labels.localeTag} data-city={profile.country}></span>
       </p>
     </div>
 
     <!-- Separator -->
-    <div class="hidden sm:block w-px self-stretch bg-gray-200 dark:bg-white/8 mx-8"></div>
+    <div class="hidden sm:block w-px self-stretch bg-ink-300/40 dark:bg-white/8 mx-8"></div>
 
     <!-- Col 2: Social -->
     <div class="flex flex-col gap-3 items-center">
       <span class="text-xs font-medium text-ink-500 dark:text-white/60">
         {labels.contacts}
       </span>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1">
         {socialLinks.map(link => (
           <a
             href={link.href}
@@ -68,7 +73,7 @@ const year = new Date().getFullYear();
             rel="noopener noreferrer"
             aria-label={link.label}
             data-tooltip={link.label}
-            class="w-8 h-8 flex items-center justify-center rounded-full text-ink-500 dark:text-white/50 hover:text-accent-600 dark:hover:text-accent-400 border border-transparent hover:border-accent-500/40 transition-colors"
+            class="w-11 h-11 flex items-center justify-center rounded-full text-ink-500 dark:text-white/50 hover:text-accent-600 dark:hover:text-accent-400 border border-transparent hover:border-accent-500/40 transition-colors"
           >
             <SocialIcon icon={link.icon} class="w-4 h-4" />
           </a>
@@ -77,18 +82,18 @@ const year = new Date().getFullYear();
     </div>
 
     <!-- Separator -->
-    <div class="hidden sm:block w-px self-stretch bg-gray-200 dark:bg-white/8 mx-8"></div>
+    <div class="hidden sm:block w-px self-stretch bg-ink-300/40 dark:bg-white/8 mx-8"></div>
 
     <!-- Col 3: Credits + back to top -->
-    <div class="flex flex-1 items-center justify-end gap-6">
-      <p class="text-xs text-ink-500 dark:text-white/60 text-right leading-relaxed">
+    <div class="flex flex-1 flex-col sm:flex-row items-center sm:justify-end gap-4 sm:gap-6">
+      <p class="text-xs text-ink-500 dark:text-white/60 text-center sm:text-right leading-relaxed">
         © {year} {profile.name}<br/>{labels.rights}
       </p>
       <button
         id="back-to-top"
         data-tooltip={labels.backToTop}
         aria-label={labels.backToTop}
-        class="cursor-pointer group shrink-0 w-11 h-11 flex items-center justify-center rounded-full bg-ink-900 dark:bg-white text-paper dark:text-ink-900 active:scale-95 transition-all hover:-translate-y-0.5"
+        class="cursor-pointer group shrink-0 w-11 h-11 flex items-center justify-center rounded-full border border-ink-300 dark:border-white/20 text-ink-900 dark:text-white hover:border-accent-500 active:scale-95 transition-colors"
       >
         <svg class="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="18 15 12 9 6 15"/>
@@ -97,11 +102,34 @@ const year = new Date().getFullYear();
     </div>
 
   </div>
+
+  <!-- Colophon da rivista: come è fatto questo numero -->
+  <div class="max-w-6xl mx-auto px-6 pb-8">
+    <p class="pt-5 border-t border-ink-300/40 dark:border-white/10 font-mono text-xs leading-relaxed text-ink-500 dark:text-white/55 text-center sm:text-left">
+      <span class="text-accent-700 dark:text-accent-400">{labels.colophon}</span>
+      <span aria-hidden="true"> · </span>{labels.setIn}<span aria-hidden="true"> · </span>{labels.builtWith}
+    </p>
+  </div>
 </footer>
+
+<style>
+  .footer-logo { --logo-punto: var(--color-accent-600); }
+  :global(.dark) .footer-logo { --logo-punto: var(--color-accent-400); }
+</style>
+
+<!-- Un biglietto per chi apre la console: di solito è un collega -->
+<script is:inline define:vars={{ note: labels.console, email: profile.email }}>
+  console.log(
+    '%cZakka%c  ' + [note, email].join(' · '),
+    'font: italic 600 20px Fraunces, Georgia, serif; color: #d97757;',
+    'font: 12px ui-monospace, monospace; color: inherit;'
+  );
+</script>
 
 <script>
   document.getElementById('back-to-top')?.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const fermo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: fermo ? 'auto' : 'smooth' });
   });
 
   function updateTime() {
@@ -109,7 +137,7 @@ const year = new Date().getFullYear();
     if (!el) return;
 
     const localeTag = el.getAttribute('data-locale') || 'it-IT';
-    const cityLabel = el.getAttribute('data-city') || 'Roma';
+    const cityLabel = el.getAttribute('data-city') || 'Italia';
 
     const now = new Date();
     const time = now.toLocaleTimeString(localeTag, {

@@ -10,7 +10,6 @@ const files: Record<string, string> = {
   RabbitMQ: 'rabbitmq-original',
   Kafka: 'apachekafka-original',
   'Microsoft SQL Server': 'microsoftsqlserver-plain',
-  SQL: 'microsoftsqlserver-plain',
   Docker: 'docker-original',
   Kubernetes: 'kubernetes-plain',
   Git: 'git-original',

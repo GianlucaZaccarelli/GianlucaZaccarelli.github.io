@@ -7,9 +7,11 @@ interface Props {
 
 const { name } = Astro.props;
 const icon = techIcon(name);
+// Indaco solo per i prodotti reali (devicons); i concetti (Lucide) restano neutri
+const isProduct = !!icon && !icon.includes('/lucide-');
 ---
 
-<span class:list={['tech-badge', { 'has-icon': !!icon }]}>
+<span class:list={['tech-badge', { 'is-product': isProduct }]}>
   {icon && <img src={icon} alt="" width="12" height="12" loading="lazy" decoding="async" class="tech-icon" />}
   {name}
 </span>
@@ -19,8 +21,8 @@ const icon = techIcon(name);
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    padding: 0.18rem 0.55rem;
-    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.72rem;
     font-family: var(--font-mono);
     font-weight: 500;
     letter-spacing: 0.04em;
@@ -34,14 +36,14 @@ const icon = techIcon(name);
     border-color: rgba(255, 255, 255, 0.12);
   }
 
-  .tech-badge.has-icon {
-    border-color: rgba(69, 92, 233, 0.3);
+  .tech-badge.is-product {
+    border-color: color-mix(in oklch, var(--color-brand-600) 30%, transparent);
     color: var(--color-brand-700);
   }
 
-  :global(.dark) .tech-badge.has-icon {
-    border-color: rgba(165, 180, 252, 0.25);
-    color: #c7d2fe;
+  :global(.dark) .tech-badge.is-product {
+    border-color: color-mix(in oklch, var(--color-brand-200) 30%, transparent);
+    color: var(--color-brand-100);
   }
 
   .tech-icon {
