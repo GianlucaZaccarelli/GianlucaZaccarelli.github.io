@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="16 37 290 182"><!--
+  Taglio piccolo per 16-40 px: T 34, nessun intreccio, nessuna scia, punto r 19.
+  Stessa costruzione del segno (src/geometria.mjs, PICCOLO).
+-->
+<title>Gianluca Zaccarelli — taglio piccolo</title><path fill="#1C1D20" transform="matrix(1 0 -0.21256 1 44.84943 0)" d="M24 45H132V79L65.16 177H166V211H24V177L90.84 79H24Z"/><path fill="#1C1D20" transform="matrix(1 0 -0.21256 1 44.84943 0)" d="M170 94H249V128H170Z"/><path fill="#1C1D20" transform="matrix(1 0 -0.21256 1 44.84943 0)" d="M227.68 72.46A83 83 0 1 0 249 128H215A49 49 0 1 1 202.41 95.21Z"/><path fill="#C2552D" d="M260 192A19 19 0 0 1 298 192A19 19 0 0 1 260 192Z"/></svg>
