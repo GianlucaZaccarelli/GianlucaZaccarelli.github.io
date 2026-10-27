@@ -126,17 +126,6 @@ const personSchema = {
     <!-- JSON-LD -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
 
-    {
-      import.meta.env.PROD && import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN && (
-        <script
-          is:inline
-          defer
-          data-domain={import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN}
-          src="https://plausible.io/js/script.js"
-        />
-      )
-    }
-
     <title>{title}</title>
 
     <!-- Before paint: dark class (no flash) + intro skip (no overlay flash) -->

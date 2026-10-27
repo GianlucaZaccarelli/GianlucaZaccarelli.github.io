@@ -1,0 +1,122 @@
+---
+// Pagina standalone come la 404 (niente intro): informativa privacy, it/en.
+// Se un giorno si aggiungono statistiche o servizi esterni, va aggiornata qui.
+import '../styles/global.css';
+import { getProfile } from '../data/profile';
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const profile = getProfile(locale);
+const siteUrl = (Astro.site ?? new URL('https://gianlucazaccarelli.github.io')).toString().replace(/\/$/, '');
+const itHref = '/privacy/';
+const enHref = '/en/privacy/';
+const updated = locale === 'en' ? 'October 27, 2026' : '27 ottobre 2026';
+
+const t = locale === 'en'
+  ? {
+      title: 'Privacy', em: 'notice',
+      metaTitle: `Privacy notice — ${profile.name}`,
+      description: 'How this site handles your data: no cookies, no tracking, what the hosting logs and what happens if you email me.',
+      lead: 'Short version: this site sets no cookies, does not track you and collects no data through forms. Here is the detail.',
+      back: 'Back to the site',
+      other: 'Versione italiana',
+      updatedLabel: 'Last updated',
+      sections: [
+        { h: 'Who is responsible', p: [`The data controller is ${profile.name}, ${profile.city}, ${profile.country}. For any request about your data write to <a href="mailto:${profile.email}">${profile.email}</a>.`] },
+        { h: 'Cookies', p: ['The site sets no cookies, neither its own nor third-party ones, so there is no consent banner.'] },
+        { h: 'What your browser keeps', p: ['Two technical values stay only in your browser and never reach me: the light or dark theme, saved in <code>localStorage</code> only when you change it, and a flag in <code>sessionStorage</code> that skips the intro once you have seen it (it is cleared when you close the tab). You can delete both from your browser settings.'] },
+        { h: 'Visit statistics', p: ['No analytics or visit statistics are active on this site.'] },
+        { h: 'Hosting', p: ['The site is a set of static files served by <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Pages</a>. Like any web server, GitHub may log technical data of each request (such as the IP address) for security and operation of the service, under its own privacy statement.'] },
+        { h: 'If you email me', p: ['If you write to me, I use your address and what you send only to reply and, if it applies, to discuss the work you propose. I do not pass it on to anyone and delete it when it is no longer needed.'] },
+        { h: 'External links', p: ['Links to LinkedIn, GitHub, Instagram and other sites open those services, which have their own privacy policies. Nothing from them is loaded until you click.'] },
+        { h: 'Your rights', p: ['Under the GDPR you can ask to access, correct or delete your data, object to its use or restrict it, by writing to the address above. You can also lodge a complaint with the Italian supervisory authority, the <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener noreferrer">Garante per la protezione dei dati personali</a>.'] },
+      ],
+    }
+  : {
+      title: 'Informativa', em: 'privacy',
+      metaTitle: `Informativa privacy — ${profile.name}`,
+      description: 'Come questo sito tratta i tuoi dati: nessun cookie, nessun tracciamento, cosa registra l’hosting e cosa succede se mi scrivi.',
+      lead: 'In breve: questo sito non usa cookie, non ti traccia e non raccoglie dati con moduli. Qui sotto il dettaglio.',
+      back: 'Torna al sito',
+      other: 'English version',
+      updatedLabel: 'Ultimo aggiornamento',
+      sections: [
+        { h: 'Chi è il titolare', p: [`Il titolare del trattamento è ${profile.name}, ${profile.city}, ${profile.country}. Per qualsiasi richiesta sui tuoi dati scrivi a <a href="mailto:${profile.email}">${profile.email}</a>.`] },
+        { h: 'Cookie', p: ['Il sito non imposta cookie, né propri né di terze parti: per questo non c’è un banner per il consenso.'] },
+        { h: 'Cosa conserva il tuo browser', p: ['Due valori tecnici restano solo nel tuo browser e non arrivano mai a me: il tema chiaro o scuro, salvato in <code>localStorage</code> solo quando lo cambi, e un segnale in <code>sessionStorage</code> che salta l’intro dopo averla vista (si cancella chiudendo la scheda). Puoi eliminarli entrambi dalle impostazioni del browser.'] },
+        { h: 'Statistiche di visita', p: ['Su questo sito non è attivo alcuno strumento di statistica o di analisi delle visite.'] },
+        { h: 'Hosting', p: ['Il sito è un insieme di file statici pubblicati da <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Pages</a>. Come ogni server web, GitHub può registrare dati tecnici di ogni richiesta (per esempio l’indirizzo IP) per la sicurezza e il funzionamento del servizio, secondo la propria informativa.'] },
+        { h: 'Se mi scrivi', p: ['Se mi scrivi, uso il tuo indirizzo e quello che mi mandi solo per risponderti ed eventualmente per parlare del lavoro che mi proponi. Non lo cedo a nessuno e lo cancello quando non serve più.'] },
+        { h: 'Link esterni', p: ['I link a LinkedIn, GitHub, Instagram e ad altri siti aprono quei servizi, che hanno le proprie informative. Da loro non viene caricato nulla finché non fai clic.'] },
+        { h: 'I tuoi diritti', p: ['In base al GDPR puoi chiedere di accedere ai tuoi dati, correggerli o cancellarli, opporti al loro uso o limitarlo, scrivendo all’indirizzo qui sopra. Puoi anche presentare reclamo al <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener noreferrer">Garante per la protezione dei dati personali</a>.'] },
+      ],
+    };
+
+const canonical = new URL(locale === 'en' ? enHref : itHref, siteUrl).toString();
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={t.description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="it" href={new URL(itHref, siteUrl).toString()} />
+    <link rel="alternate" hreflang="en" href={new URL(enHref, siteUrl).toString()} />
+    <link rel="alternate" hreflang="x-default" href={new URL(itHref, siteUrl).toString()} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>{t.metaTitle}</title>
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch {
+        /* storage non disponibile: tema chiaro */
+      }
+    </script>
+  </head>
+  <body class="antialiased">
+    <main id="main" class="max-w-3xl mx-auto px-6 py-20 md:py-28">
+      <nav class="flex flex-wrap justify-between gap-4 mb-14 text-sm font-medium">
+        <a href={locale === 'en' ? '/en/' : '/'} class="inline-flex items-center min-h-11 text-accent-700 dark:text-accent-400 hover:underline">← {t.back}</a>
+        <a href={locale === 'en' ? itHref : enHref} lang={locale === 'en' ? 'it' : 'en'} hreflang={locale === 'en' ? 'it' : 'en'} class="inline-flex items-center min-h-11 text-ink-500 dark:text-white/60 hover:text-ink-900 dark:hover:text-white">{t.other}</a>
+      </nav>
+
+      <h1 class="section-title">{t.title} <em>{t.em}</em></h1>
+      <p class="editorial-lead mb-6">{t.lead}</p>
+      <p class="meta-mono text-xs tracking-wide text-ink-500 dark:text-white/55 mb-14">{t.updatedLabel}: {updated}</p>
+
+      <div class="privacy-body">
+        {t.sections.map((s) => (
+          <section class="py-7 border-t border-ink-300/50 dark:border-white/10">
+            <h2 class="font-serif font-medium text-xl md:text-2xl text-ink-900 dark:text-white mb-3" style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">{s.h}</h2>
+            {s.p.map((p) => <p class="text-ink-700 dark:text-white/75 leading-relaxed" set:html={p} />)}
+          </section>
+        ))}
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+  .privacy-body :global(a) {
+    color: var(--color-accent-700);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  :global(.dark) .privacy-body :global(a) { color: var(--color-accent-400); }
+  .privacy-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+</style>

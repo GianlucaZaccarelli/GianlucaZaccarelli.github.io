@@ -15,6 +15,8 @@ const labels = locale === 'en'
   ? {
       contacts: 'Contacts',
       rights: 'All rights reserved.',
+      privacy: 'Privacy',
+      privacyHref: '/en/privacy/',
       backToTop: 'Back to top',
       console: 'Reading the source? Then we speak the same language.',
       localeTag: 'en-GB',
@@ -22,6 +24,8 @@ const labels = locale === 'en'
   : {
       contacts: 'Contatti',
       rights: 'Tutti i diritti riservati.',
+      privacy: 'Privacy',
+      privacyHref: '/privacy/',
       backToTop: "Torna all'inizio",
       console: 'Stai leggendo il sorgente? Allora parliamo la stessa lingua.',
       localeTag: 'it-IT',
@@ -82,6 +86,7 @@ const year = new Date().getFullYear();
     <div class="flex flex-1 flex-col sm:flex-row items-center sm:justify-end gap-4 sm:gap-6">
       <p class="text-xs text-ink-500 dark:text-white/60 text-center sm:text-right leading-relaxed">
         © {year} {profile.name}<br/>{labels.rights}
+        <span aria-hidden="true"> · </span><a href={labels.privacyHref} class="inline-flex items-center min-h-11 -my-3.5 underline-offset-4 hover:underline hover:text-ink-900 dark:hover:text-white">{labels.privacy}</a>
       </p>
       <button
         id="back-to-top"

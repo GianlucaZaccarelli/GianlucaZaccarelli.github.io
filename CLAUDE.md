@@ -77,6 +77,7 @@ GianlucaZaccarelli.github.io/
 │   │   ├── Personal.astro        # "Fuori orario": estetica, moto, galleria
 │   │   ├── Contact.astro
 │   │   ├── Footer.astro
+│   │   ├── PrivacyPage.astro     # Informativa it/en standalone: niente cookie, niente statistiche
 │   │   └── SocialIcon.astro      # SVG inline per linkedin/github/instagram/mail
 │   ├── assets/                   # foto/ (hero-ritratto-bn.jpg, cv-ritratto.jpg, galleria/), og-image.jpg (1200×630), logos/*.webp
 │   ├── data/
@@ -97,6 +98,7 @@ GianlucaZaccarelli.github.io/
 │   │   ├── en.astro              # Versione inglese (/en/)
 │   │   ├── cv-print.astro        # CV stampabile IT per Puppeteer
 │   │   ├── cv-print-en.astro     # CV stampabile EN per Puppeteer
+│   │   ├── privacy.astro, en/privacy.astro  # Informativa privacy (PrivacyPage.astro), link nel footer
 │   │   └── 404.astro             # Pagina 404 standalone bilingue
 │   └── styles/
 │       └── global.css            # @import tailwindcss + @theme design tokens
@@ -133,6 +135,7 @@ GianlucaZaccarelli.github.io/
 - Design responsive mobile-first: `sm:`, `md:`, `lg:` breakpoints
 
 ### Contenuto e SEO
+- **Nessun cookie, nessuna statistica, nessuna risorsa esterna a runtime**: per questo niente banner. Se si aggiunge qualcosa che traccia o carica da terzi, va aggiornata `PrivacyPage.astro` (e valutato il consenso)
 - `<title>`, `<meta name="description">`, Open Graph e Twitter Card in `BaseLayout.astro` differenziati per `locale`
 - `lang={locale}` sul tag `<html>`, `og:locale` coerente (`it_IT` / `en_US`)
 - `<link rel="alternate" hreflang="it|en|x-default">` per ogni pagina
