@@ -11,8 +11,8 @@ interface Props {
 const { locale = 'it' } = Astro.props;
 const experience = getExperience(locale);
 const labels = locale === 'en'
-  ? { title: 'Career path' }
-  : { title: 'Percorso professionale' };
+  ? { title: 'Career', em: 'path' }
+  : { title: 'Percorso', em: 'professionale' };
 
 /**
  * Estrae l'anno di inizio dal periodo (es. "Set 2024 – Presente" → "2024").
@@ -27,7 +27,7 @@ function extractStartYear(period: string): string {
   <div class="max-w-6xl mx-auto px-6">
 
     <h2 class="section-title">
-      <span class="section-num" aria-hidden="true">02</span>{labels.title}
+      <span class="section-num" aria-hidden="true">02</span>{labels.title} <em>{labels.em}</em>
     </h2>
 
     <ol class="space-y-14 md:space-y-24">
@@ -61,7 +61,7 @@ function extractStartYear(period: string): string {
                   <div class="logo-tile">
                     <Image
                       src={job.logo}
-                      alt={`Logo ${job.company}`}
+                      alt=""
                       widths={[112, 224]}
                       sizes="112px"
                       class="block h-full w-full object-contain object-center"
@@ -75,7 +75,7 @@ function extractStartYear(period: string): string {
                     {job.role}
                   </h3>
                   {job.url ? (
-                    <a href={job.url} target="_blank" rel="noopener noreferrer" class="inline-block py-1 -my-1 text-sm font-medium text-accent-700 dark:text-accent-400 mt-1.5 underline-offset-4 decoration-1 hover:underline">
+                    <a href={job.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center min-h-11 -mt-1.5 -mb-3 text-sm font-medium text-accent-700 dark:text-accent-400 underline-offset-4 decoration-1 hover:underline">
                       {job.company}
                     </a>
                   ) : (

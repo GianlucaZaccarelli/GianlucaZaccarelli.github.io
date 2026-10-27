@@ -34,7 +34,7 @@ Deve essere professionale, veloce, accessibile e moderno.
 ### Qualità del Codice
 - **ESLint** (flat config, `eslint.config.mjs`) + **Prettier** (con `prettier-plugin-astro`)
 - **Astro Check** — controllo tipi nei file `.astro` (`npm run check`)
-- **Playwright** — test e2e + visual regression (`npm run test:e2e`). Disattivati in CI: gli snapshot sono generati su Windows e vanno rigenerati su Linux prima di riattivarli
+- **Playwright** — test e2e + visual regression (`npm run test:e2e`). Disattivati in CI: gli snapshot sono generati su Windows e vanno rigenerati su Linux prima di riattivarli. `PW_PORT` cambia la porta del dev server dei test (se la 4321 è occupata), `PW_CHROMIUM` punta a un Chromium già installato; `tests/e2e/screenshot.css` nasconde header, folio e toolbar di Astro negli snapshot
 
 ### Generazione PDF del CV
 - Script `scripts/generate-pdf.mjs` avvia un server statico su `dist/` e usa Puppeteer per stampare `/cv-print` in `public/cv.pdf` e `/cv-print-en` in `public/cv-en.pdf`
@@ -52,12 +52,13 @@ GianlucaZaccarelli.github.io/
 ├── docs/design/logo-zg/         # Marchio "ZG. punto in corsa": src/ (generatore) + kit/ (asset, linee guida)
 ├── public/
 │   ├── favicon.svg, favicon.ico  # Dal kit (docs/design/logo-zg/kit/app)
-│   ├── apple-touch-icon.png, icon-*.png, site.webmanifest
+│   ├── apple-touch-icon.png, icon-*.png, site.webmanifest (it), site-en.webmanifest
 │   ├── robots.txt
 │   ├── icons/                    # SVG devicons v2.16.0 copiati in locale
 │   └── cv.pdf, cv-en.pdf         # Generati in build, non committati
 ├── scripts/
 │   ├── generate-pdf.mjs          # Server statico + Puppeteer → public/cv*.pdf
+│   ├── fetch-github-stats.mjs    # Calendario contribuzioni GitHub → src/data/github-activity.json (GITHUB_TOKEN)
 │   └── subset-fonts.py           # Font ridotti → src/fonts/ (fonttools + brotli)
 ├── src/
 │   ├── components/
@@ -70,7 +71,9 @@ GianlucaZaccarelli.github.io/
 │   │   ├── Experience.astro
 │   │   ├── Education.astro
 │   │   ├── Skills.astro
+│   │   ├── GitHubActivity.astro  # Contribuzioni GitHub dell'ultimo anno, in fondo a Skills
 │   │   ├── Projects.astro
+│   │   ├── Services.astro        # Servizi offerti: una riga per servizio + prove reali
 │   │   ├── Personal.astro        # "Fuori orario": estetica, moto, galleria
 │   │   ├── Contact.astro
 │   │   ├── Footer.astro
@@ -85,6 +88,7 @@ GianlucaZaccarelli.github.io/
 │   │   ├── education.ts
 │   │   ├── skills.ts
 │   │   ├── projects.ts
+│   │   ├── services.ts           # Servizi: descrizione, cosa include, lavori che lo dimostrano
 │   │   └── personal.ts           # Testi di "Fuori orario" + foto della galleria
 │   ├── layouts/
 │   │   └── BaseLayout.astro      # <head> SEO/OG + LoadingScreen + slot
@@ -124,6 +128,7 @@ GianlucaZaccarelli.github.io/
 - Usare Tailwind utility classes direttamente negli attributi `class`
 - CSS custom in blocchi `<style>` scoped dei componenti è ammesso per animazioni complesse (hero, marquee, loading screen)
 - Design tokens (brand, surface, font) definiti via `@theme` in `src/styles/global.css`
+- Vetro (Liquid Glass, come ZakStack): token `--vetro-*` e classe `.lastra` in `global.css`, solo su header, sue pill e menu mobile; mai sul contenuto
 - Dark mode class-based: `@variant dark (&:where(.dark, .dark *))`; lo switch è gestito da `Header.astro` e persiste in `localStorage`
 - Design responsive mobile-first: `sm:`, `md:`, `lg:` breakpoints
 
@@ -146,13 +151,13 @@ GianlucaZaccarelli.github.io/
 ### Performance
 - Target Lighthouse: Performance ≥ 95, Accessibility ≥ 95, Best Practices = 100, SEO = 100
 - Ascolto scroll: usare un unico listener con `requestAnimationFrame` invece di più listener indipendenti
-- Font con `font-display: swap`; Fraunces tiene gli assi `opsz`/`SOFT` (wght 100–600, WONK fisso a 1) + italic; Fraunces e Inter in `preload` in `BaseLayout.astro`. Se servono nuovi caratteri o pesi: aggiornare `scripts/subset-fonts.py` e rigenerare
+- Font con `font-display: swap`; Fraunces tiene gli assi `opsz`/`SOFT` (wght 100–600, WONK fisso a 1) + italic con `SOFT` fisso a 100 (ogni corsivo lo usa: un corsivo con altro `SOFT` richiede di rigenerare); Fraunces e Inter in `preload` in `BaseLayout.astro`. Se servono nuovi caratteri o pesi: aggiornare `scripts/subset-fonts.py` e rigenerare
 
 ---
 
 ## GitHub Actions — Deploy
 
-File `.github/workflows/deploy.yml`: checkout → setup-node 22 → `npm ci` → `npm run lint` → `npm run check` → `npm run build` → `node scripts/generate-pdf.mjs` → copia `public/cv.pdf` e `public/cv-en.pdf` in `dist/` → `upload-pages-artifact` → `deploy-pages`.
+File `.github/workflows/deploy.yml` (push su `main`, manuale, e ogni lunedì per aggiornare le contribuzioni GitHub): checkout → setup-node 22 → `npm ci` → `npm run lint` → `npm run check` → `node scripts/fetch-github-stats.mjs` → `npm run build` → `node scripts/generate-pdf.mjs` → copia `public/cv.pdf` e `public/cv-en.pdf` in `dist/` → `upload-pages-artifact` → `deploy-pages`.
 
 ---
 
@@ -176,14 +181,15 @@ npm run test:e2e:ui      # Playwright in modalità UI interattiva
 
 ## Sezioni del CV
 
-1. **Hero / Header** — logo, nav (tab bar da `lg:`, menu hamburger sotto), lingua, theme toggle, bottone CV; hero fullscreen con parallax e marquee animato
+1. **Hero / Header** — logo, nav (tab bar da `xl:`, menu hamburger sotto), lingua, theme toggle, bottone CV; hero fullscreen con parallax e marquee animato
 2. **About** — bio, posizione, lingue, MBTI, disponibilità
 3. **Experience** — timeline con logo, ruolo, azienda, periodo, bullet point
 4. **Education** — card con logo, titolo, istituto, anno, descrizione
-5. **Skills** — cluster per categoria con chip; logo devicons per prodotti/tecnologie reali, icona generica Lucide per le competenze concettuali
-6. **Projects** — griglia card con stack badge e link opzionali
-7. **Fuori orario** (`#personal`) — lato personale: classe '98, estetica, moto; galleria a colonne (foto in `src/assets/foto/galleria/`, elencate in `personal.ts`, nascosta se vuota)
-8. **Contact** — CTA email + social
+5. **Skills** — cluster per categoria con chip; logo devicons per prodotti/tecnologie reali, icona generica Lucide per le competenze concettuali; in fondo il calendario delle contribuzioni GitHub
+6. **Projects** — griglia card con stack badge e link opzionali (siti pubblici: link al dominio)
+7. **Servizi** (`#services`) — siti web, app e gestionali, consulenza/body rental, audit; ognuno cita il lavoro che lo prova
+8. **Fuori orario** (`#personal`) — lato personale: classe '98, estetica, moto; galleria a colonne (foto in `src/assets/foto/galleria/`, elencate in `personal.ts`, nascosta se vuota)
+9. **Contact** — CTA email + social
 
 ---
 

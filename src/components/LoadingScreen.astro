@@ -23,12 +23,9 @@ const words = locale === 'en'
 
     <!-- Parole al centro (decorative: niente heading) -->
     <div class="loading-words">
-      {words.map((word, i) => (
+      {words.map((word) => (
         <div class:list={[
           'loading-word',
-          'home-active',
-          { 'home-active-first': i === 0 },
-          { 'home-active-last': i === words.length - 1 },
           { 'jap': word === 'こんにちは' }
         ]}>
           {word}<div class="dot"></div>
@@ -112,9 +109,12 @@ const words = locale === 'en'
     transform: translateX(-50%);
     display: none;
     white-space: nowrap;
+    /* Il serif parla anche qui: Fraunces da display, lo stesso (precaricato) della copertina */
+    font-family: var(--font-serif);
     font-size: clamp(3.25em, 5vw, 4.5em);
-    font-weight: 700;
-    letter-spacing: -0.03em;
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    font-variation-settings: 'opsz' 144, 'SOFT' 100;
   }
 
   .loading-word.jap {
@@ -234,9 +234,10 @@ const words = locale === 'en'
 
     if (!screen || !container || !wordsEl || !bar || !curve) return;
 
-    // Sotto l'intro la pagina non e' raggiungibile da tastiera (lo skip link resta sopra)
+    // Sotto l'intro la pagina non e' raggiungibile da tastiera, skip link compreso:
+    // punterebbe a un #main inerte (un tasto qualsiasi salta comunque l'intro)
     const sotto = Array.from(document.body.children).filter(
-      (el) => el !== container && !el.classList.contains('skip-to-content') && el.tagName !== 'SCRIPT'
+      (el) => el !== container && el.tagName !== 'SCRIPT'
     ) as HTMLElement[];
     sotto.forEach((el) => (el.inert = true));
 

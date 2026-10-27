@@ -59,6 +59,15 @@ export interface Project {
   demo?: string;
 }
 
+export interface Service {
+  title: string;
+  description: string;
+  /** Cosa comprende, mostrato in mono */
+  includes: string[];
+  /** Lavori reali che lo dimostrano: etichetta + ancora della sezione */
+  proof: { label: string; href: string }[];
+}
+
 export interface SocialLink {
   label: string;
   href: string;

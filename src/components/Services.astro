@@ -1,0 +1,94 @@
+---
+import { getServices } from '../data/services';
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const services = getServices(locale);
+
+const labels = locale === 'en'
+  ? {
+      title: 'What I',
+      em: 'offer',
+      lead: 'I work on my own or inside your team. I’ve already done every service below for someone: next to each one you’ll find where.',
+      proof: 'Where I’ve done it',
+      cta: 'Tell me about your project',
+    }
+  : {
+      title: 'Servizi',
+      em: 'offerti',
+      lead: 'Lavoro da solo o dentro il tuo team. Ogni servizio qui sotto l’ho già fatto per qualcuno: accanto trovi dove.',
+      proof: 'Dove l’ho fatto',
+      cta: 'Raccontami il progetto',
+    };
+---
+
+<section id="services" class="relative py-24 md:py-32 bg-white dark:bg-surface overflow-clip">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <h2 class="section-title">
+      <span class="section-num" aria-hidden="true">06</span>{labels.title} <em>{labels.em}</em>
+    </h2>
+
+    <p class="editorial-lead max-w-2xl mb-14 md:mb-20">{labels.lead}</p>
+
+    <!-- Un servizio per riga, come un sommario: titolo a sinistra, dettagli e prove a destra -->
+    <ul class="border-b border-ink-300/50 dark:border-white/10">
+      {services.map((s) => (
+        <li class="service-row grid grid-cols-12 gap-x-6 gap-y-4 py-8 md:py-10 border-t border-ink-300/50 dark:border-white/10">
+          <h3 class="col-span-12 md:col-span-4 font-serif font-medium text-2xl md:text-3xl leading-tight text-ink-900 dark:text-white" style="font-variation-settings: 'opsz' 48, 'SOFT' 100;">
+            {s.title}
+          </h3>
+          <div class="col-span-12 md:col-span-8 max-w-2xl">
+            <p class="text-ink-700 dark:text-white/75 text-base md:text-lg leading-relaxed">{s.description}</p>
+            <p class="meta-mono mt-4 text-xs md:text-sm tracking-wide text-ink-500 dark:text-white/55">
+              {s.includes.join(' · ')}
+            </p>
+            <p class="mt-3 flex flex-wrap items-center gap-x-4 text-sm">
+              <span class="meta-label">{labels.proof}</span>
+              {s.proof.map((p) => (
+                <a href={p.href} class="inline-flex items-center min-h-11 -my-2.5 font-medium text-accent-700 dark:text-accent-400 underline-offset-4 decoration-1 hover:underline">
+                  {p.label}
+                </a>
+              ))}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <a href="#contact" class="services-cta group mt-12 md:mt-16 inline-flex items-center gap-2 min-h-11 px-5 rounded-full text-sm font-semibold">
+      {labels.cta}
+      <span class="inline-block transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span>
+    </a>
+
+  </div>
+</section>
+
+<style>
+  /* Stessa famiglia del bottone CV: velatura terracotta, mai un pieno (Red Pen Rule) */
+  .services-cta {
+    color: var(--color-accent-700);
+    background: color-mix(in oklch, var(--color-accent-600) 12%, transparent);
+    border: 1px solid color-mix(in oklch, var(--color-accent-600) 45%, transparent);
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  .services-cta:hover {
+    transform: translateY(-1px);
+    background: color-mix(in oklch, var(--color-accent-600) 20%, transparent);
+    border-color: color-mix(in oklch, var(--color-accent-600) 60%, transparent);
+    box-shadow: 0 6px 16px -6px color-mix(in oklch, var(--color-accent-600) 35%, transparent);
+  }
+  :global(.dark) .services-cta {
+    color: var(--color-accent-400);
+    background: color-mix(in oklch, var(--color-accent-500) 12%, transparent);
+    border-color: color-mix(in oklch, var(--color-accent-500) 40%, transparent);
+  }
+  :global(.dark) .services-cta:hover {
+    background: color-mix(in oklch, var(--color-accent-500) 20%, transparent);
+    color: var(--color-accent-200);
+  }
+</style>

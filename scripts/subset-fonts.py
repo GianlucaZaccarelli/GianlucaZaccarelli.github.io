@@ -1,6 +1,7 @@
 """Font del sito alleggeriti: stessi file variabili di @fontsource-variable, ridotti a
 - caratteri latini (Latin-1, punteggiatura tipografica, frecce, euro): tutto il testo del sito;
 - intervalli d'asse davvero usati (Fraunces wght 100-600, WONK fisso a 1 come il default;
+  nel corsivo anche SOFT fisso a 100: ogni testo in corsivo lo usa, l'inchiostro anima solo il tondo;
   Inter wght 400-700; JetBrains Mono wght 400-600);
 - niente hinting (inutile nei browser moderni).
 Gli altri script (giapponese dell'intro) ricadono sui font di sistema, come prima.
@@ -28,7 +29,7 @@ UNICODES = (
 
 FONT = [
     ('fraunces/files/fraunces-latin-full-normal.woff2', {'wght': (100, 600), 'WONK': 1}, 'fraunces-normal.woff2'),
-    ('fraunces/files/fraunces-latin-full-italic.woff2', {'wght': (100, 600), 'WONK': 1}, 'fraunces-italic.woff2'),
+    ('fraunces/files/fraunces-latin-full-italic.woff2', {'wght': (100, 600), 'WONK': 1, 'SOFT': 100}, 'fraunces-italic.woff2'),
     ('inter/files/inter-latin-wght-normal.woff2', {'wght': (400, 700)}, 'inter.woff2'),
     ('jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2', {'wght': (400, 600)}, 'jetbrains-mono.woff2'),
 ]

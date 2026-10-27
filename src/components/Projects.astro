@@ -12,24 +12,22 @@ const projects = getProjects(locale);
 
 const labels = locale === 'en'
   ? {
-      title: 'Selected work',
+      title: 'Selected', em: 'work',
       github: 'Source',
-      demo: 'Live',
       privateProject: 'Internal project — not public',
       featured: 'Featured',
     }
   : {
-      title: 'Progetti selezionati',
+      title: 'Progetti', em: 'selezionati',
       github: 'Codice',
-      demo: 'Demo',
       privateProject: 'Progetto interno — non pubblico',
       featured: 'In evidenza',
     };
 
-// Layout recipe for bento: alternate sizes. Supports up to ~8 projects.
-// feature = wide card with emphasized type. Rest flow naturally.
-const layoutSizes = ['feature', 'standard', 'standard', 'wide'] as const;
-type Size = typeof layoutSizes[number];
+// Bento a 3 colonne: la prima è in evidenza (2 colonne), poi le righe alternano
+// normale + larga e larga + normale, così ogni riga resta piena
+const layoutSizes = ['wide', 'standard', 'standard', 'wide'] as const;
+type Size = 'feature' | typeof layoutSizes[number];
 
 const getSizeClass = (size: Size): string => {
   switch (size) {
@@ -44,7 +42,7 @@ const getSizeClass = (size: Size): string => {
 
 const projectsWithLayout = projects.map((p, i) => ({
   ...p,
-  size: (layoutSizes[i % layoutSizes.length] ?? 'standard') as Size,
+  size: (i === 0 ? 'feature' : layoutSizes[i % layoutSizes.length]) as Size,
 }));
 ---
 
@@ -52,7 +50,7 @@ const projectsWithLayout = projects.map((p, i) => ({
   <div class="max-w-6xl mx-auto px-6">
 
     <h2 class="section-title">
-      <span class="section-num" aria-hidden="true">05</span>{labels.title}
+      <span class="section-num" aria-hidden="true">05</span>{labels.title} <em>{labels.em}</em>
     </h2>
 
     <div class="bento-grid grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 md:auto-rows-fr">
@@ -97,7 +95,7 @@ const projectsWithLayout = projects.map((p, i) => ({
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="text-sm font-medium text-ink-900 dark:text-white hover:text-accent-600 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
+                  class="min-h-11 -my-3 text-sm font-medium text-ink-900 dark:text-white hover:text-accent-700 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
                 >
                   {labels.github} <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span>
                 </a>
@@ -107,9 +105,9 @@ const projectsWithLayout = projects.map((p, i) => ({
                   href={project.demo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="text-sm font-medium text-ink-900 dark:text-white hover:text-accent-600 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
+                  class="min-h-11 -my-3 text-sm font-medium text-ink-900 dark:text-white hover:text-accent-700 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
                 >
-                  {labels.demo} <span class="inline-block transition-transform group-hover:translate-x-0.5">↗</span>
+                  {new URL(project.demo).hostname.replace(/^www\./, '')} <span class="inline-block transition-transform group-hover:translate-x-0.5" aria-hidden="true">↗</span>
                 </a>
               )}
               {!project.github && !project.demo && (

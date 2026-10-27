@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Ogni lunedì: ricostruisce il sito con il calendario GitHub aggiornato
+  schedule:
+    - cron: '0 6 * * 1'
 
 permissions:
   contents: read
@@ -44,6 +47,13 @@ jobs:
       # combaciano col rendering Linux del runner. Per riattivarli servono
       # `npx playwright install --with-deps chromium` + `npm run test:e2e`
       # e snapshot rigenerati su Linux.
+
+      # Calendario delle contribuzioni per la sezione Competenze; se GitHub non
+      # risponde lo script lascia il file versionato e la build prosegue
+      - name: Fetch GitHub activity
+        run: node scripts/fetch-github-stats.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build with Astro
         run: npm run build

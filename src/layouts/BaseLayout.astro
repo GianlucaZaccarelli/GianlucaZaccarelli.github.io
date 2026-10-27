@@ -23,7 +23,7 @@ const defaultMeta = locale === 'en'
         'Portfolio and curriculum vitae of Gianluca Zaccarelli, Senior Full-Stack Developer with experience in C#, .NET, microservices, Docker and enterprise development.',
     }
   : {
-      title: 'Gianluca Zaccarelli — Sviluppatore Full-Stack Senior',
+      title: 'Gianluca Zaccarelli — Senior Full-Stack Developer',
       description:
         'Portfolio e curriculum vitae di Gianluca Zaccarelli, Sviluppatore Full-Stack Senior con esperienza in C#, .NET, microservizi, Docker e sviluppo enterprise.',
     };
@@ -112,7 +112,7 @@ const personSchema = {
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="manifest" href={locale === 'en' ? '/site-en.webmanifest' : '/site.webmanifest'} />
     <meta name="apple-mobile-web-app-title" content="ZG." />
 
     <!-- Preload font primari per LCP (hero usa Fraunces; body usa Inter) -->
@@ -120,7 +120,7 @@ const personSchema = {
     <link rel="preload" as="font" type="font/woff2" href={interLatinWght} crossorigin />
 
     <!-- Theme color (browser chrome) -->
-    <meta name="theme-color" content="#fafaf7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#fcfaf7" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1c1d20" media="(prefers-color-scheme: dark)" />
 
     <!-- JSON-LD -->

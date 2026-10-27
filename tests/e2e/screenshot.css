@@ -1,0 +1,11 @@
+/* Solo per gli snapshot: niente elementi fissi o del dev server sopra le sezioni */
+astro-dev-toolbar,
+.site-header,
+#folio,
+.skip-to-content {
+  visibility: hidden !important;
+}
+/* Le colonne sticky si spostano con lo scroll: negli snapshot restano ferme */
+.md\:sticky {
+  position: static !important;
+}

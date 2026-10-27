@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* Font variabili ridotti ai caratteri latini e agli assi usati (scripts/subset-fonts.py,
-   sorgente @fontsource-variable). Fraunces tiene opsz e SOFT per l'inchiostro; italic reale per <em>. */
+   sorgente @fontsource-variable). Fraunces tiene opsz e SOFT per l'inchiostro; italic reale per <em> (SOFT fisso a 100). */
 @font-face {
   font-family: 'Fraunces Variable';
   font-style: normal;
@@ -78,6 +78,48 @@ html {
   overflow-x: clip;
 }
 
+/* ── Vetro (Liquid Glass, come in ZakStack) ───────────────
+   Solo per ciò che galleggia sopra il contenuto: la barra dell'header, le sue
+   pill e il menu mobile. Mai sul contenuto. Superficie traslucida e filtro per
+   la barra; per le pill la lastra: luce dall'alto a sinistra, orlo di riflessi
+   interni (seguono gli angoli) e un'ombra morbida che la stacca. */
+:root {
+  --vetro-superficie: color-mix(in oklch, var(--color-paper) 66%, transparent);
+  --vetro-superficie-forte: color-mix(in oklch, var(--color-paper) 82%, transparent);
+  --vetro-filtro: blur(24px) saturate(180%);
+  --vetro-filtro-ampio: blur(40px) saturate(170%);
+  --vetro-lastra: rgb(255 255 255 / 0.5);
+  --vetro-luce: linear-gradient(160deg, rgb(255 255 255 / 0.7), rgb(255 255 255 / 0.15) 35%, rgb(255 255 255 / 0) 70%);
+  --vetro-orlo: inset 0 1px 0 rgb(255 255 255 / 0.95), inset 0 0 0 1px rgb(255 255 255 / 0.4), inset 0 -1px 0 rgb(17 24 39 / 0.05);
+  --vetro-ombra: 0 1px 2px rgb(17 24 39 / 0.05), 0 10px 28px -14px rgb(17 24 39 / 0.22);
+  --vetro-bordo: color-mix(in oklch, var(--color-ink-300) 55%, transparent);
+}
+.dark {
+  --vetro-superficie: color-mix(in oklch, var(--color-surface) 62%, transparent);
+  --vetro-superficie-forte: color-mix(in oklch, var(--color-surface) 80%, transparent);
+  --vetro-lastra: rgb(255 255 255 / 0.06);
+  --vetro-luce: linear-gradient(160deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0.02) 40%, rgb(255 255 255 / 0) 70%);
+  --vetro-orlo: inset 0 1px 0 rgb(255 255 255 / 0.12), inset 0 0 0 1px rgb(255 255 255 / 0.05), inset 0 -1px 0 rgb(0 0 0 / 0.3);
+  --vetro-ombra: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -14px rgb(0 0 0 / 0.6);
+  --vetro-bordo: rgb(255 255 255 / 0.12);
+}
+.lastra {
+  background-color: var(--vetro-lastra);
+  background-image: var(--vetro-luce);
+  border: 1px solid var(--vetro-bordo);
+  box-shadow: var(--vetro-orlo), var(--vetro-ombra);
+}
+/* «Riduci trasparenza»: vetro pieno e senza blur; «Aumenta contrasto»: bordi veri */
+@media (prefers-reduced-transparency: reduce) {
+  :root { --vetro-superficie: var(--color-paper); --vetro-superficie-forte: var(--color-paper); --vetro-lastra: #fff; --vetro-luce: none; }
+  .dark { --vetro-superficie: var(--color-surface); --vetro-superficie-forte: var(--color-surface); --vetro-lastra: var(--color-surface-card); }
+  :root { --vetro-filtro: none; --vetro-filtro-ampio: none; }
+}
+@media (prefers-contrast: more) {
+  :root { --vetro-bordo: var(--color-ink-500); }
+  .dark { --vetro-bordo: rgb(255 255 255 / 0.5); }
+}
+
 /* Scorrimento morbido solo se il movimento è gradito */
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
@@ -141,8 +183,9 @@ body {
   color: var(--color-accent-700);
 }
 .dark .section-num { color: var(--color-accent-400); }
-/* Da tablet in su il numero sporge nel margine: il titolo resta allineato al testo */
-@media (min-width: 768px) {
+/* Da xl il numero sporge nel margine: il titolo resta allineato al testo. Sotto
+   il margine (24px) è più stretto del numero, che verrebbe tagliato */
+@media (min-width: 1280px) {
   .section-title { position: relative; }
   .section-num {
     position: absolute;
@@ -210,10 +253,11 @@ body {
   }
 }
 
-/* Il corsivo terracotta entra come un tratto di penna, da sinistra */
+/* Il corsivo terracotta entra come un tratto di penna, da sinistra. I margini negativi
+   lasciano fuori dal ritaglio le code del corsivo, che sporgono oltre il box (la "i" finale) */
 @keyframes ink-stroke {
-  from { clip-path: inset(-0.2em 100% -0.3em 0); }
-  to   { clip-path: inset(-0.2em 0 -0.3em 0); }
+  from { clip-path: inset(-0.2em 100% -0.3em -0.15em); }
+  to   { clip-path: inset(-0.2em -0.4em -0.3em -0.15em); }
 }
 
 @keyframes ink-year {
@@ -275,28 +319,6 @@ body {
   filter: invert(1) hue-rotate(180deg);
 }
 
-/* ── Nav underline sliding animation ──────────────────── */
-.nav-link {
-  position: relative;
-  padding: 0.375rem 0.75rem;
-}
-.nav-link::after {
-  content: '';
-  position: absolute;
-  left: 0.75rem;
-  right: 0.75rem;
-  bottom: 0.2rem;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.nav-link:hover::after,
-.nav-link:focus-visible::after {
-  transform: scaleX(1);
-}
-
 /* ── Grain / noise texture overlay ─────────────────────── */
 .grain-overlay {
   position: absolute;
@@ -322,7 +344,7 @@ body {
   background-color: var(--color-ink-900);
   color: var(--color-paper);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   padding: 4px 10px;
@@ -331,6 +353,13 @@ body {
   opacity: 0;
   transition: opacity 0.15s ease;
   z-index: 200;
+}
+
+/* Controlli vicini al bordo destro: il tooltip si allinea a destra e non esce dalla pagina */
+.tooltip-end::after {
+  left: auto;
+  right: 0;
+  transform: none;
 }
 
 [data-tooltip]:hover::after,
@@ -363,7 +392,10 @@ body {
   top: 0.5rem;
   left: 0.5rem;
   z-index: 10000;
-  padding: 0.6rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
   background: var(--color-ink-900);
   color: var(--color-paper);
   font-family: var(--font-mono);

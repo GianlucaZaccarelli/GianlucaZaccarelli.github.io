@@ -1,6 +1,7 @@
 ---
 import { getCoreSkills, getSkills } from '../data/skills';
 import { techIcon } from '../data/icons';
+import GitHubActivity from './GitHubActivity.astro';
 import type { Locale } from '../data/types';
 
 interface Props {
@@ -11,11 +12,11 @@ const { locale = 'it' } = Astro.props;
 const skills = getSkills(locale);
 const core = getCoreSkills().map(name => ({ name, icon: techIcon(name) }));
 const labels = locale === 'en'
-  ? { title: 'Tech stack', core: 'Every day', more: 'more', moreAria: 'more skills in', less: 'Show less' }
-  : { title: 'Competenze tecniche', core: 'Ogni giorno', more: 'altre', moreAria: 'altre competenze in', less: 'Mostra meno' };
+  ? { title: 'Tech', em: 'stack', core: 'Every day', more: 'more', moreAria: 'more skills in', less: 'Show less' }
+  : { title: 'Competenze', em: 'tecniche', core: 'Ogni giorno', more: 'altre', moreAria: 'altre competenze in', less: 'Mostra meno' };
 
-// Su mobile ogni cluster mostra i primi N chip; gli altri si aprono con "+N"
-const VISIBLE_ON_MOBILE = 6;
+// Ogni cluster mostra i primi N chip (in ordine di rilevanza); gli altri si aprono con "+N"
+const VISIBLE = 6;
 
 // Gli strumenti core sono già in evidenza sopra: nei cluster non si ripetono
 const coreNames = new Set(core.map(c => c.name));
@@ -25,11 +26,11 @@ const clusters = skills.map(s => ({
 }));
 ---
 
-<section id="skills" class="relative py-20 md:py-32 bg-white dark:bg-surface overflow-clip">
+<section id="skills" class="relative py-24 md:py-32 bg-white dark:bg-surface overflow-clip">
   <div class="max-w-6xl mx-auto px-6">
 
     <h2 class="section-title">
-      <span class="section-num" aria-hidden="true">04</span>{labels.title}
+      <span class="section-num" aria-hidden="true">04</span>{labels.title} <em>{labels.em}</em>
     </h2>
 
     <!-- Core: gli strumenti di tutti i giorni -->
@@ -49,7 +50,7 @@ const clusters = skills.map(s => ({
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10 md:gap-y-12">
       {clusters.map(cluster => {
-        const hidden = cluster.items.length - VISIBLE_ON_MOBILE;
+        const hidden = cluster.items.length - VISIBLE;
         return (
           <div class="skill-cluster">
             <div class="flex items-baseline gap-3 mb-5 pb-3 border-b border-ink-300/40 dark:border-white/10">
@@ -63,7 +64,7 @@ const clusters = skills.map(s => ({
             </div>
             <ul class="flex flex-wrap gap-2">
               {cluster.items.map((item, i) => (
-                <li class:list={['skill-chip', { 'is-extra': i >= VISIBLE_ON_MOBILE }]}>
+                <li class:list={['skill-chip', { 'is-extra': i >= VISIBLE }]}>
                   {item.icon && (
                     <img src={item.icon} alt="" width="16" height="16" loading="lazy" decoding="async" class="skill-icon" />
                   )}
@@ -71,7 +72,7 @@ const clusters = skills.map(s => ({
                 </li>
               ))}
               {hidden > 0 && (
-                <li class="md:hidden">
+                <li>
                   <button
                     type="button"
                     class="skill-more"
@@ -89,6 +90,8 @@ const clusters = skills.map(s => ({
         );
       })}
     </div>
+
+    <GitHubActivity locale={locale} />
 
   </div>
 </section>
@@ -134,7 +137,7 @@ const clusters = skills.map(s => ({
     padding: 0.45rem 0.9rem;
     border-radius: 999px;
     background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid color-mix(in oklch, var(--color-ink-900) 12%, transparent);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 500;
@@ -169,11 +172,9 @@ const clusters = skills.map(s => ({
     flex-shrink: 0;
   }
 
-  /* Mobile: i chip oltre i primi N restano chiusi finché non si apre il cluster */
-  @media (max-width: 767px) {
-    .skill-chip.is-extra { display: none; }
-    .skill-cluster.is-open .skill-chip.is-extra { display: inline-flex; }
-  }
+  /* I chip oltre i primi N restano chiusi finché non si apre il cluster */
+  .skill-chip.is-extra { display: none; }
+  .skill-cluster.is-open .skill-chip.is-extra { display: inline-flex; }
 
   .skill-more {
     min-height: 2.75rem;

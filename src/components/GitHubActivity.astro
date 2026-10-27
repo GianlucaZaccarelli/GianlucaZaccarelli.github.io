@@ -1,0 +1,180 @@
+---
+import activity from '../data/github-activity.json';
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const lang = locale === 'en' ? 'en-US' : 'it-IT';
+const labels = locale === 'en'
+  ? {
+      title: 'On GitHub',
+      total: 'contributions in the last year',
+      active: 'active days',
+      streak: 'days in a row',
+      ongoing: 'ongoing',
+      private: 'in private repositories',
+      less: 'Less',
+      more: 'More',
+      updated: 'Updated',
+      profile: 'GitHub profile',
+      contributions: 'contributions',
+      month: 'Month',
+      table: 'Contributions per month',
+    }
+  : {
+      title: 'Su GitHub',
+      total: 'contribuzioni nell’ultimo anno',
+      active: 'giorni attivi',
+      streak: 'giorni di fila',
+      ongoing: 'in corso',
+      private: 'in repository privati',
+      less: 'Meno',
+      more: 'Più',
+      updated: 'Aggiornato al',
+      profile: 'Profilo GitHub',
+      contributions: 'contribuzioni',
+      month: 'Mese',
+      table: 'Contribuzioni per mese',
+    };
+
+const { days } = activity;
+// 'always': in italiano CLDR non raggruppa i numeri a 4 cifre (6431 invece di 6.431)
+const numFmt = new Intl.NumberFormat(lang, { useGrouping: 'always' });
+const num = (n: number) => numFmt.format(n);
+// Le date sono giorni di calendario: formattate in UTC per non slittare di fuso
+const asDate = (d: string) => new Date(`${d}T00:00:00Z`);
+const fmt = (d: string, o: Intl.DateTimeFormatOptions) => asDate(d).toLocaleDateString(lang, { timeZone: 'UTC', ...o });
+
+const activeDays = days.filter((d) => d.count > 0).length;
+// Serie in corso: oggi può essere ancora vuoto, si parte da ieri
+let streak = 0;
+for (let i = days.length - 1 - (days.at(-1)?.count === 0 ? 1 : 0); i >= 0 && days[i].count > 0; i--) streak++;
+const privatePct = activity.total > 0 ? Math.floor((activity.private / activity.total) * 100) : 0;
+
+// Cinque livelli come su GitHub: zero, poi i quartili dei giorni attivi
+const nonZero = days.map((d) => d.count).filter((c) => c > 0).sort((a, b) => a - b);
+const q = (p: number) => nonZero[Math.floor((nonZero.length - 1) * p)] ?? 0;
+const cuts = [q(0.25), q(0.5), q(0.75)];
+const level = (c: number) => (c === 0 ? 0 : 1 + cuts.filter((t) => c > t).length);
+
+// Colonne = settimane (domenica in alto, come il calendario di GitHub)
+const CELL = 10;
+const GAP = 2;
+const STEP = CELL + GAP;
+const TOP = 14;
+const offset = asDate(days[0].date).getUTCDay();
+const cells = days.map((d, i) => ({ ...d, x: Math.floor((i + offset) / 7) * STEP, y: TOP + ((i + offset) % 7) * STEP, lv: level(d.count) }));
+const cols = Math.ceil((days.length + offset) / 7);
+const width = cols * STEP - GAP;
+const height = TOP + 7 * STEP - GAP;
+const months = cells
+  .filter((c) => c.date.endsWith('-01') && c.x < width - 2 * STEP)
+  .map((c) => ({ x: c.x, label: fmt(c.date, { month: 'short' }) }));
+
+const perMonth = Object.entries(
+  days.reduce<Record<string, number>>((acc, d) => {
+    const m = d.date.slice(0, 7);
+    acc[m] = (acc[m] ?? 0) + d.count;
+    return acc;
+  }, {}),
+);
+---
+
+<div class="gh-activity mt-16 md:mt-20 pt-8 border-t border-ink-300/40 dark:border-white/10">
+  <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 mb-6">
+    <h3 class="text-base font-semibold text-ink-900 dark:text-white">{labels.title}</h3>
+    <a href={`https://github.com/${activity.user}`} target="_blank" rel="noopener noreferrer" class="inline-flex items-center min-h-11 -my-3 text-sm font-medium text-accent-700 dark:text-accent-400 underline-offset-4 decoration-1 hover:underline">
+      {labels.profile} <span aria-hidden="true">&nbsp;↗</span>
+    </a>
+  </div>
+
+  <p class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+    <span class="gh-total font-serif text-ink-900 dark:text-white">{num(activity.total)}</span>
+    <span class="editorial-lead !text-lg md:!text-xl">{labels.total}</span>
+  </p>
+  <p class="meta-mono mt-3 mb-8 text-xs md:text-sm tracking-wide text-ink-500 dark:text-white/60">
+    {num(activeDays)} {labels.active}
+    <span aria-hidden="true"> · </span>{num(streak)} {labels.streak}{streak > 0 && <>, {labels.ongoing}</>}
+    <span aria-hidden="true"> · </span>{privatePct}% {labels.private}
+  </p>
+
+  <svg class="gh-grid w-full h-auto" viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
+    {months.map((m) => <text x={m.x} y="9" class="gh-month">{m.label}</text>)}
+    {cells.map((c) => (
+      <rect x={c.x} y={c.y} width={CELL} height={CELL} rx="2" class={`lv${c.lv}`}>
+        <title>{fmt(c.date, { day: 'numeric', month: 'short', year: 'numeric' })} — {num(c.count)} {labels.contributions}</title>
+      </rect>
+    ))}
+  </svg>
+
+  <div class="mt-4 flex flex-wrap items-center justify-between gap-3 meta-mono text-xs text-ink-500 dark:text-white/55">
+    <span class="inline-flex items-center gap-1.5">
+      {labels.less}
+      <svg width="68" height="12" viewBox="0 0 68 12" aria-hidden="true">
+        {[0, 1, 2, 3, 4].map((lv) => <rect x={lv * 14} y="0" width="12" height="12" rx="2" class={`lv${lv}`} />)}
+      </svg>
+      {labels.more}
+    </span>
+    <span>{labels.updated} {fmt(activity.generatedAt, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+  </div>
+
+  <table class="sr-only">
+    <caption>{labels.table}</caption>
+    <thead><tr><th scope="col">{labels.month}</th><th scope="col">{labels.contributions}</th></tr></thead>
+    <tbody>
+      {perMonth.map(([m, n]) => (
+        <tr><th scope="row">{fmt(`${m}-01`, { month: 'long', year: 'numeric' })}</th><td>{num(n)}</td></tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .gh-total {
+    font-size: clamp(2.75rem, 5vw, 4rem);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    font-variant-numeric: tabular-nums;
+    font-variation-settings: 'opsz' 144, 'SOFT' 100;
+  }
+
+  /* Un solo tono, dal chiaro allo scuro (in scuro l'ancora si ribalta):
+     zero è un filo neutro, poi terracotta sempre più carico */
+  .gh-activity {
+    --gh-0: color-mix(in oklch, var(--color-ink-300) 35%, transparent);
+    --gh-1: oklch(88% 0.06 45);
+    --gh-2: oklch(76% 0.11 45);
+    --gh-3: oklch(64% 0.155 45);
+    --gh-4: oklch(50% 0.15 45);
+  }
+  :global(.dark) .gh-activity {
+    --gh-0: rgba(255, 255, 255, 0.07);
+    --gh-1: oklch(36% 0.07 45);
+    --gh-2: oklch(48% 0.11 45);
+    --gh-3: oklch(62% 0.145 45);
+    --gh-4: oklch(78% 0.12 45);
+  }
+  .lv0 { fill: var(--gh-0); }
+  .lv1 { fill: var(--gh-1); }
+  .lv2 { fill: var(--gh-2); }
+  .lv3 { fill: var(--gh-3); }
+  .lv4 { fill: var(--gh-4); }
+  .gh-grid rect { transition: opacity 0.15s ease; }
+  .gh-grid rect:hover { opacity: 0.7; }
+
+  .gh-month {
+    font-family: var(--font-mono);
+    font-size: 7px;
+    fill: var(--color-ink-500);
+  }
+  :global(.dark) .gh-month { fill: rgba(255, 255, 255, 0.55); }
+  /* L'SVG scala con la colonna: i mesi (7 unità) superano gli 11px solo da xl,
+     dove la griglia è larga ~1100px; sotto restano nascosti */
+  @media (max-width: 1279px) {
+    .gh-month { display: none; }
+  }
+</style>

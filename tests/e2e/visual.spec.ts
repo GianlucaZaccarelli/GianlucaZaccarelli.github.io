@@ -8,6 +8,11 @@ async function openStableHomepage(page: import('@playwright/test').Page) {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await page.waitForLoadState('networkidle');
+  // Tutti i font dichiarati, non solo quelli già usati sopra la piega: senza,
+  // le chip in mono a volte vengono fotografate col font di riserva
+  await page.evaluate(async () => {
+    await Promise.all([...document.fonts].map((f) => f.load()));
+  });
 }
 
 test.describe('ZakkaSite visual regression', () => {
@@ -19,6 +24,7 @@ test.describe('ZakkaSite visual regression', () => {
     await expect(hero).toHaveScreenshot('hero.png', {
       animations: 'disabled',
       caret: 'hide',
+      stylePath: 'tests/e2e/screenshot.css',
       maxDiffPixelRatio: 0.02,
     });
   });
@@ -31,6 +37,7 @@ test.describe('ZakkaSite visual regression', () => {
     await expect(about).toHaveScreenshot('about.png', {
       animations: 'disabled',
       caret: 'hide',
+      stylePath: 'tests/e2e/screenshot.css',
       maxDiffPixelRatio: 0.04,
     });
 
@@ -40,6 +47,7 @@ test.describe('ZakkaSite visual regression', () => {
     await expect(experience).toHaveScreenshot('experience.png', {
       animations: 'disabled',
       caret: 'hide',
+      stylePath: 'tests/e2e/screenshot.css',
       maxDiffPixelRatio: 0.05,
     });
   });
@@ -53,6 +61,7 @@ test.describe('ZakkaSite visual regression', () => {
     await expect(projects).toHaveScreenshot('projects.png', {
       animations: 'disabled',
       caret: 'hide',
+      stylePath: 'tests/e2e/screenshot.css',
       maxDiffPixelRatio: 0.02,
     });
   });
@@ -66,6 +75,7 @@ test.describe('ZakkaSite visual regression', () => {
     await expect(education).toHaveScreenshot('education.png', {
       animations: 'disabled',
       caret: 'hide',
+      stylePath: 'tests/e2e/screenshot.css',
       maxDiffPixelRatio: 0.02,
     });
   });
@@ -79,6 +89,7 @@ test.describe('ZakkaSite visual regression', () => {
     await expect(skills).toHaveScreenshot('skills.png', {
       animations: 'disabled',
       caret: 'hide',
+      stylePath: 'tests/e2e/screenshot.css',
       maxDiffPixelRatio: 0.02,
     });
   });
@@ -92,6 +103,7 @@ test.describe('ZakkaSite visual regression', () => {
     await expect(contact).toHaveScreenshot('contact.png', {
       animations: 'disabled',
       caret: 'hide',
+      stylePath: 'tests/e2e/screenshot.css',
       maxDiffPixelRatio: 0.02,
     });
   });

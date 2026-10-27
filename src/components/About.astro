@@ -12,14 +12,14 @@ const profile = getProfile(locale);
 
 const labels = locale === 'en'
   ? {
-      sectionTitle: 'Who I am',
+      sectionTitle: 'Who', sectionEm: 'I am',
       position: 'Location',
       languages: 'Languages',
       personality: 'Personality',
       availability: 'Availability',
     }
   : {
-      sectionTitle: 'Chi sono',
+      sectionTitle: 'Chi', sectionEm: 'sono',
       position: 'Posizione',
       languages: 'Lingue',
       personality: 'Personalità',
@@ -40,7 +40,7 @@ const [bioLead, bioPeople, bioMethod] = profile.bioParagraphs;
   <div class="max-w-6xl mx-auto px-6">
 
     <h2 class="section-title">
-      <span class="section-num" aria-hidden="true">01</span>{labels.sectionTitle}
+      <span class="section-num" aria-hidden="true">01</span>{labels.sectionTitle} <em>{labels.sectionEm}</em>
     </h2>
 
     <!-- Magazine layout: 12 cols -->
@@ -93,7 +93,7 @@ const [bioLead, bioPeople, bioMethod] = profile.bioParagraphs;
           <div>
             <dt class="meta-label mb-1.5">{labels.personality}</dt>
             <dd class="text-ink-900 dark:text-white text-sm md:text-base">
-              <span class="meta-mono text-accent-600 dark:text-accent-400 font-medium">{profile.mbti}</span>
+              <span class="meta-mono text-accent-700 dark:text-accent-400 font-medium">{profile.mbti}</span>
               <span class="text-ink-500 dark:text-white/50 text-xs ml-1">— MBTI</span>
             </dd>
           </div>

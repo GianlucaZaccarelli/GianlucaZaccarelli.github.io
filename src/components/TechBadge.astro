@@ -28,7 +28,7 @@ const isProduct = !!icon && !icon.includes('/lucide-');
     letter-spacing: 0.04em;
     border-radius: 999px;
     color: var(--color-ink-700);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid color-mix(in oklch, var(--color-ink-900) 10%, transparent);
   }
 
   :global(.dark) .tech-badge {

@@ -16,9 +16,6 @@ const labels = locale === 'en'
       contacts: 'Contacts',
       rights: 'All rights reserved.',
       backToTop: 'Back to top',
-      colophon: 'Colophon',
-      setIn: 'Set in Fraunces, Inter and JetBrains Mono',
-      builtWith: 'Built with Astro, published on GitHub Pages',
       console: 'Reading the source? Then we speak the same language.',
       localeTag: 'en-GB',
     }
@@ -26,9 +23,6 @@ const labels = locale === 'en'
       contacts: 'Contatti',
       rights: 'Tutti i diritti riservati.',
       backToTop: "Torna all'inizio",
-      colophon: 'Colophon',
-      setIn: 'Composto in Fraunces, Inter e JetBrains Mono',
-      builtWith: 'Costruito con Astro, pubblicato su GitHub Pages',
       console: 'Stai leggendo il sorgente? Allora parliamo la stessa lingua.',
       localeTag: 'it-IT',
     };
@@ -93,7 +87,7 @@ const year = new Date().getFullYear();
         id="back-to-top"
         data-tooltip={labels.backToTop}
         aria-label={labels.backToTop}
-        class="cursor-pointer group shrink-0 w-11 h-11 flex items-center justify-center rounded-full border border-ink-300 dark:border-white/20 text-ink-900 dark:text-white hover:border-accent-500 active:scale-95 transition-colors"
+        class="tooltip-end cursor-pointer group shrink-0 w-11 h-11 flex items-center justify-center rounded-full border border-ink-300 dark:border-white/20 text-ink-900 dark:text-white hover:border-accent-500 active:scale-95 transition-colors"
       >
         <svg class="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="18 15 12 9 6 15"/>
@@ -103,13 +97,6 @@ const year = new Date().getFullYear();
 
   </div>
 
-  <!-- Colophon da rivista: come è fatto questo numero -->
-  <div class="max-w-6xl mx-auto px-6 pb-8">
-    <p class="pt-5 border-t border-ink-300/40 dark:border-white/10 font-mono text-xs leading-relaxed text-ink-500 dark:text-white/55 text-center sm:text-left">
-      <span class="text-accent-700 dark:text-accent-400">{labels.colophon}</span>
-      <span aria-hidden="true"> · </span>{labels.setIn}<span aria-hidden="true"> · </span>{labels.builtWith}
-    </p>
-  </div>
 </footer>
 
 <style>
