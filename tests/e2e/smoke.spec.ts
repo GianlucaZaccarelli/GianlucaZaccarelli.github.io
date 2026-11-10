@@ -6,7 +6,7 @@ test.describe('ZakkaSite smoke', () => {
 
     await expect(page).toHaveTitle(/Gianluca Zaccarelli/);
 
-    for (const id of ['about', 'experience', 'education', 'skills', 'projects', 'services', 'personal', 'contact']) {
+    for (const id of ['about', 'experience', 'education', 'skills', 'projects', 'zakstack', 'services', 'personal', 'contact']) {
       await expect(page.locator(`#${id}`)).toBeVisible();
     }
   });
@@ -38,6 +38,7 @@ test.describe('ZakkaSite smoke', () => {
     await expect(page.locator('#education .section-title')).toContainText('My education');
     await expect(page.locator('#skills .section-title')).toContainText('Tech stack');
     await expect(page.locator('#projects .section-title')).toContainText('Selected work');
+    await expect(page.locator('#zakstack .section-title')).toContainText('Ready foundations');
     await expect(page.locator('#services .section-title')).toContainText('What I offer');
     await expect(page.locator('#contact .section-title')).toContainText('Say hello');
 

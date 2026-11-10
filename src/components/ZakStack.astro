@@ -1,0 +1,50 @@
+---
+import { getZakStack } from '../data/zakstack';
+import type { Locale } from '../data/types';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const zs = getZakStack(locale);
+
+const labels = locale === 'en'
+  ? { title: 'Ready', em: 'foundations', included: 'Already built' }
+  : { title: 'Fondamenta', em: 'pronte', included: 'Già pronto' };
+---
+
+<!-- Stesso fondo dei Progetti e niente padding sopra: ne è la continuazione -->
+<section id="zakstack" class="relative pb-24 md:pb-32 bg-paper dark:bg-surface-alt overflow-clip">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <h2 class="section-title">
+      <span class="section-num" aria-hidden="true">06</span>{labels.title} <em>{labels.em}</em>
+    </h2>
+
+    <div class="grid grid-cols-12 gap-x-6 lg:gap-x-12 gap-y-10 items-start">
+      <!-- Logo animato: lo stesso SVG del README del profilo GitHub (l'animazione è nel file) -->
+      <a href={zs.url} target="_blank" rel="noopener noreferrer" class="col-span-12 md:col-span-5 block rounded-2xl">
+        <img src="/zakstack.svg" alt="ZakStack — Ready Foundations" width="928" height="268" loading="lazy" decoding="async" class="w-full h-auto" />
+      </a>
+
+      <div class="col-span-12 md:col-span-7 max-w-2xl">
+        <p class="editorial-lead">{zs.lead}</p>
+        <p class="mt-6 text-ink-700 dark:text-white/75 text-base md:text-lg leading-relaxed">{zs.description}</p>
+        <p class="meta-label mt-8">{labels.included}</p>
+        <p class="meta-mono mt-2 text-xs md:text-sm tracking-wide text-ink-500 dark:text-white/55">
+          {zs.includes.join(' · ')}
+        </p>
+        <a
+          href={zs.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group mt-6 min-h-11 text-sm font-medium text-ink-900 dark:text-white hover:text-accent-700 dark:hover:text-accent-400 transition-colors inline-flex items-center gap-1"
+        >
+          {new URL(zs.url).hostname} <span class="inline-block transition-transform group-hover:translate-x-0.5" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>

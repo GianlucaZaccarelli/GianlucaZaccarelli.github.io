@@ -73,6 +73,7 @@ GianlucaZaccarelli.github.io/
 │   │   ├── Skills.astro
 │   │   ├── GitHubActivity.astro  # Contribuzioni GitHub dell'ultimo anno, in fondo a Skills
 │   │   ├── Projects.astro
+│   │   ├── ZakStack.astro        # ZakStack: logo animato (public/zakstack.svg, dal README del profilo) + cosa include
 │   │   ├── Services.astro        # Servizi offerti: una riga per servizio + prove reali
 │   │   ├── Personal.astro        # "Fuori orario": estetica, moto, galleria
 │   │   ├── Contact.astro
@@ -89,6 +90,7 @@ GianlucaZaccarelli.github.io/
 │   │   ├── education.ts
 │   │   ├── skills.ts
 │   │   ├── projects.ts
+│   │   ├── zakstack.ts           # Testi della sezione ZakStack
 │   │   ├── services.ts           # Servizi: descrizione, cosa include, lavori che lo dimostrano
 │   │   └── personal.ts           # Testi di "Fuori orario" + foto della galleria
 │   ├── layouts/
@@ -190,9 +192,10 @@ npm run test:e2e:ui      # Playwright in modalità UI interattiva
 4. **Education** — card con logo, titolo, istituto, anno, descrizione
 5. **Skills** — cluster per categoria con chip; logo devicons per prodotti/tecnologie reali, icona generica Lucide per le competenze concettuali; in fondo il calendario delle contribuzioni GitHub
 6. **Projects** — griglia card con stack badge e link opzionali (siti pubblici: link al dominio)
-7. **Servizi** (`#services`) — siti web, app e gestionali, consulenza/body rental, audit; ognuno cita il lavoro che lo prova
-8. **Fuori orario** (`#personal`) — lato personale: classe '98, estetica, moto; galleria a colonne (foto in `src/assets/foto/galleria/`, elencate in `personal.ts`, nascosta se vuota)
-9. **Contact** — CTA email + social
+7. **ZakStack** (`#zakstack`) — il boilerplate da cui partono i gestionali: logo animato + cosa include, link a zakstackhq.com; non è nella nav
+8. **Servizi** (`#services`) — siti web, app e gestionali, consulenza/body rental, audit; ognuno cita il lavoro che lo prova
+9. **Fuori orario** (`#personal`) — lato personale: classe '98, estetica, moto; galleria a colonne (foto in `src/assets/foto/galleria/`, elencate in `personal.ts`, nascosta se vuota)
+10. **Contact** — CTA email + social
 
 ---
 

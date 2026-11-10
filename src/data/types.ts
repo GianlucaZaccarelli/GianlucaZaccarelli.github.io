@@ -49,6 +49,14 @@ export interface Skill {
   items: string[];
 }
 
+/** Sezione ZakStack: il boilerplate da cui partono i gestionali */
+export interface ZakStackInfo {
+  url: string;
+  lead: string;
+  description: string;
+  includes: string[];
+}
+
 export interface Project {
   title: string;
   /** Ruolo ricoperto nel progetto, mostrato in mono sotto il titolo */
