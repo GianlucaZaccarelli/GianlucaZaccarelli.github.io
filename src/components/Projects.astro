@@ -27,7 +27,7 @@ const labels = locale === 'en'
 // Bento a 3 colonne: la prima è in evidenza (2 colonne), poi le righe alternano
 // normale + larga e larga + normale, così ogni riga resta piena
 const layoutSizes = ['wide', 'standard', 'standard', 'wide'] as const;
-type Size = 'feature' | typeof layoutSizes[number];
+type Size = 'feature' | 'full' | typeof layoutSizes[number];
 
 const getSizeClass = (size: Size): string => {
   switch (size) {
@@ -35,6 +35,7 @@ const getSizeClass = (size: Size): string => {
     // il row-span-2 lasciava un grande vuoto al centro della card
     case 'feature':  return 'md:col-span-2';
     case 'wide':     return 'md:col-span-2';
+    case 'full':     return 'md:col-span-3';
     case 'standard':
     default:         return 'md:col-span-1';
   }
@@ -42,7 +43,8 @@ const getSizeClass = (size: Size): string => {
 
 const projectsWithLayout = projects.map((p, i) => ({
   ...p,
-  size: (i === 0 ? 'feature' : layoutSizes[i % layoutSizes.length]) as Size,
+  // Con un numero dispari di progetti l'ultimo resterebbe da solo in riga: occupa tutta la larghezza
+  size: (i === 0 ? 'feature' : i === projects.length - 1 && i % 2 === 0 ? 'full' : layoutSizes[i % layoutSizes.length]) as Size,
 }));
 ---
 

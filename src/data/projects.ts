@@ -50,6 +50,16 @@ const entries: ProjectEntry[] = [
     demo: 'https://giovannivitulano.com',
   },
   {
+    title: 'Baita Vicinanza d’Andraz',
+    role: { it: 'Design e sviluppo', en: 'Design and development' },
+    description: {
+      it: 'Una casa in legno del 1792 nelle Dolomiti, da affittare: camere, servizi, dintorni, recensioni da Airbnb e Booking e prenotazione diretta via WhatsApp o email, in sei lingue.',
+      en: 'A 1792 wooden house in the Dolomites, up for rent: rooms, amenities, surroundings, Airbnb and Booking reviews and direct booking via WhatsApp or email, in six languages.',
+    },
+    stack: ['Astro', { it: 'i18n (6 lingue)', en: 'i18n (6 languages)' }],
+    demo: 'https://www.vicinanzadandraz.com',
+  },
+  {
     title: { it: 'Questo sito', en: 'This website' },
     role: { it: 'Design e sviluppo', en: 'Design and development' },
     description: {
