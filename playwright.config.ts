@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// PW_PORT se la 4321 è occupata da un altro progetto (reuseExistingServer lo riuserebbe)
-const port = Number(process.env.PW_PORT ?? 4321);
+// PW_PORT se la 4323 è occupata da un altro progetto (reuseExistingServer lo riuserebbe)
+const port = Number(process.env.PW_PORT ?? 4323);
 const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({

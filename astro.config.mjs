@@ -6,6 +6,7 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://gianlucazaccarelli.github.io',
+  server: { port: 4323 },
 
   // CSS incorporato nell'HTML: ~17 KB compressi, niente fogli che bloccano il primo disegno
   build: {
